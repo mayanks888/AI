@@ -1,0 +1,109 @@
+My important command
+---------------------------------------------------------------------------------------------------
+
+Shift ubunto python to new version
+
+alias python=python3
+
+---------------------------------------------------------------------------------------------------
+
+revert back
+
+alias python=python2#change pytho version ubunto
+
+---------------------------------------------------------------------------------------------------
+
+enable tensorflow in terminal window
+
+source Tensorflow-dev/bin/activate
+
+---------------------------------------------------------------------------------------------------
+
+install tool:
+
+removing software: - sudo apt-get remove spyder
+
+update tool : sudo apt-get upgrade firefox
+
+---------------------------------------------------------------------------------------------------
+
+5) Defining address in pandas( ../ =jump one folder up)
+
+pd.read_csv('../../../data_folder/data.csv')
+
+-------------------------------------------------------------------------------------------------------------------
+
+this is  tensorflow debugger:
+
+
+from tensorflow.python import debug as tf_debug
+sess = tf_debug.TensorBoardDebugWrapperSession(sess, "localhost:7000")
+
+this one is right-  tensorboard --logdir /tmp/logdir --debugger_port 7000
+
+
+#Keras
+import tensorflow as tf
+from keras import backend as keras_backend
+from tensorflow.python import debug as tf_debug
+
+keras_backend.set_session(tf_debug.TensorBoardDebugWrapperSession(tf.Session(),"localhost:7000"))
+
+# Define your keras model, called "model".
+
+#before model.fit
+model.fit(...)
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+tensorboard:
+use this :tensorboard --logdir="/home/mayank-s/PycharmProjects/models/aptive task/models/research/training"
+
+tensorboard --logdir=./Home/PycharmProjects/output_graph/
+
+tensorboard --logdir=./output_graph/
+
+Defining graph:  writer = tf.summary.FileWriter("/home/mayank-s/PycharmProjects/output_graph", sess.graph)
+
+windows
+summary_writer = tf.summary.FileWriter('..\..\..\output_graph/try2',sess.graph)
+
+
+#Keras
+
+from keras.callbacks import TensorBoard
+cb=TensorBoard(log_dir=("/home/mayank-s/PycharmProjects/Data_Science/output_graph/try3"))
+myclaisfer.fit(X_train,y_train,batch_size=10,nb_epoch=3,  callbacks=[cb])
+
+tensorboard --logdir=./output_graph/
+
+------------------------------------------------------------------------------------------------------------------------
+
+Basis address of python file
+
+/home/mayank-s/PycharmProjects/Data_Science/Deep learning/TensorFlow
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+Define value in python
+
+plt.title('Example: %d Label: %d' % (num, label))#to print properly
+------------------------------------------------------------------------------------------------------------------------
+#reading datasets
+1. windows
+../../../../Datasets
+
+
+___________________________________________________________________________________________________--
+# object detection
+
+python3 eval.py  --logtostderr --checkpoint_dir=training1/ --eval_dir=training1/ --pipeline_config_path=training1/faster_rcnn_resnet50_coco.config
+
+python3 train.py --logtostderr --train_dir training/ --pipeline_config_path  training/faster_rcnn_resnet50_coco.config
+
+__________________________________________________________________________________________________-
+docker build --tag python_docker .
