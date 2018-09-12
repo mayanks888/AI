@@ -17,11 +17,11 @@ from torchvision import datasets, transforms
 from torch.autograd import Variable
 
 # ___________________
-data=pd.read_csv('../../../Datasets/MNIST_data/train_image.csv')
-label=pd.read_csv('../../../Datasets/MNIST_data/train_label.csv')
+data=pd.read_csv('/home/mayank-s/PycharmProjects/Datasets/MNIST_data/train_image.csv')
+label=pd.read_csv('/home/mayank-s/PycharmProjects/Datasets/MNIST_data/train_label.csv')
 
-test_feature=pd.read_csv('../../../Datasets/MNIST_data/test_image.csv')
-test_label=pd.read_csv('../../../Datasets/MNIST_data/test_label.csv')
+test_feature=pd.read_csv('/home/mayank-s/PycharmProjects/Datasets/MNIST_data/test_image.csv')
+test_label=pd.read_csv('/home/mayank-s/PycharmProjects/Datasets/MNIST_data/test_label.csv')
 
 
 
@@ -62,7 +62,7 @@ y_test = np_utils.to_categorical(label_test, 10)
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, kernel_size=5,padding=2)#this is nothing with(1=channel,layer=32,padding=1 =same size of input)
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=5,padding=2,stride=1)#this is nothing with(1=channel,layer=32,padding=1 =same size of input)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=5,padding=2)
         self.mp = nn.MaxPool2d(2)
         self.fc = nn.Linear(3136, 10)

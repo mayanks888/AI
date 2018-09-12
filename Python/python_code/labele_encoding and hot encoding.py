@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder,OneHotEncoder
 
-data=pd.read_csv("../Datasets/census_data.csv")
+data=pd.read_csv("/home/mayank-s/PycharmProjects/Datasets/census_data.csv")
 print (data.head())
-print(data.isnull().sum())#sum of all colum null values
+print('total empty value item are',data.isnull().sum())#sum of all colum null values
 
 #drop purchased column from data sets
 
@@ -35,3 +35,9 @@ print(hot_e)
 #you have to convert all string column into categorical before applying one hot encoding
 sec_hot_code=OneHotEncoder(categorical_features=[1])
 features=sec_hot_code.fit_transform(features).toarray()
+
+
+#using dummies from pandas
+# this is simply great try to implemented in your future codes
+cool=pd.get_dummies(data[['workclass', 'education', 'education_num']])
+print(cool.head())
