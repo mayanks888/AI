@@ -10,7 +10,7 @@ class DiabetesDataset(Dataset):
 
     # Initialize your data, download, etc.
     def __init__(self):
-        xy = np.loadtxt('/home/mayank-s/PycharmProjects/Datasets/kitti_datasets.csv',
+        xy = np.loadtxt('/home/mayank-s/Desktop/Link to Datasets/mnist_test_10.csv',
                         delimiter=',', dtype=np.float32)
         self.len = xy.shape[0]
         self.x_data = torch.from_numpy(xy[:, 0:-1])
@@ -24,10 +24,7 @@ class DiabetesDataset(Dataset):
 
 
 dataset = DiabetesDataset()
-train_loader = DataLoader(dataset=dataset,
-                          batch_size=32,
-                          shuffle=True,
-                          num_workers=2)
+train_loader = DataLoader(dataset=dataset, batch_size=32, shuffle=True, num_workers=2)
 
 for epoch in range(2):
     for i, data in enumerate(train_loader, 0):

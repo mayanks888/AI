@@ -26,7 +26,7 @@ df=pd.DataFrame(data2,index=row,columns=colm)#define dataframe like excel
 print (df)
 # print (df['e']['a'])#this will show data at 'e' colum and 'a' row
 # print(df.iloc[1:,2:4])
-# print(df.drop(labels='e[]',axis=1))#delete the rows or column from dataframe based on a dataframe and inplace =true if wany permenant
+# print(df.drop(labels='e[]',axis=1))#delete the rows or column from dataframe based on a dataframe and inplace =true if want permenant
 # print (df[df>0])#very important
 # print (df[df['g']>0])#so it will only  show rows g whose column does satisfy the condition
 # print (df[['e','f']])#when you want to uses two column in dataframe use two square brackets

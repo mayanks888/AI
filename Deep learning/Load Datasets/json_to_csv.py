@@ -18,8 +18,8 @@ file_number=0
 classes=['bus','light','traffic light','person','bike','truck','motor','car','train','Rider',"traffic sign"]
 bblabel=[]
 loop=0
-jason_path="/home/mayank-s/PycharmProjects/Datasets/Berkely DeepDrive/labels/100k/train"
-image_path="/home/mayank-s/PycharmProjects/Datasets/Berkely DeepDrive/bdd100k/images/100k/train/"
+jason_path="/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/labels/100k/train"
+image_path="/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/bdd100k/images/100k/train"
 
 for i in os.listdir(image_path):
     # if loop > 5:
@@ -41,7 +41,7 @@ for i in os.listdir(image_path):
         # for obj in root.iter('object'):
         for ki in Json['frames'][0]['objects']:
             loop+=1
-            print("count run", loop)
+            # print("count run", loop)
             object_name=ki['category']
             if object_name in classes:
                 # print(ki.box2d.category)
@@ -56,8 +56,10 @@ for i in os.listdir(image_path):
                 bblabel.append(data_label)
     except IOError:
         print("error at loop:{lp} and image:{dt}".format(lp=loop,dt=dat))
+        print('error1')
     except:
         print("error at loop:{lp} and image:{dt}".format(lp=loop, dt=dat))
+        print('error2')
         # print('ERROR...object detecion failed for Filename: {fn} , Check file type '.format(fn=filename), '\n')
     else:
         print("successfull for ", dat)
