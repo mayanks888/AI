@@ -1,92 +1,125 @@
-import pandas as pd
-import numpy as np
-
-'''data=pd.read_csv('Carcount.csv')
-data=data.sort_values(by='count', ascending=False)
-print(data)
-
-df=data[data['count']>12]
-print(df)
-# df.to_csv('maxcarcaount_3.csv')
-# df['xmax']-df['xmin'] > threshold
-# df[df['JobTitle'].value_counts()<2])'''
+# this is made for my understanding about python built in function
 
 
+a = 'Real Python'
+b = ['Real', 'Python']
+
+# Here both the len function will perform same function
+print(len(a))
+
+print(a.__len__())
+
+print(b[0])
+
+print(b.__getitem__(0))
+
+print(dir(a))
+
+class checkbuilt():
+    def __init__(self):
+        self.data=[1,2,3,4,5,6]
 
 
-data=pd.read_csv("/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/berkely_train.csv")
-# data=pd.read_csv('/home/mayank-s/Desktop/Link to Datasets/aptiveBB/reddy.csv')
-print(data.head())
-print(data.groupby('class').count())
+    def __len__(self):
+        return len(self.data)
 
-# this is done to remove if xmin==xmax and ymin==yamax(which is actuallly wrong)
-df=data[(data['xmin']!=data['xmax']) & (data['ymin']!=data['ymax'])]
+    def find_length(self):
+        return len(self.data)
 
+    def __str__(self):
+        return (str(self.data))
 
-print(df.head())
+    '''The[] operator is called the indexing operator and is used in various contexts 
+    in Python such as getting the value at an index in sequences, getting the value 
+    associatedwith a key in dictionaries, or obtaining a part of a sequence through 
+    slicing.You can change its behavior using the __getitem__() special method.'''
 
-# df.to_csv("berkely_After_filter.csv")
+    def __getitem__(self, key):
+        print('hello i getting an index now')
+        return self.data[key]
 
-# this is most important funtion to count no of class in group
-new=data.groupby(['filename'])['class'].count()
+    def __setitem__(self, key, value):
+        self.data[key]=value
 
+    def __iter__(self):  # iterate over all keys
+        for x in (self.data):
+            yield x
+            # dat.append()
 
-gb = data.groupby(['filename'])
-grouped_C = gb['class']
-n=data.groupby(['filename', 'class'])
-a=(n.size())
-print(a)
-gv=a.index[0]
-
-for file_name, (cls) in enumerate(a):
-    print(file_name)
-    print(cls)
-new1=data.groupby(['filename', 'class'])['xmin']#.count()
-
-# b=data.groupby(level=['filname', 'class']).sum()
-
-
-
-
-mydata=data.groupby('filename')
-print(data.groupby('class').count())
-len_group=mydata.ngroups
-# index=mydata.groups['car'].values
-mygroup=mydata.groups
-
-# new=data.groupby(['filename', 'class'])#['car'].count()
-
-# this is most important funtion to count no of class in group
-new=data.groupby(['filename'])['class'].count()
-
-for da in mygroup.keys():
-    index = mydata.groups[da].values
-    for read_index in index():
-
-
-        print(index)
-        print(da)
-        break
+    def __call__(self,a,b):
+        sum = a+b
+        return sum
 
 
 
-'''for da in mydata.ngroups():
+thor=checkbuilt()
+# Here you can see that by using(__len__) we were able to use thor as to find the lenth of list directly)
+print("by built in method",len(thor))
 
-    index = mydata.groups['car'].values
-    mydata.groups['0124dfa6-385f1b58'].values
-    print(da)'''
+""" you should keep in mind that Python requires the function to return an integer.
+If your method were to return anything other than an integer, you would get a 
+TypeError.This most probably, is to keep it consistent  # with the fact that len() 
+is generally used to obtain the length of a sequence, which can only be an integer:"""
+
+print("by normal orthodox method",thor.find_length())
 
 
-# index=mydata.groups['car'].values
-'''pyindex=np.random.choice(index, size=10000, replace=False)
-data.drop(data.index[pyindex],inplace=True)
-print(data.groupby('class').count())
+print("by built in method string present is ",str(thor))
 
-df=data.replace("motor", "cool")
-df=df.replace("bike", "cool")
-df=df.replace("cool", "motorbike")
-df=df.replace("traffic light", "traffic_light")
-df=df.replace("traffic sign ", "traffic_sign ")
-print(df.groupby('class').count())
-data.to_csv("berkely_train_new_1.csv")
-print(1)'''
+print("by built in method to extract index values is ",thor[1])
+# print("by built in method to change index values is ",thor[1,89])
+
+# this buit in function  (__call__) is used to run the class object direcat by directly calling the instance of class check example
+print("by built in method to call the function(__call__) ",thor(2,4))
+
+# this is how you will use __iter__ whoch is like running the for loop in the in list or anything
+for item in thor :
+    print("by built in method to use iteration (__iter__) ",item)
+
+
+
+
+# ***********************************************************************************
+class Order:
+    def __init__(self, cart, customer):
+        self.cart = list(cart)
+        self.customer = customer
+
+    def __add__(self, other):
+        new_cart = self.cart.copy()
+        new_cart.append(other)
+        return Order(new_cart, self.customer)
+
+order = Order(['banana', 'apple'], 'Real Python')
+
+# print((order + 'orange')) # New Order instance
+print((order + 'orange').cart ) # New Order instance
+print(order.cart ) # Original instance unchanged
+order = order + 'mango'  # Changing the original instance
+print(order.cart)
+
+
+
+
+import collections.abc
+
+class MyMap(collections.abc.Mapping):
+    def __init__(self, n):
+        self.n = n
+
+    def __getitem__(self, key): # given a key, return it's value
+        if 0 <= key < self.n:
+            return key * key
+        else:
+            raise KeyError('Invalid key')
+
+    def __iter__(self): # iterate over all keys
+        for x in range(self.n):
+            yield x
+
+    def __len__(self):
+        return self.n
+
+m = MyMap(5)
+for k, v in m.items():
+    print(k, '->', v)
