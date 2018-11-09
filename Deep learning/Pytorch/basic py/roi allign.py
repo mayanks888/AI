@@ -11,6 +11,27 @@ def ROIAlign(feature_maps, rois, config, pool_size, mode='bilinear'):
              boxes to fill the array.
     - Feature maps: List of feature maps from different levels of the pyramid.
                     Each is [batch, channels, height, width]
+Hi Aidong,
+
+
+Thanks for giving the access to me and Ashis !
+
+
+But in order to access the directory, IP Address & the respective port should be added to the Site to Site VPN tunnel from Aptiv's network.
+
+
+Request to you raise the ticket to your IT department in this matter.
+
+
+From our end we have added IP address ("10.195.186.39") to Tata Elxsi firewall.
+
+
+Let us know if you have any query.
+
+
+Best Regards,
+Mayank Sati
+
 
     Output:
     Pooled regions in the shape: [batch, num_boxes, height, width, channels].

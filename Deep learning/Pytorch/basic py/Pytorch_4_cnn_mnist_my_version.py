@@ -87,6 +87,7 @@ model = Net()
 # model.cuda()
 model = model.double()
 criterea = torch.nn.CrossEntropyLoss()#this include softmax and cross entropy
+criterea=torch.nn.BCELoss()#this is for binary cross entropy when you have only binary output (0/1 or True/False)
 # criterea=torch.nn.MSELoss(size_average=False)#cross entropy loss
 optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.5)
 
@@ -100,7 +101,7 @@ for loop in range(epochs):
     # Construct an array data source
     ds = data_source.ArrayDataSource([scaled_input, y])
     # Iterate over samples, drawing batches of 64 elements in random order
-    for (data, target) in ds.batch_iterator(batch_size=100, shuffle=True):#shuffle true will randomise every batch
+    for (data, target) in ds.batch_iterator(batch_size=1, shuffle=True):#shuffle true will randomise every batch
         new_data=data.reshape(-1,1,28,28)
         cool_data=new_data[0]
         # cv2.imshow("image",np.reshape(cool_data,newshape=(28,28,1)))

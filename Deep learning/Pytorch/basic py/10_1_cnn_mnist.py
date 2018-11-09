@@ -1,5 +1,5 @@
-
-from __future__ import print_function
+import cv2
+# from __future__ import print_function
 import argparse
 import torch
 import torch.nn as nn
@@ -7,15 +7,26 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.autograd import Variable
-
+import matplotlib.pyplot as plt
+from PIL import Image
 # Training settings
 batch_size = 64
-
+import numpy as np
 # MNIST Dataset
-train_dataset = datasets.MNIST(root='./data/',
-                               train=True,
-                               transform=transforms.ToTensor(),
-                               download=True)
+train_dataset = datasets.MNIST(root='./data/', train=True, download=True)
+# train_dataset = datasets.MNIST(root='./data/', train=True, transform=transforms.ToTensor(), download=True)
+#
+# # for img, label_id in train_dataset:
+# for train_data,train_labels in train_dataset:
+#     # print(label_id, train_dataset.classes[label_id])
+#     # display(img)
+#     # cv2.imshow('img', np.array(train_data))
+#     # Image.save(trai)
+#     # train_data.save('cool.jpg')
+#     train_data.show()
+#     # plt.imshow(np.asarray(train_data))
+#     # break
+#     # imshow(np.asarray(pil_im))
 
 test_dataset = datasets.MNIST(root='./data/',
                               train=False,
@@ -45,7 +56,7 @@ class Net(nn.Module):
         first_conv=self.conv1(x)
         x = F.relu(self.mp(first_conv))
         #x = F.relu(self.mp(self.conv1(x)))
-        print (x.data)
+        # print (x.data)
         x = F.relu(self.mp(self.conv2(x)))
         x = x.view(in_size, -1)  # flatten the tensor
         x = self.fc(x)

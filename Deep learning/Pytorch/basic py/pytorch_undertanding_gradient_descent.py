@@ -1,10 +1,36 @@
 import torch
 from torch.autograd import Variable
 
+
+# ***************************************************************
+# understanding the gradient  in pytorch
+# f(x)= 4x+2
+# df/dx= 4(differnetion of (4x+2 is 4))
+
+def funtion_to_check_grad(x):
+    return (4*x+2)
+
+def funtion_to_check_grad2(x):
+    return (3*x)
+
+val=torch.tensor(3.0,requires_grad=True)#req grad mean in need grad of val value.
+
+val2=funtion_to_check_grad(val)
+
+val3=funtion_to_check_grad2(val2)
+
+val3.backward()#here the actaul differnetion will happed
+
+
+print('the gradient of val value is ',val.grad)#understand gradient of val will be calculated and not val2)
+
+# ****************
+
+
 x_data = [1.0, 2.0, 3.0]
 y_data = [2.0, 4.0, 6.0]
 
-w = Variable(torch.Tensor([1.0]),  requires_grad=True)  # Any random value
+w = torch.tensor(3.0,requires_grad=True)  # Any random value
 
 # our model forward pass
 

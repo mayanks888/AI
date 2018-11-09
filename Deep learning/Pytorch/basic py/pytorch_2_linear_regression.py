@@ -34,11 +34,11 @@ epochs=1
 for loop in range(epochs):
     y_predicted=model(input_data)
     loss=criterea(y_predicted,output_data)
-    print(epochs, loss.data)
-    print(epochs, loss.item())     #loss.data both means the same thing
-    optimise.zero_grad()
-    loss.backward()
-    optimise.step()
+    print('lossdata',epochs, loss.data)
+    print('lossitem',epochs, loss.item())#loss.data both means the same thing
+    optimise.zero_grad()#this is to find fresh gradient every time in each epochs good practise
+    loss.backward()#this commmand is responsible for backward propogation(it finds delta (loss vs each initialse weight)
+    optimise.step()#with this command the gradient will added to the intial weights according to learning rate.(weight update)
 
 #
 # After training move to testing

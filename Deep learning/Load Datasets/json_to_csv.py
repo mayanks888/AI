@@ -89,5 +89,5 @@ columns=['filename','Class','xmin','xmax','ymin','ymax']
 # pd1.to_csv('output_bb.csv')
 
 
-df=pd.DataFrame(bblabel)
+df=pd.DataFrame(bblabel,columns=columns)
 df.to_csv('output_Train.csv')

@@ -1,25 +1,36 @@
 import pandas as pd
 import numpy as np
-data=pd.read_csv("/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/berkerly_new_useful/Berkerly_no_filter_include_all_classes.csv")
+# data=pd.read_csv("/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/berkerly_new_useful/Berkerly_no_filter_include_all_classes.csv")
+# data=pd.read_csv("/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/berkerly_new_useful/berkely_ready_to_train_for_retinanet_with_weather_pytorch.csv")
+data=pd.read_csv("/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/berkerly_new_useful/berkely_ready_to_train_for_retinanet_with_weather_pytorch.csv")
+data=pd.read_csv("berkely_weather.csv")
 
 df=data[(data['xmin']!=data['xmax']) & (data['ymin']!=data['ymax'])]
 
-print(df.groupby('class').count())
 
-classes=['person', 'traffic light', 'bus', 'car', 'motor','bike',  'traffic sign']
+
+
+cool=(df.groupby('weather').count())
+print(df.groupby('weather').count())
+
+# classes=['person', 'traffic light', 'bus', 'car', 'motor','bike',  'traffic sign']
+# classes=['weather','clear','foggy' ,'overcast', 'partly cloudy','rainy','snowy', 'undefined']
+classes=['weather','clear' ,'overcast','partly cloudy','rainy','snowy']
+
 # df=data.loc[data['class'].isin(["traffic sign","traffic light"])]
-df=df.loc[data['class'].isin(classes)]
+df=df.loc[data['weather'].isin(classes)]
 
-print(df.groupby('class').count())
+print(df.groupby('weather').count())
 
 
-df=df.replace("motor", "cool")
-df=df.replace("bike", "cool")
-df=df.replace("cool", "motorbike")
-df=df.replace("traffic light", "traffic_light")
-df=df.replace("traffic sign", "traffic_sign")
-print(df.groupby('class').count())
-df.to_csv("berkely_ready_to_train.csv")
+df=df.replace("partly cloudy", "partly_cloudy")
+
+# df=df.replace("bike", "cool")
+# df=df.replace("cool", "motorbike")
+# df=df.replace("traffic light", "traffic_light")
+# df=df.replace("traffic sign", "traffic_sign")
+print(df.groupby('weather').count())
+# df.to_csv("berkely_weather.csv")
 print(1)
 
 

@@ -24,10 +24,10 @@ inputs = Variable(torch.Tensor(x_one_hot))
 labels = Variable(torch.LongTensor(y_data))
 
 num_classes = 5
-input_size = 5  # one-hot size
-hidden_size = 5  # output from the LSTM. 5 to directly predict one-hot
+input_size = 5  # one-hot size(no of inputs in one time period batch)
+hidden_size =5 # output from the LSTM. 5 to directly predict one-hot(no of hidden neuron in one layer)
 batch_size = 1   # one sentence
-sequence_length = 6  # |ihello| == 6
+sequence_length = 6  # |ihello| == 6(no of time period in one batch
 num_layers = 1  # one-layer rnn
 
 
@@ -42,13 +42,14 @@ class RNN(nn.Module):
         self.hidden_size = hidden_size
         self.sequence_length = sequence_length
 
-        self.rnn = nn.RNN(input_size=5, hidden_size=5, batch_first=True)
+        # self.rnn = nn.RNN(input_size=5, hidden_size=5, batch_first=True)
+        self.rnn = nn.RNN(input_size=self.input_size, hidden_size=self.hidden_size, batch_first=True)
+        print()
 
     def forward(self, x):
         # Initialize hidden and cell states
         # (num_layers * num_directions, batch, hidden_size) for batch_first=True
-        h_0 = Variable(torch.zeros(
-            self.num_layers, x.size(0), self.hidden_size))
+        h_0 = Variable(torch.zeros(self.num_layers, x.size(0), self.hidden_size))
 
         # Reshape input
         x.view(x.size(0), self.sequence_length, self.input_size)
