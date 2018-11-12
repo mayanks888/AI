@@ -40,7 +40,7 @@ class Replay_memory(object):
         samples = zip(*random.sample(self.memory, batch_size))#check how its work
         return map(lambda x: torch.tensor(torch.cat(x, 0)), samples)#convert sample in concat torch tensor
 
-class dqn():
+class Dqn():
     def __init__(self,input_size,np_action,gamma):
         self.gamma=gamma
         self.reward_window=[]#mean of previous rewards

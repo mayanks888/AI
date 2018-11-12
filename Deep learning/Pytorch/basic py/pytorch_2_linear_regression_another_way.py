@@ -1,4 +1,4 @@
- import torch
+import torch
 from torch.autograd import Variable
 # input matrix is (3x1)
 #
