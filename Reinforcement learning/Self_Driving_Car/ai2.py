@@ -69,9 +69,24 @@ class Dqn():
         # action = probs.multinomial()
         return action.data[0]
     
-    def learn(self, batch_state, batch_next_state, batch_reward, batch_action):
-        outputs = self.model(batch_state).gather(1, batch_action.unsqueeze(1)).squeeze(1)
-        next_outputs = self.model(batch_next_state).detach().max(1)[0]
+    def learn(self, last_batch_state, new_batch_next_state, batch_reward, batch_action):
+        # outputs = self.model(last_batch_state).gather(1, batch_action.unsqueeze(1)).squeeze(1)
+        ##################################################33333
+        # normal playing
+        sqeze_action = batch_action.unsqueeze(1)#adding one dimensionality
+        outputs_last_batch_Q = self.model(last_batch_state)
+        outputs1=outputs_last_batch_Q.gather(1, sqeze_action)
+        outputs=outputs1.squeeze(1)
+        ###########################################################
+        # next_outputs = self.model(new_batch_next_state).detach().max(1)[0]
+        ##################################################33333
+        # normal playing
+        next_batch_Q = self.model(new_batch_next_state)
+        next_batch_Q_dteach=next_batch_Q.detach()
+        next_batch_Q_max=next_batch_Q_dteach.max(1)[0]
+        next_outputs=next_batch_Q_max
+        ##################################################33333
+
         target = self.gamma*next_outputs + batch_reward
         td_loss = F.smooth_l1_loss(outputs, target)
         self.optimizer.zero_grad()
