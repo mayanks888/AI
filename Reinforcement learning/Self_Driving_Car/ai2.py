@@ -20,14 +20,15 @@ class Network(nn.Module):
         super(Network, self).__init__()
         self.input_size = input_size
         self.nb_action = nb_action
-        self.fc1 = nn.Linear(input_size, 30)
-        self.fc2 = nn.Linear(30, 30)
+        self.fc1 = nn.Linear(input_size, 100)
+        self.fc2 = nn.Linear(100, 30)
         self.fc3 = nn.Linear(30, nb_action)
     
     def forward(self, state):
         x = F.relu(self.fc1(state))
+        # x = F.relu(self.fc2(x))
         x = F.relu(self.fc2(x))
-        x = F.relu(self.fc2(x))
+        # x = F.relu(self.fc2(x))
         q_values = self.fc3(x)
         return q_values
 

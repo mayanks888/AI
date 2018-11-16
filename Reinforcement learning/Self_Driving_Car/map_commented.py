@@ -36,7 +36,9 @@ scores = [] # initializing the mean score curve (sliding window of the rewards) 
 
 # Initializing the map
 first_update = True # using this trick to initialize the map only once
+
 def init():
+    global first_update
     global sand # sand is an array that has as many cells as our graphic interface has pixels. Each cell has a one if there is sand, 0 otherwise.
     global goal_x # x-coordinate of the goal (where the car has to go, that is the airport or the downtown)
     global goal_y # y-coordinate of the goal (where the car has to go, that is the airport or the downtown)
@@ -44,6 +46,7 @@ def init():
     goal_x = 20 # the goal to reach is at the upper left of the map (the x-coordinate is 20 and not 0 because the car gets bad reward if it touches the wall)
     goal_y = largeur - 20 # the goal to reach is at the upper left of the map (y-coordinate)
     first_update = False # trick to initialize the map only once
+
 
 # Initializing the last distance
 last_distance = 0
@@ -120,8 +123,10 @@ class Game(Widget):
 
         longueur = self.width # width of the map (horizontal edge)
         largeur = self.height # height of the map (vertical edge)
+        # first_update = True
         if first_update: # trick to initialize the map only once
             init()
+            # first_update=False
 
         xx = goal_x - self.car.x # difference of x-coordinates between the goal and the car
         yy = goal_y - self.car.y # difference of y-coordinates between the goal and the car
@@ -141,27 +146,27 @@ class Game(Widget):
             last_reward = -1 # and reward = -1
         else: # otherwise
             self.car.velocity = Vector(6, 0).rotate(self.car.angle) # it goes to a normal speed (speed = 6)
-            last_reward = -0.2 # and it gets bad reward (-0.2)
+            last_reward = -0.1 # and it gets bad reward (-0.2)
             if distance < last_distance: # however if it getting close to the goal
-                last_reward = 0.1 # it still gets slightly positive reward 0.1
+                last_reward = 0.5 # it still gets slightly positive reward 0.1
 
         if self.car.x < 10: # if the car is in the left edge of the frame
             self.car.x = 10 # it is not slowed down
-            last_reward = -2 # but it gets bad reward -1
+            last_reward = -1 # but it gets bad reward -1
         if self.car.x > self.width-10: # if the car is in the right edge of the frame
             self.car.x = self.width-10 # it is not slowed down
-            last_reward = -2 # but it gets bad reward -1
+            last_reward = -1 # but it gets bad reward -1
         if self.car.y < 10: # if the car is in the bottom edge of the frame
             self.car.y = 10 # it is not slowed down
-            last_reward = -2 # but it gets bad reward -1
+            last_reward = -1 # but it gets bad reward -1
         if self.car.y > self.height-10: # if the car is in the upper edge of the frame
             self.car.y = self.height-10 # it is not slowed down
-            last_reward = -5 # but it gets bad reward -1
-
+            last_reward = -1 # but it gets bad reward -1
+        # print('initia distance', (goal_x, goal_y))
         if distance < 100: # when the car reaches its goal
             goal_x = self.width - goal_x # the goal becomes the bottom right corner of the map (the downtown), and vice versa (updating of the x-coordinate of the goal)
             goal_y = self.height - goal_y # the goal becomes the bottom right corner of the map (the downtown), and vice versa (updating of the y-coordinate of the goal)
-
+            # print('goal are ', (goal_x,goal_y))
         # Updating the last distance from the car to the goal
         last_distance = distance
 
