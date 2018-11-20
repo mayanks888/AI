@@ -148,7 +148,7 @@ class Game(Widget):
             self.car.velocity = Vector(6, 0).rotate(self.car.angle) # it goes to a normal speed (speed = 6)
             last_reward = -0.1 # and it gets bad reward (-0.2)
             if distance < last_distance: # however if it getting close to the goal
-                last_reward = 0.5 # it still gets slightly positive reward 0.1
+                last_reward = 0.1 # it still gets slightly positive reward 0.1
 
         if self.car.x < 10: # if the car is in the left edge of the frame
             self.car.x = 10 # it is not slowed down
