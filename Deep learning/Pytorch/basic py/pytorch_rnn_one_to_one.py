@@ -47,6 +47,9 @@ class RNN(nn.Module):
         print()
 
     def forward(self, x):
+        # x (batch, time_step, input_size)
+        # h_state (n_layers, batch, hidden_size)
+        # r_out (batch, time_step, hidden_size)
         # Initialize hidden and cell states
         # (num_layers * num_directions, batch, hidden_size) for batch_first=True
         h_0 = Variable(torch.zeros(self.num_layers, x.size(0), self.hidden_size))
@@ -58,7 +61,7 @@ class RNN(nn.Module):
         # Input: (batch, seq_len, input_size)
         # h_0: (num_layers * num_directions, batch, hidden_size)
 
-        out, _ = self.rnn(x, h_0)
+        out, new_h_1 = self.rnn(x, h_0)
         return out.view(-1, num_classes)
 
 

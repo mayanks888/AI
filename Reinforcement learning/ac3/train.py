@@ -77,4 +77,3 @@ def train(rank, params, shared_model, optimizer):
         ensure_shared_grads(model, shared_model) # making sure the model of the agent and the shared model share the same gradient
         optimizer.step() # running the optimization step
 
-# tra/in()
