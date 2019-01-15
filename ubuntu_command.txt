@@ -1,0 +1,163 @@
+commands
+
+1. pwd : path of working directory
+2. man : show the details of the commands
+3. verbose : show important info :read more about it
+----------
+1. df : disk space information
+2. df -h : human readable form of disk space
+3. du : estimate and display diskspace by folder
+4. du -sh :du s=summary , h=human readable
+----------
+1. free : all memory information
+2. free -m : show information in megabytes(-g, -k,-b)
+----------
+1. watch free -m : execute command after every time
+2. watch -n 1  nvidia-smi   :  execute same command after every one second
+----------
+1. head filename : show first 10 line of file_name 
+2. tail -n 8 filename : show last 8 line of file
+----------
+1. find  /download -name test.sh : find pah of test.sh inside directory download
+2. find  /download -name *.sh : find path of all .sh files inside directory download
+3. find  /download -mtime -1 : find all the file inside download that were created one day ago
+----------
+
+wc text.txt : show details inside the file(lines , word and character)
+     -c, --byte print the byte counts
+       -m, --chars print the character counts
+              t the newline count
+       --files0-from=F :read input from the files specified by NUL-terminated names  in  file F; If F is - then read names from standard input
+       -L, --max-line-length: print the length of the longest line
+
+       -w, --words
+              print the word counts
+
+       --help display this help and exit
+
+       --version
+              output version information and exit
+
+
+----------
+              - ls command 
+    ls : getting the list of all the list of file inside the directory
+    ls -R : show the list in hierarchical order
+    ls -l :long listing of file
+    ls -ld dir :long listing of directory dir
+              
+              - CD command
+    cd : this is for entering into the directory by default it will go to home directory
+    cd / or cd ~ : this is to enter the root directory
+    cd ..  : go one step back
+    cd ../.. : go two step backwards
+    cd Download/mayankfolder : enter to the specific path
+    cd 'my folder' :if directory name  contain space between them
+                
+              - cat commands
+    cat : display the content of files
+    cat list.txt
+    cat -n list.txt : show content with line no
+    man cat
+    cat > test.txt
+      line 1
+      line 2 
+      line 3
+    cat >> test.txt
+      line 1
+      line 2 
+      line 3
+      
+    cat test.txt > test_2.txt
+      
+              
+              - mkdir
+    mkdir test : it will create the folder/directory
+    mkdir -p test/train : this will create the test folder thn train subfolder inside it 
+    mkdir -p datasets{test,train,val} : this will create the dataset folder and than three subfolder inside it 
+              [ ] rm/rmdir
+    rmdir train : remove train directory
+    rmdir -p datasets/train : remove all folder including datasets
+    rm -r datasets : if datasets direction contain some file inside it 
+    rm -rv datasets : with information delete all data inside datasets
+    use 'mal' for more
+              
+              - cp : cp option source destination
+    cp test.txt test_2.txt : copy with test_2.txt
+    cp test.txt /home/downloads/test_2.txt : copy inside directory
+    cp test.txt test_2.txt /home/downloads/ :copy multiple files inside directory
+    cp -i test.txt test_2.txt : ask before overwrite
+    cp -R dir1 dir2 :copy and create dir1 to dir2
+    
+              
+              - mv: mv option source destination
+    mv test1.txt text_2.txt : move and rename same file to test_2
+    mv test1.txt /dir/ :move the file inside the direcory
+    mv -i test1.txt /dir/ :move the file but ask before overwrite if already existed
+              
+              - nano 
+    nano file.txt : to create the file or open in the small editor
+    nano test.cpp :to create c++ 
+    nano test.py : to create pyhton file
+    
+              
+              - sudo: (super user do ) basically it is used to give admin right
+    sudo makdir datasets
+    sudo apt-get install skype
+              
+              - top :system monitor/kill
+    top
+      press s to change the refresh monitor
+      press i for runnig process
+    
+    kill 3286 :pid of process
+    ps -ux :list of all running process
+
+
+              - echo
+    echo "hello world" : return the string hello world
+    myvar="hello"
+      echo $myvar : return hello
+    echo -e "some \n text" : return some
+                                    text
+              
+              - chmod: change the permission of the file 
+          user                      group                other
+          r w x                     r w x                 r w x
+          4 2 1  
+    # Permission                      rwx
+    7 read, write and execute rwx
+    6 read and write                 rw-
+    5 read and execute                r-x
+    4 read only                       r--
+    3 write and execute               -wx
+    2 write only                       -w-
+    1 execute only                     --x
+    0 none                             ---
+    chmod 755 file.txt : user :7 all read write and execute, group 5 only read and write, and  other 5 read and write
+    ___________________________________________________________________________________
+    chmod o+x file_name :means change the permission of file for 'other' to 'execute'
+    chmod g-wx file_name :means change the permission of file for 'group' to 'execute' and  write
+    chmod ug-rwx file_name :means change the permission of file for 'user, group' to  'read', 'execute' and  'write'
+    chmod a-rwx file_name :means change the permission of file for 'all' to 'read','execute' and  'write'
+              - bash script : set of command  to execute for ubuntu
+    nano myscript.sh :  create the script file .sh show user that it a script
+      cin/bash : to show  that script will be used as bash commands
+      ls -l : show long listing
+      echo "hello world"
+      ctrl+d : end the script
+      
+    execute script myscript.sh
+    if permission is needed 
+      chmod +x myscript.sh
+    
+     ./myscript.sh :to execute the script
+              
+              -  which : location of any app or director/whatis
+          
+    which firefox : loction of firefox
+    whatis firefox : info about firefox
+              - .bashrc : command execute for new  terminal session
+    nano .bashrc
+    gedit .bashrc :open in editor
+    echo " this is now modified" : enter inside the .bashrc file 
