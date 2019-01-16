@@ -3,6 +3,7 @@ commands
 1. pwd : path of working directory
 2. man : show the details of the commands
 3. verbose : show important info :read more about it
+4. ifconfig : check ip address  of the system
 ----------
 1. df : disk space information
 2. df -h : human readable form of disk space
@@ -22,22 +23,23 @@ commands
 2. find  /download -name *.sh : find path of all .sh files inside directory download
 3. find  /download -mtime -1 : find all the file inside download that were created one day ago
 ----------
+1. wc text.txt : show details inside the file(lines , word and character)
 
-wc text.txt : show details inside the file(lines , word and character)
      -c, --byte print the byte counts
-       -m, --chars print the character counts
-              t the newline count
-       --files0-from=F :read input from the files specified by NUL-terminated names  in  file F; If F is - then read names from standard input
-       -L, --max-line-length: print the length of the longest line
+       -m, --chars print the character counts 
+         t the newline count     
+       --files0-from=F :read input from the files specified by NUL-terminated names  in  file F; If F is 
+       -L, --max-line-length: print the length of the longest lin
+       -w, --words print the word count`
+       --version     output version information and exit
+       
 
-       -w, --words
-              print the word counts
+----------
+1. cal: show calendar
+2. date:show date
+3.  date && cal : show date and calendar together
 
-       --help display this help and exit
-
-       --version
-              output version information and exit
-
+   
 
 ----------
               - ls command 
@@ -161,3 +163,40 @@ wc text.txt : show details inside the file(lines , word and character)
     nano .bashrc
     gedit .bashrc :open in editor
     echo " this is now modified" : enter inside the .bashrc file 
+              -  cal/date
+    cal : show the calender
+    date
+              
+              - apt-get : advanced package tool for debian based operating system
+    sudo apt-get update:update package from remove direcory
+       nano /etc/apt/sources.list : to a open the file and  check the all the packages install
+    java -version or java -v : to check if app is install in you system
+    sudo apt-get install skype : to install app
+    sudo apt-get remove skype : to remove the app , it only remove the app but not configuration file 
+    sudo apt-get remove --purge skype : remover app as well as configuration file
+    sudo apt-get autoremove : remove non used library , not recomended read printed list first
+    {{{{ apt-get [-asqdyfmubV] [-o=config_string] [-c=config_file]
+                   [-t=target_release] [-a=architecture] {update | upgrade |
+                   dselect-upgrade | dist-upgrade |
+                   install pkg [{=pkg_version_number | /target_release}]...  |
+                   remove pkg...  | purge pkg...  |
+                   source pkg [{=pkg_version_number | /target_release}]...  |
+                   build-dep pkg [{=pkg_version_number | /target_release}]...  |
+                   download pkg [{=pkg_version_number | /target_release}]...  |
+                   check | clean | autoclean | autoremove | {-v | --version} |
+                   {-h | --help}}
+    
+       
+
+tar/untar
+
+    tar -cvf test.tar test : create tar file name test.tar for folder tes
+      -cvf = c: create tar, f=self defined file name, v= verbose ( show status of file conversion)
+    tar -xvf test.tar : untar file
+      -xvf : x= execute tar file
+    tar -cvfz test.gz test test : create gz file
+    tar -xvfz test.gz test : unzip  gz file
+
+ssh : 
+
+    
