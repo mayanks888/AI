@@ -1,9 +1,10 @@
 commands
 
-1. pwd : path of working directory
+1. pwd : path of working directory(current directory)
 2. man : show the details of the commands
 3. verbose : show important info :read more about it
 4. ifconfig : check ip address  of the system
+5. touch main.cpp : simpy create the file without opening like nano
 ----------
 1. df : disk space information
 2. df -h : human readable form of disk space
@@ -22,6 +23,7 @@ commands
 1. find  /download -name test.sh : find pah of test.sh inside directory download
 2. find  /download -name *.sh : find path of all .sh files inside directory download
 3. find  /download -mtime -1 : find all the file inside download that were created one day ago
+4. find  .-type-f -name *.sh :  find all the file with type f (file ) and  exe with .sh
 ----------
 1. wc text.txt : show details inside the file(lines , word and character)
 
@@ -45,7 +47,7 @@ commands
               - ls command 
     ls : getting the list of all the list of file inside the directory
     ls -R : show the list in hierarchical order
-    ls -l :long listing of file
+    ls -l :long listing of file,show group user 
     ls -ld dir :long listing of directory dir
               
               - CD command
@@ -74,7 +76,7 @@ commands
       
               
               - mkdir
-    mkdir test : it will create the folder/directory
+    mkdir ./test : it will create the  folder/directory int the current directory
     mkdir -p test/train : this will create the test folder thn train subfolder inside it 
     mkdir -p datasets{test,train,val} : this will create the dataset folder and than three subfolder inside it 
               [ ] rm/rmdir
@@ -83,6 +85,7 @@ commands
     rm -r datasets : if datasets direction contain some file inside it 
     rm -rv datasets : with information delete all data inside datasets
     use 'mal' for more
+    rm /dir/* : delete all the file inside the directoy
               
               - cp : cp option source destination
     cp test.txt test_2.txt : copy with test_2.txt
@@ -97,23 +100,29 @@ commands
     mv test1.txt /dir/ :move the file inside the direcory
     mv -i test1.txt /dir/ :move the file but ask before overwrite if already existed
               
-              - nano 
+              - nano /touch
     nano file.txt : to create the file or open in the small editor
     nano test.cpp :to create c++ 
     nano test.py : to create pyhton file
-    
+    touch main.cpp : only create file without opening it
               
               - sudo: (super user do ) basically it is used to give admin right
     sudo makdir datasets
     sudo apt-get install skype
+    sudo su : when you dont want to write sudo more into same terminal ,get all the permission with su
+    su mayank : comeback to you owm username terminal
+    sudo !! : when command get failed due to sudo access, use this and command will start
               
               - top :system monitor/kill
     top
       press s to change the refresh monitor
       press i for runnig process
     
-    kill 3286 :pid of process
-    ps -ux :list of all running process
+    kill 3286 :pid of process close the process
+    killall lirl-browser : kill all process
+    ps -ux :list of all running process]
+    pgrep lirl-browser
+    
 
 
               - echo
@@ -142,6 +151,7 @@ commands
     chmod g-wx file_name :means change the permission of file for 'group' to 'execute' and  write
     chmod ug-rwx file_name :means change the permission of file for 'user, group' to  'read', 'execute' and  'write'
     chmod a-rwx file_name :means change the permission of file for 'all' to 'read','execute' and  'write'
+    sudo chown -R nick:nink : chown is used to change the ownership of the file(R= resursive means apply to all the file inside directory)
               - bash script : set of command  to execute for ubuntu
     nano myscript.sh :  create the script file .sh show user that it a script
       cin/bash : to show  that script will be used as bash commands
@@ -165,9 +175,12 @@ commands
     echo " this is now modified" : enter inside the .bashrc file 
               -  cal/date
     cal : show the calender
-    date
+    date:show the date
               
-              - apt-get : advanced package tool for debian based operating system
+
+apt-get : advanced package tool for debian based operating system
+so basically we can use apt-get when app are present in the debian repository for other app there are other method
+
     sudo apt-get update:update package from remove direcory
        nano /etc/apt/sources.list : to a open the file and  check the all the packages install
     java -version or java -v : to check if app is install in you system
@@ -185,11 +198,14 @@ commands
                    download pkg [{=pkg_version_number | /target_release}]...  |
                    check | clean | autoclean | autoremove | {-v | --version} |
                    {-h | --help}}
-    
-       
-
-tar/untar
-
+    apt-cache search skype : this will search for skype app in the repository
+    apt-cache policy skype : search the install app in your system
+    sudo apt-get upgrade : if any new version of app is released in the debian      repository
+    sudo service elasrisearch start : start the servicesu
+    sudo systemctl elasticsearch start :: start the servicesu
+    sudo servicr elastisearch stop :stop the service
+                            this will upgrade it
+              - tar/untar
     tar -cvf test.tar test : create tar file name test.tar for folder tes
       -cvf = c: create tar, f=self defined file name, v= verbose ( show status of file conversion)
     tar -xvf test.tar : untar file
@@ -200,3 +216,12 @@ tar/untar
 ssh : 
 
     
+
+deb: its is the extension of the app file use to install the third party software in ubuntu (similar to .exe in windows)
+
+    sudo dpkg -i *.deb : install the app (* denotes file name)
+
+ grep
+
+     grep 'function' main.txt : find function in main.txt
+     grep -i  'function' main.txt : find function in main.txt ignore case sensitivity(-i)
