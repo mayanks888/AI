@@ -1,5 +1,5 @@
 python/tensorflow
-
+ aspect ratio = width of image/height of image, scale is the size of the image
 ---------------------------------------------------------------------------------------------------
 
 1. Shift ubunto python to new version
