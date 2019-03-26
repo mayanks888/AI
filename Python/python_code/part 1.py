@@ -10,8 +10,8 @@ df=pd.DataFrame()
 df['name']=['mayank','shashank']
 df['place']=['bangalore','delhi']
 df['profession']=['engineer','HR']
-print df
-print type(df)
+print("df")
+print type("df")
 
 #now if you want to add new rows into dataframe##
 new_row=pd.Series(['sandy','bangalore','computer engineer'])

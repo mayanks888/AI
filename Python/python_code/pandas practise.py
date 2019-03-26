@@ -1,13 +1,13 @@
 import pandas as pd
 import numpy as np
-'''#basically excel version of python
+#basically excel version of python
 mylist=[1,2,3,4]
 ind=['a','b','c','d']
 data=pd.Series(mylist,index=ind)#similar like excel as index is serial number
 print (data)
 print (data['a'])
 data.columns='mynum'
-print (data.columns)'''
+print (data.columns)
 
 #now lets learn about data frame
 # daraframe is nothing  but a collection of series just like excel(bunch of column)

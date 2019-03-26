@@ -21,6 +21,7 @@ a=[]
 file_number=0
 classes=['bus','light','traffic_sign','person','bike','truck','motor','car','train','Rider']
 
+# filename1='/home/mayank-s/PycharmProjects/Datasets/Berkely DeepDrive/labels/100k/train/'
 filename1='/home/mayank-s/PycharmProjects/Datasets/Berkely DeepDrive/labels/100k/train/'
 for i in os.listdir(filename1):
 
@@ -52,5 +53,5 @@ for i in os.listdir(filename1):
     file_number=file_number+1
 columns=['filename','Class','xmin','xmax','ymin','ymax']
 pd1=pd.DataFrame(a,columns=columns)
-pd1.to_csv('output.csv')
+pd1.to_csv('output1.csv')
 

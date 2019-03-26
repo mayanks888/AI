@@ -8,6 +8,7 @@ from keras import optimizers
 from keras import backend as keras_backend
 from keras.callbacks import TensorBoard
 from tensorflow.python import debug as tf_debug
+from keras.layers import Dense,Conv2D,MaxPooling2D,Flatten,AveragePooling2D,Dropout,BatchNormalization,Activation
 inputshape=(224,224,3)
 base_model=applications.vgg16.VGG16(weights = "imagenet", include_top=True,input_shape=inputshape)
 print (base_model.summary())
