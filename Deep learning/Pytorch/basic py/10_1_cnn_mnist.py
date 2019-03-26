@@ -13,8 +13,8 @@ from PIL import Image
 batch_size = 64
 import numpy as np
 # MNIST Dataset
-train_dataset = datasets.MNIST(root='./data/', train=True, download=True)
-# train_dataset = datasets.MNIST(root='./data/', train=True, transform=transforms.ToTensor(), download=True)
+# train_dataset = datasets.MNIST(root='./data/', train=True, download=True)
+train_dataset = datasets.MNIST(root='./data/', train=True, transform=transforms.ToTensor(), download=True)
 #
 # # for img, label_id in train_dataset:
 # for train_data,train_labels in train_dataset:
@@ -104,4 +104,4 @@ def test():
 
 for epoch in range(1, 10):
     train(epoch)
-    test()
+    # test()

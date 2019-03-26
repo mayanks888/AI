@@ -20,5 +20,5 @@ y_predict= regression_data.predict(X_train)
 # plt.show()
 print (regression_data.score)
 
-print regression_data.coef_
+print (regression_data.coef_)
 

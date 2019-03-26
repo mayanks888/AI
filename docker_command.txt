@@ -1,0 +1,368 @@
+docker
+
+Docker documents
+Some terminology that is used frequently in the Docker ecosystem.
+
+1. Images - The blueprints of our application which form the basis of containers. In the demo above, we used the docker pull command to download the busybox image.
+2. Containers - Created from Docker images and run the actual application. We create a container using docker run which we did using the busybox image that we downloaded. A list of running containers can be seen using the docker ps command.
+3. Docker Daemon - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operating system to which clients talk to.
+4. Docker Client - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as Kitematic which provide a GUI to the users.
+5. Docker Hub - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.
+
+ 
+Images:
+
+1. Commands
+  1. docker run <images_name> or
+  2. docker build --tag python_docker  create image with tagname(Example: docker run busybox echo "hello there")
+  3. docker images --help :
+  4. docker pull image : pull image from reposit or local
+  5. docker images : list of all images
+  6. docker images -q :
+  7. docker images -f “dangling=false” :
+  8. docker images -f “dangling=false” -q :
+  9. docker run image : run a container of images
+  10. docker rmi image : delete image
+  11. docker rmi -f image :  delelte image forcefully even container is running
+  12. docker inspect :  Check layer of the containers
+  13. docker history imageName
+  14. “docker run –it –name <container name>  <image_name> bash “: most imp run interactive session
+    1. It: intereactive session
+    2. --name:(container name) name given to container
+    3. Image name/Id:image name of id
+
+ 
+
+2. docker pull <image_name> : pulls images from docker online registry
+  1. “docker run --rm <images_name>:”One last thing that'll be useful is the --rm flag that can be passed to docker run which automatically deletes the container once it's exited from. For one off docker runs, --rm flag is very useful.
+  2. Static Sites: some more expalanation about docker statis sites
+    - Let's start by taking baby-steps. The first thing we're going to look at is how we can run a dead-simple static website. We're going to pull a Docker image from Docker Hub, run the container and see how easy it is to run a webserver.
+
+Let's begin. The image that we are going to use is a single-page website that I've already created for the purpose of this demo and hosted on the registry - prakhar1989/static-site. We can download and run the image directly in one go using docker run. As noted above, the --rm flag automatically removes the container when it exits.
+
+    - $ docker run --rm prakhar1989/static-site
+
+Since the image doesn't exist locally, the client will first fetch the image from the registry and then run the image. If all goes well, you should see a Nginx is running... message in your terminal. Okay now that the server is running, how to see the website? What port is it running on? And more importantly, how do we access the container directly from our host machine? Hit Ctrl+C to stop the container.
+Well in this case, the client is not exposing any ports so we need to re-run the docker run command to publish ports. While we're at it, we should also find a way so that our terminal is not attached to the running container. This way, you can happily close your terminal and keep the container running. This is called detached mode.
+
+    - $ docker run -d -P --name static-site prakhar1989/static-sitee61d12292d69556eabe2a44c16cbd54486b2527e2ce4f95438e504afb7b02810
+
+In the above command, -d will detach our terminal, -P will publish all exposed ports to random ports and finally --name corresponds to a name we want to give. Now we can see the ports by running the docker port [CONTAINER] command
+
+    - $ docker port static-site80/tcp -> 0.0.0.0:32769443/tcp -> 0.0.0.0:32768
+
+You can open http://localhost:32769 in your browser.
+
+    - To stop a detached container, run docker stop by giving the container ID. In this case, we can use the name static-site we used to start the container.
+
+$ docker stop static-sitestatic-site
+ 
+ 
+
+3. We've looked at images before, but in this section we'll dive deeper into what Docker images are and build our own image! Lastly, we'll also use that image to run our application locally and finally deploy on AWS to share it with our friends! Excited? Great! Let's get started.
+
+Docker images are the basis of containers. In the previous example, we pulled the Busybox image from the registry and asked the Docker client to run a container based on that image. To see the list of images that are available locally, use the docker images command.
+ 
+
+----------
+
+ The above gives a list of images that I've pulled from the registry, along with ones that I've created myself (we'll shortly see how). The TAG refers to a particular snapshot of the image and the IMAGE ID is the corresponding unique identifier for that image.
+For simplicity, you can think of an image akin to a git repository - images can be committed with changes and have multiple versions. If you don't provide a specific version number, the client defaults to latest. For example, you can pull a specific version of ubuntu image
+$ docker pull ubuntu:12.04
+To get a new Docker image you can either get it from a registry (such as the Docker Hub) or create your own. There are tens of thousands of images available on Docker Hub. You can also search for images directly from the command line using docker search.
+An important distinction to be aware of when it comes to images is the difference between base and child images.
+
+  - Base images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.
+  - Child images are images that build on base images and add additional functionality.
+
+Then there are official and user images, which can be both base and child images.
+
+  - Official images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are official images.
+  - User images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.
+
+‘
+ 
+ 
+Container:
+
+4.  Docker run <image_name>
+  1. Docker run –it <imagename> : run a session inside docker container
+5. Docker start <container_id>: to start any previously created docker with id.
+6. Docker stop<container_id>: to start any previously created docker with id.
+7. “docker run –it –name <container name>  <image_name> bash “: most imp run interactive session
+    1. It: intereactive session
+    2. --name:(container name) name given to container
+    3. Image name/Id:image name of id
+
+ 
+
+8.  
+9. docker ps : command shows you all containers that are currently running.
+  1. docker ps –a: So what we see above is a list of all containers that we ran. Do notice that the STATUS column shows that these containers exited a few minutes ago.
+  2. $ docker run -it busybox sh: To run command inside the container
+
+ ls:bin   dev   etc   home  proc  root  sys   tmp   usr   var/ #
+uptime :05:45:21 up  5:58,  0 users,  load average: 0.00, 0.01, 0.04
+
+10. Before we move ahead though, let's quickly talk about deleting containers. We saw above that we can still see remnants of the container even after we've exited by running docker ps -a. Throughout this tutorial, you'll run docker run multiple times and leaving stray containers will eat up disk space. Hence, as a rule of thumb, I clean up containers once I'm done with them. To do that, you can run the docker rm command. Just copy the container IDs from above and paste them alongside the command.
+
+Step 1: Stop container : docker stop <container id>
+Step 2: Remove container: docker rm <container id>
+docker rm 305297d7a235 ff0a5c3750b9
+Note: On deletion, you should see the IDs echoed back to you. If you have a bunch of containers
+Step 3 : docker rm $(docker ps -a -q -f status=exited) : This command deletes all containers that have a status of exited. In case you're wondering, the -q flag, only returns the numeric IDs and -f filters output based on conditions provided.
+Step 4: ”docker container prune”
+WARNING! This will remove all stopped containers. The docker container prune command can be used to achieve the same effect.
+ 
+Step 5: stop all container: docker stop $(docker ps -a -q)
+Step 6: delele all containerdocker rm $(docker ps -a -q)
+ 
+ 
+Docker help:
+ 
+
+  1. Docker container –help
+    1. Docker container rm –help
+    2. Docker container prune–help
+
+ 
+System comand docker :
+
+  1. docker stats : memory allocation to various containes
+  2. docker system df : all info about images and containers in system
+  3. docker system prune: remove all stopped acontainer s
+  4. Docker system prune –a : remove all stoped images+container form system
+----------
+
+ 
+ 
+ 
+ 
+Important Setup
+ 
+
+- To create container in iterative session
+  1. “Docker run –it –name <optional> <image ID/image name> “:  for non jupyter notebook
+  2. “Docker run –it –name <optional> <image ID/image name> bash “: for jupyter notebook
+
+ 
+
+- To copy image for local into docker container
+  1. Docker cp <target folder address> < container address>
+
+  Example : docker cp /home/mayank-s/Desktop/dock_image.tar  mayan:/tensorflow/models/research/object_detection/
+
+- To use local folder in the container
+  1. Docker run –it –name <container name optional> --v <local folder address> <image id> bash
+
+Example : docker run -it --name mayank -v /home/mayank-s/nk:/var ed58e2b10e4b bash
+
+- To commit container , it will create a new image of the container
+  1. Docker commit <container id> new_image_name
+
+Now you can you this image which you have develop from container
+
+- To save and load image
+  1. Docker save <image id > <destination address>
+  2. Docker load <image address at local pc>
+
+ 
+
+- To run tensorflow on nvidia docker
+  1.  Nvidia-docker run –it <image_id> bash
+
+ 
+
+- To run prexited container in IT(interactive mode)
+  1. Docker start <container name/id>
+  2. Docker attach <container name/id>
+----------
+
+List all exited containers
+docker ps -aq -f status=exited
+Remove stopped containers
+docker ps -aq --no-trunc -f status=exited | xargs docker rm
+This command will not remove running containers, only an error message will be printed out for each of them.
+Remove dangling/untagged images
+docker images -q --filter dangling=true | xargs docker rmi
+Remove containers created after a specific container
+docker ps --since a1bz3768ez7g -q | xargs docker rm
+Remove containers created before a specific container
+docker ps --before a1bz3768ez7g -q | xargs docker rm
+Use --rm for docker build
+Recap and cheat sheet
+
+List Docker CLI commands
+
+docker
+docker container --help
+
+Display Docker version and info
+
+docker --version
+docker version
+docker info
+
+Execute Docker image
+
+docker run hello-world
+
+List Docker images
+
+docker image ls
+
+List Docker containers (running, all, all in quiet mode)
+
+docker container ls
+docker container ls --all
+docker container ls -aq
+docker build -t friendlyhello . # Create image using this directory's Dockerfile
+docker run -p 4000:80 friendlyhello # Run "friendlyname" mapping port 4000 to 80
+docker run -d -p 4000:80 friendlyhello # Same thing, but in detached mode
+docker container ls # List all running containers
+docker container ls -a # List all containers, even those not running
+docker container stop # Gracefully stop the specified container
+docker container kill # Force shutdown of the specified container
+docker container rm # Remove specified container from this machine
+docker container rm $(docker container ls -a -q) # Remove all containers
+docker image ls -a # List all images on this machine
+docker image rm  # Remove specified image from this machine
+docker image rm $(docker image ls -a -q) # Remove all images from this machine
+docker login # Log in this CLI session using your Docker credentials
+docker tag  username/repository:tag # Tag  for upload to registry
+docker push username/repository:tag # Upload tagged image to registry
+docker run username/repository:tag # Run image from a registry
+docker build --tag python_docker .
+
+___________________________________________________________________
+Docker documents
+Some terminology that is used frequently in the Docker ecosystem.
+1.	Images - The blueprints of our application which form the basis of containers. In the demo above, we used the docker pull command to download the busybox image.
+2.	Containers - Created from Docker images and run the actual application. We create a container using docker run which we did using the busybox image that we downloaded. A list of running containers can be seen using the docker ps command.
+3.	Docker Daemon - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operating system to which clients talk to.
+4.	Docker Client - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as Kitematic which provide a GUI to the users.
+5.	Docker Hub - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.
+
+Images:
+1.	Commands
+a.	docker run <images_name> or 
+b.	docker build --tag python_docker  create image with tagname(Example: docker run busybox echo "hello there")
+c.	docker images --help : 
+d.	docker pull image : pull image from reposit or local
+e.	docker images : list of all images
+f.	docker images -q : 
+g.	docker images -f “dangling=false” : 
+h.	docker images -f “dangling=false” -q : 
+i.	docker run image : run a container of images 
+j.	docker rmi image : delete image 
+k.	docker rmi -f image :  delelte image forcefully even container is running
+l.	docker inspect :  Check layer of the containers 
+m.	docker history imageName
+n.	“docker run –it –name <container name>  <image_name> bash “: most imp run interactive session
+i.	It: intereactive session
+ii.	--name:(container name) name given to container 
+iii.	Image name/Id:image name of id 
+ 
+2.	docker pull <image_name> : pulls images from docker online registry
+a.	“docker run --rm <images_name>:”One last thing that'll be useful is the --rm flag that can be passed to docker run which automatically deletes the container once it's exited from. For one off docker runs, --rm flag is very useful. 
+b.	Static Sites: some more expalanation about docker statis sites
+•	Let's start by taking baby-steps. The first thing we're going to look at is how we can run a dead-simple static website. We're going to pull a Docker image from Docker Hub, run the container and see how easy it is to run a webserver.
+Let's begin. The image that we are going to use is a single-page website that I've already created for the purpose of this demo and hosted on the registry - prakhar1989/static-site. We can download and run the image directly in one go using docker run. As noted above, the --rm flag automatically removes the container when it exits.
+•	$ docker run --rm prakhar1989/static-site 
+Since the image doesn't exist locally, the client will first fetch the image from the registry and then run the image. If all goes well, you should see a Nginx is running... message in your terminal. Okay now that the server is running, how to see the website? What port is it running on? And more importantly, how do we access the container directly from our host machine? Hit Ctrl+C to stop the container.
+Well in this case, the client is not exposing any ports so we need to re-run the docker run command to publish ports. While we're at it, we should also find a way so that our terminal is not attached to the running container. This way, you can happily close your terminal and keep the container running. This is called detached mode.
+•	$ docker run -d -P --name static-site prakhar1989/static-sitee61d12292d69556eabe2a44c16cbd54486b2527e2ce4f95438e504afb7b02810 
+In the above command, -d will detach our terminal, -P will publish all exposed ports to random ports and finally --name corresponds to a name we want to give. Now we can see the ports by running the docker port [CONTAINER] command
+•	$ docker port static-site80/tcp -> 0.0.0.0:32769443/tcp -> 0.0.0.0:32768 
+You can open http://localhost:32769 in your browser.
+•	To stop a detached container, run docker stop by giving the container ID. In this case, we can use the name static-site we used to start the container.
+$ docker stop static-sitestatic-site
+
+
+3.	We've looked at images before, but in this section we'll dive deeper into what Docker images are and build our own image! Lastly, we'll also use that image to run our application locally and finally deploy on AWS to share it with our friends! Excited? Great! Let's get started.
+Docker images are the basis of containers. In the previous example, we pulled the Busybox image from the registry and asked the Docker client to run a container based on that image. To see the list of images that are available locally, use the docker images command.
+
+ 
+ The above gives a list of images that I've pulled from the registry, along with ones that I've created myself (we'll shortly see how). The TAG refers to a particular snapshot of the image and the IMAGE ID is the corresponding unique identifier for that image.
+For simplicity, you can think of an image akin to a git repository - images can be committed with changes and have multiple versions. If you don't provide a specific version number, the client defaults to latest. For example, you can pull a specific version of ubuntu image
+$ docker pull ubuntu:12.04 
+To get a new Docker image you can either get it from a registry (such as the Docker Hub) or create your own. There are tens of thousands of images available on Docker Hub. You can also search for images directly from the command line using docker search.
+An important distinction to be aware of when it comes to images is the difference between base and child images.
+o	Base images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.
+o	Child images are images that build on base images and add additional functionality.
+Then there are official and user images, which can be both base and child images.
+o	Official images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are official images.
+o	User images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.
+‘
+
+
+Container:
+4.	 Docker run <image_name>
+a.	Docker run –it <imagename> : run a session inside docker container
+5.	Docker start <container_id>: to start any previously created docker with id.
+6.	Docker stop<container_id>: to start any previously created docker with id.
+7.	“docker run –it –name <container name>  <image_name> bash “: most imp run interactive session
+iv.	It: intereactive session
+v.	--name:(container name) name given to container 
+vi.	Image name/Id:image name of id 
+ 
+8.	
+9.	docker ps : command shows you all containers that are currently running.
+a.	docker ps –a: So what we see above is a list of all containers that we ran. Do notice that the STATUS column shows that these containers exited a few minutes ago.
+b.	$ docker run -it busybox sh: To run command inside the container
+ ls:bin   dev   etc   home  proc  root  sys   tmp   usr   var/ # 
+uptime :05:45:21 up  5:58,  0 users,  load average: 0.00, 0.01, 0.04
+10.	Before we move ahead though, let's quickly talk about deleting containers. We saw above that we can still see remnants of the container even after we've exited by running docker ps -a. Throughout this tutorial, you'll run docker run multiple times and leaving stray containers will eat up disk space. Hence, as a rule of thumb, I clean up containers once I'm done with them. To do that, you can run the docker rm command. Just copy the container IDs from above and paste them alongside the command.
+Step 1: Stop container : docker stop <container id>
+Step 2: Remove container: docker rm <container id>
+docker rm 305297d7a235 ff0a5c3750b9
+Note: On deletion, you should see the IDs echoed back to you. If you have a bunch of containers
+Step 3 : docker rm $(docker ps -a -q -f status=exited) : This command deletes all containers that have a status of exited. In case you're wondering, the -q flag, only returns the numeric IDs and -f filters output based on conditions provided.
+Step 4: ”docker container prune”
+WARNING! This will remove all stopped containers. The docker container prune command can be used to achieve the same effect.
+
+Step 5: stop all container: docker stop $(docker ps -a -q)
+Step 6: delele all containerdocker rm $(docker ps -a -q)
+
+
+Docker help:
+
+1.	Docker container –help
+i.	Docker container rm –help
+ii.	Docker container prune–help
+
+System comand docker :
+a.	docker stats : memory allocation to various containes
+b.	docker system df : all info about images and containers in system
+c.	docker system prune: remove all stopped acontainer s
+d.	Docker system prune –a : remove all stoped images+container form system
+
+
+
+
+Important Setup
+
+•	To create container in iterative session
+a.	“Docker run –it –name <optional> <image ID/image name> “:  for non jupyter notebook
+b.	“Docker run –it –name <optional> <image ID/image name> bash “: for jupyter notebook
+
+•	To copy image for local into docker container
+a.	Docker cp <target folder address> < container address>
+  Example : docker cp /home/mayank-s/Desktop/dock_image.tar  mayan:/tensorflow/models/research/object_detection/
+•	To use local folder in the container 
+a.	Docker run –it –name <container name optional> --v <local folder address> <image id> bash
+Example : docker run -it --name mayank -v /home/mayank-s/nk:/var ed58e2b10e4b bash
+•	To commit container , it will create a new image of the container
+a.	Docker commit <container id> new_image_name
+Now you can you this image which you have develop from container
+•	To save and load image
+a.	Docker save <image id > <destination address>
+b.	Docker load <image address at local pc>
+
+•	To run tensorflow on nvidia docker 
+a.	 Nvidia-docker run –it <image_id> bash
+
+•	To run prexited container in IT(interactive mode)
+a.	Docker start <container name/id>
+b.	Docker attach <container name/id>
+

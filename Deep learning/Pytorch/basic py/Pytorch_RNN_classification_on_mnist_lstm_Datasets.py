@@ -6,7 +6,7 @@ import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
 
 #hyperprameter
-EPOCH = 1               # train the training data n times, to save time, we just train 1 epoch
+EPOCH = 4               # train the training data n times, to save time, we just train 1 epoch
 BATCH_SIZE = 64
 TIME_STEP = 28          # rnn time step / image height
 INPUT_SIZE = 28         # rnn input size / image width
@@ -27,7 +27,7 @@ print(train_data.train_data.size())     # (60000, 28, 28)
 print(train_data.train_labels.size())   # (60000)
 plt.imshow(train_data.train_data[0].numpy(), cmap='gray')
 plt.title('%i' % train_data.train_labels[0])
-plt.show()
+# plt.show()
 
 # Data Loader for easy mini-batch return in training
 train_loader = torch.utils.data.DataLoader(dataset=train_data, batch_size=BATCH_SIZE, shuffle=True)
@@ -57,6 +57,7 @@ class RNN(nn.Module):
         # h_n shape (n_layers, batch, hidden_size)
         # h_c shape (n_layers, batch, hidden_size)
         r_out, (h_n, h_c) = self.rnn(x, None)   # None represents zero initial hidden state
+        r_out1=r_out   # None represents zero initial hidden state
 
         # choose r_out at the last time step
         out = self.out(r_out[:, -1, :])
@@ -87,8 +88,8 @@ for epoch in range(EPOCH):
             print('Epoch: ', epoch, '| train loss: %.4f' % loss.data.numpy(), '| test accuracy: %.2f' % accuracy)
 
 # print 10 predictions from test data
-test_output = rnn(test_x[:10].view(-1, 28, 28))
+test_output = rnn(test_x[:64].view(-1, 28, 28))
 pred_y = torch.max(test_output, 1)[1].data.numpy().squeeze()
 print(pred_y, 'prediction number')
-print(test_y[:10], 'real number')
+print(test_y[:64], 'real number')
 
