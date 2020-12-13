@@ -1,7 +1,7 @@
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-import numpy as np
 
 
 class RoIPool(nn.Module):
@@ -19,10 +19,10 @@ class RoIPool(nn.Module):
         Note: both features and rois are required to be Variable type.
               You should transform rois to Variable and set requires_grad to False before pass is to this function.
         """
-        #---------- debug
+        # ---------- debug
         assert isinstance(features, Variable)
         assert isinstance(rois, Variable)
-        #---------- debug
+        # ---------- debug
         batch_size, num_channels, data_height, data_width = features.size()
         num_rois = rois.size()[0]
         outputs = Variable(torch.zeros(num_rois, num_channels, self.pooled_height, self.pooled_width))
@@ -49,7 +49,7 @@ class RoIPool(nn.Module):
                     wstart = min(data_width, max(0, wstart + roi_start_w))
                     wend = min(data_width, max(0, wend + roi_start_w))
 
-                    is_empty = (hend <= hstart) or(wend <= wstart)
+                    is_empty = (hend <= hstart) or (wend <= wstart)
                     if is_empty:
                         outputs[roi_ind, :, ph, pw] = 0
                     else:
@@ -57,28 +57,27 @@ class RoIPool(nn.Module):
 
                         data_pool = torch.max(data[:, hstart:hend, wstart:wend], 1)[0]
                         outputs[roi_ind, :, ph, pw] = torch.max(data_pool, 1)[0].view(-1)
-        #---------- debug
+        # ---------- debug
         assert outputs.shape[0] == rois.shape[0]
         assert outputs.shape[1] == features.shape[1]
         assert outputs.shape[2] == self.pooled_height
         assert outputs.shape[3] == self.pooled_width
         assert isinstance(outputs, Variable)
-        #---------- debug
+        # ---------- debug
         return outputs
 
 
 if __name__ == '__main__':
-    features = Variable(torch.ones(1,1,80,80), requires_grad=False)
-    features[0,0,1,1] = 2
-    features[0,0,1,70] = 3
-    features[0,0,70,1] = 4
-    features[0,0,70,70] = 5
-    rois = Variable(torch.LongTensor([[0,0,0,750,750], [0,0,0,200,200]]),requires_grad=False)
+    features = Variable(torch.ones(1, 1, 80, 80), requires_grad=False)
+    features[0, 0, 1, 1] = 2
+    features[0, 0, 1, 70] = 3
+    features[0, 0, 70, 1] = 4
+    features[0, 0, 70, 70] = 5
+    rois = Variable(torch.LongTensor([[0, 0, 0, 750, 750], [0, 0, 0, 200, 200]]), requires_grad=False)
     print(features.shape)
     print(rois.shape)
 
-    roip = RoIPool(2,2)
+    roip = RoIPool(2, 2)
     out = roip(features, rois, spatial_scale=0.1)
     print(out)
     print(out.shape)
-

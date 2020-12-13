@@ -1,7 +1,6 @@
-import random
-import torch
-import torch.nn.functional as F
-action= 4
+action = 4
+
+
 #
 # myaction=random.randint(1, action)
 # print(myaction)
@@ -31,8 +30,6 @@ action= 4
 # print(F.smooth_l1_loss(x, t, reduce=True))
 #
 
-import numpy as np
-
 def return_state_utility(v, T, u, reward, gamma):
     """Return the state utility.
 
@@ -45,40 +42,40 @@ def return_state_utility(v, T, u, reward, gamma):
     """
     action_array = np.zeros(4)
     for action in range(0, 4):
-        action_array[action] = np.sum(np.multiply(u, np.dot(v, T[:,:,action])))
+        action_array[action] = np.sum(np.multiply(u, np.dot(v, T[:, :, action])))
     return reward + gamma * np.max(action_array)
 
+
 def main():
-    #Starting state vector
-    #The agent starts from (1, 1)
+    # Starting state vector
+    # The agent starts from (1, 1)
     v = np.array([[0.0, 0.0, 0.0, 0.0,
                    0.0, 0.0, 0.0, 0.0,
                    1.0, 0.0, 0.0, 0.0]])
 
-    #Transition matrix loaded from file
-    #(It is too big to write here)
+    # Transition matrix loaded from file
+    # (It is too big to write here)
     T = np.load("T.npy")
     # print(T)
 
-    #Utility vector
-    u = np.array([[0.812, 0.868, 0.918,   1.0,
-                   0.762,   0.0, 0.660,  -1.0,
+    # Utility vector
+    u = np.array([[0.812, 0.868, 0.918, 1.0,
+                   0.762, 0.0, 0.660, -1.0,
                    0.705, 0.655, 0.611, 0.388]])
 
-    #Defining the reward for state (1,1)
+    # Defining the reward for state (1,1)
     reward = -0.04
-    #Assuming that the discount factor is equal to 1.0
+    # Assuming that the discount factor is equal to 1.0
     gamma = 1
 
-    #Use the Bellman equation to find the utility of state (1,1)
+    # Use the Bellman equation to find the utility of state (1,1)
     utility_11 = return_state_utility(v, T, u, reward, gamma)
     print("Utility of state (1,1): " + str(utility_11))
+
 
 if __name__ == "__main__":
     main()
 
-
-import numpy as np
 
 def return_state_utility(v, T, u, reward, gamma):
     """Return the state utility.
@@ -92,34 +89,35 @@ def return_state_utility(v, T, u, reward, gamma):
     """
     action_array = np.zeros(4)
     for action in range(0, 4):
-        action_array[action] = np.sum(np.multiply(u, np.dot(v, T[:,:,action])))
+        action_array[action] = np.sum(np.multiply(u, np.dot(v, T[:, :, action])))
     return reward + gamma * np.max(action_array)
 
-def main():
-    #Change as you want
-    tot_states = 12
-    gamma = 0.999 #Discount factor
-    iteration = 0 #Iteration counter
-    epsilon = 0.01 #Stopping criteria small value
 
-    #List containing the data for each iteation
+def main():
+    # Change as you want
+    tot_states = 12
+    gamma = 0.999  # Discount factor
+    iteration = 0  # Iteration counter
+    epsilon = 0.01  # Stopping criteria small value
+
+    # List containing the data for each iteation
     graph_list = list()
 
-    #Transition matrix loaded from file (It is too big to write here)
+    # Transition matrix loaded from file (It is too big to write here)
     T = np.load("T.npy")
 
-    #Reward vector
-    r = np.array([-0.04, -0.04, -0.04,  +1.0,
-                  -0.04,   0.0, -0.04,  -1.0,
+    # Reward vector
+    r = np.array([-0.04, -0.04, -0.04, +1.0,
+                  -0.04, 0.0, -0.04, -1.0,
                   -0.04, -0.04, -0.04, -0.04])
 
-    #Utility vectors
-    u = np.array([0.0, 0.0, 0.0,  0.0,
-                   0.0, 0.0, 0.0,  0.0,
-                   0.0, 0.0, 0.0,  0.0])
-    u1 = np.array([0.0, 0.0, 0.0,  0.0,
-                    0.0, 0.0, 0.0,  0.0,
-                    0.0, 0.0, 0.0,  0.0])
+    # Utility vectors
+    u = np.array([0.0, 0.0, 0.0, 0.0,
+                  0.0, 0.0, 0.0, 0.0,
+                  0.0, 0.0, 0.0, 0.0])
+    u1 = np.array([0.0, 0.0, 0.0, 0.0,
+                   0.0, 0.0, 0.0, 0.0,
+                   0.0, 0.0, 0.0, 0.0])
 
     while True:
         delta = 0
@@ -128,46 +126,48 @@ def main():
         graph_list.append(u)
         for s in range(tot_states):
             reward = r[s]
-            v = np.zeros((1,tot_states))
-            v[0,s] = 1.0
+            v = np.zeros((1, tot_states))
+            v[0, s] = 1.0
             u1[s] = return_state_utility(v, T, u, reward, gamma)
-            delta = max(delta, np.abs(u1[s] - u[s])) #Stopping criteria
+            delta = max(delta, np.abs(u1[s] - u[s]))  # Stopping criteria
         if delta < epsilon * (1 - gamma) / gamma:
-                print("=================== FINAL RESULT ==================")
-                print("Iterations: " + str(iteration))
-                print("Delta: " + str(delta))
-                print("Gamma: " + str(gamma))
-                print("Epsilon: " + str(epsilon))
-                print("===================================================")
-                print(u[0:4])
-                print(u[4:8])
-                print(u[8:12])
-                print("===================================================")
-                break
+            print("=================== FINAL RESULT ==================")
+            print("Iterations: " + str(iteration))
+            print("Delta: " + str(delta))
+            print("Gamma: " + str(gamma))
+            print("Epsilon: " + str(epsilon))
+            print("===================================================")
+            print(u[0:4])
+            print(u[4:8])
+            print(u[8:12])
+            print("===================================================")
+            break
+
 
 if __name__ == "__main__":
     main()
 
-
 import numpy as np
 
-def return_policy_evaluation(p, u, r, T, gamma):
-  """Return the policy utility.
 
-  @param p policy vector
-  @param u utility vector
-  @param r reward vector
-  @param T transition matrix
-  @param gamma discount factor
-  @return the utility vector u
-  """
-  for s in range(12):
-    if not np.isnan(p[s]):
-      v = np.zeros((1,12))
-      v[0,s] = 1.0
-      action = int(p[s])
-      u[s] = r[s] + gamma * np.sum(np.multiply(u, np.dot(v, T[:,:,action])))
-  return u
+def return_policy_evaluation(p, u, r, T, gamma):
+    """Return the policy utility.
+
+    @param p policy vector
+    @param u utility vector
+    @param r reward vector
+    @param T transition matrix
+    @param gamma discount factor
+    @return the utility vector u
+    """
+    for s in range(12):
+        if not np.isnan(p[s]):
+            v = np.zeros((1, 12))
+            v[0, s] = 1.0
+            action = int(p[s])
+            u[s] = r[s] + gamma * np.sum(np.multiply(u, np.dot(v, T[:, :, action])))
+    return u
+
 
 def return_expected_action(u, T, v):
     """Return the expected action.
@@ -184,9 +184,10 @@ def return_expected_action(u, T, v):
     """
     actions_array = np.zeros(4)
     for action in range(4):
-       #Expected utility of doing a in state s, according to T and u.
-       actions_array[action] = np.sum(np.multiply(u, np.dot(v, T[:,:,action])))
+        # Expected utility of doing a in state s, according to T and u.
+        actions_array[action] = np.sum(np.multiply(u, np.dot(v, T[:, :, action])))
     return np.argmax(actions_array)
+
 
 def print_policy(p, shape):
     """Printing utility.
@@ -200,15 +201,22 @@ def print_policy(p, shape):
     policy_string = ""
     for row in range(shape[0]):
         for col in range(shape[1]):
-            if(p[counter] == -1): policy_string += " *  "
-            elif(p[counter] == 0): policy_string += " ^  "
-            elif(p[counter] == 1): policy_string += " <  "
-            elif(p[counter] == 2): policy_string += " v  "
-            elif(p[counter] == 3): policy_string += " >  "
-            elif(np.isnan(p[counter])): policy_string += " #  "
+            if (p[counter] == -1):
+                policy_string += " *  "
+            elif (p[counter] == 0):
+                policy_string += " ^  "
+            elif (p[counter] == 1):
+                policy_string += " <  "
+            elif (p[counter] == 2):
+                policy_string += " v  "
+            elif (p[counter] == 3):
+                policy_string += " >  "
+            elif (np.isnan(p[counter])):
+                policy_string += " #  "
             counter += 1
         policy_string += '\n'
     print(policy_string)
+
 
 if __name__ == "__main__":
     main()
@@ -219,36 +227,36 @@ def main():
     epsilon = 0.0001
     iteration = 0
     T = np.load("T.npy")
-    #Generate the first policy randomly
+    # Generate the first policy randomly
     # NaN=Nothing, -1=Terminal, 0=Up, 1=Left, 2=Down, 3=Right
     p = np.random.randint(0, 4, size=(12)).astype(np.float32)
     p[5] = np.NaN
     p[3] = p[7] = -1
-    #Utility vectors
-    u = np.array([0.0, 0.0, 0.0,  0.0,
-                  0.0, 0.0, 0.0,  0.0,
-                  0.0, 0.0, 0.0,  0.0])
-    #Reward vector
-    r = np.array([-0.04, -0.04, -0.04,  +1.0,
-                  -0.04,   0.0, -0.04,  -1.0,
+    # Utility vectors
+    u = np.array([0.0, 0.0, 0.0, 0.0,
+                  0.0, 0.0, 0.0, 0.0,
+                  0.0, 0.0, 0.0, 0.0])
+    # Reward vector
+    r = np.array([-0.04, -0.04, -0.04, +1.0,
+                  -0.04, 0.0, -0.04, -1.0,
                   -0.04, -0.04, -0.04, -0.04])
 
     while True:
         iteration += 1
-        #1- Policy evaluation
+        # 1- Policy evaluation
         u_0 = u.copy()
         u = return_policy_evaluation(p, u, r, T, gamma)
-        #Stopping criteria
+        # Stopping criteria
         delta = np.absolute(u - u_0).max()
         if delta < epsilon * (1 - gamma) / gamma: break
         for s in range(12):
-            if not np.isnan(p[s]) and not p[s]==-1:
-                v = np.zeros((1,12))
-                v[0,s] = 1.0
-                #2- Policy improvement
+            if not np.isnan(p[s]) and not p[s] == -1:
+                v = np.zeros((1, 12))
+                v[0, s] = 1.0
+                # 2- Policy improvement
                 a = return_expected_action(u, T, v)
                 if a != p[s]: p[s] = a
-        print_policy(p, shape=(3,4))
+        print_policy(p, shape=(3, 4))
 
     print("=================== FINAL RESULT ==================")
     print("Iterations: " + str(iteration))
@@ -260,8 +268,9 @@ def main():
     print(u[4:8])
     print(u[8:12])
     print("===================================================")
-    print_policy(p, shape=(3,4))
+    print_policy(p, shape=(3, 4))
     print("===================================================")
+
 
 if __name__ == "__main__":
     main()

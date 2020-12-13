@@ -23,22 +23,23 @@ for data in pix_val:
     print (data)
     # mydata.append(data-255)
 print (mydata)'''
+import matplotlib.pyplot as plt
+import numpy as np
 import tensorflow as tf
 from PIL import Image
-import numpy as np
-import matplotlib.pyplot as plt
+
 im = Image.open('myfile.png')
 # pixels = list(im.getdata())
 pixels = list(im.getdata(0))
-print (pixels)
-print (len(pixels))
+print(pixels)
+print(len(pixels))
 # width, height = im.size
 # pixels = [pixels[i * width:(i + 1) * width] for i in range(height)]
 # print (pixels)
-mydata=[]
+mydata = []
 for data in pixels:
-    print (data)
-    mydata.append(255-data)
+    print(data)
+    mydata.append(255 - data)
 print(mydata)
 mydata = np.array(mydata, ndmin=2).T
 image_array = np.asfarray(mydata.reshape(28, 28))

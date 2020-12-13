@@ -1,0 +1,8 @@
+prefix=/home/mayank_sati/codebase/git/AI/Machine_learning/Python/Ros/tf_ros/devel
+
+Name: learning_tf
+Description: Description of learning_tf
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/mayank_sati/codebase/git/AI/Machine_learning/Python/Ros/tf_ros/devel/lib 
+Requires: 

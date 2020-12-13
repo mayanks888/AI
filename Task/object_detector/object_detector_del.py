@@ -8,7 +8,13 @@
 #
 # @author Mayank Sati/Ashis Samal
 #
-#library used:
+# library used:
+
+import argparse
+import os
+import sys
+import time
+from datetime import datetime, timedelta
 
 # 1.Protobuf 3.0.0
 # 2.Python - tk
@@ -21,13 +27,9 @@
 # 9.0pencv-python 3.4.1.15
 ######################################################################################
 import cv2
-import os
-import argparse
-import time
 import numpy as np
-import sys
-from datetime import datetime, timedelta
 import tensorflow as tf
+
 sys.path.append("..")
 # Import utilites
 from utils import label_map_util
@@ -36,17 +38,17 @@ from utils import visualization_utils as vis_util
 
 class Object_detect():
 
-    def __init__(self,MODEL_NAME,label_path,NUM_CLASSES):
-        self.MODEL_NAME=MODEL_NAME
-        self.label_path=label_path
-        self.NUM_CLASSES=NUM_CLASSES
+    def __init__(self, MODEL_NAME, label_path, NUM_CLASSES):
+        self.MODEL_NAME = MODEL_NAME
+        self.label_path = label_path
+        self.NUM_CLASSES = NUM_CLASSES
 
     def Laod_model_parameter(self):
         CWD_PATH = os.getcwd()
         # Path to frozen detection graph .pb file, which contains the model that is usedfor object detection.
         PATH_TO_CKPT = os.path.join(CWD_PATH, self.MODEL_NAME, 'frozen_inference_graph.pb')
         # Path to label map file
-        PATH_TO_LABELS = os.path.join(CWD_PATH,self.label_path)
+        PATH_TO_LABELS = os.path.join(CWD_PATH, self.label_path)
         # dictionary mapping integers to appropriate string labels would be fine
         label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
         categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=self.NUM_CLASSES,
@@ -76,9 +78,7 @@ class Object_detect():
         # Number of objects detected
         self.num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
-
-
-    def find_detection(self,input_folder,output_folder):
+    def find_detection(self, input_folder, output_folder):
         """Function to detect images in input folder and save annotated image in an output directory.
 
             Args:
@@ -96,7 +96,7 @@ class Object_detect():
             print("Output folder not present. Creating New folder...")
             os.makedirs(output_folder)
 
-        for root,_, filenames in os.walk(input_folder):
+        for root, _, filenames in os.walk(input_folder):
             if (len(filenames) == 0):
                 print("Input folder is empty")
                 return 1
@@ -108,7 +108,6 @@ class Object_detect():
                     file_path = (os.path.join(root, filename))
                     image = cv2.imread(file_path, 1)
                     image_expanded = np.expand_dims(image, axis=0)
-
 
                     # Perform the actual detection by running the model with the image as input
                     (boxes, scores, classes, num) = self.sess.run(
@@ -134,10 +133,11 @@ class Object_detect():
                 except IOError:
                     print("Existing Object Detection...")
                 except:
-                    print('ERROR...object detection failed for filename: {fn}, Check file type... '.format(fn=filename),'\n')
+                    print('ERROR...object detection failed for filename: {fn}, Check file type... '.format(fn=filename),
+                          '\n')
                 else:
                     1
-                    #print("Object Detected  successfully !", '\n')
+                    # print("Object Detected  successfully !", '\n')
 
             time_end = time.time()
             print("Object Detection on above images completed successfully !", '\n')
@@ -145,7 +145,7 @@ class Object_detect():
             d = datetime(1, 1, 1) + sec
             print("Time Consumed - hours:{th} - Minutes:{mn} - Second:{sc}".format(th=d.hour, mn=d.minute,
                                                                                    sc=d.second))
-            print('\n',"Path for output annotated images :", output_folder)
+            print('\n', "Path for output annotated images :", output_folder)
             # print("Object Detected successfully !", '\n')
 
 
@@ -164,14 +164,14 @@ def parse_args():
 
 
 MODEL_NAME = 'ssd_mobilenet_v2'
-PATH_TO_LABELS="labelmap.pbtxt"
-NUM_CLASSES=9
+PATH_TO_LABELS = "labelmap.pbtxt"
+NUM_CLASSES = 9
 
-args=parse_args()
-print('\n',"Starting  Objects Detection on Image...","\n")
+args = parse_args()
+print('\n', "Starting  Objects Detection on Image...", "\n")
 print('Reading images from path :', args.input_path)
-model = Object_detect(MODEL_NAME,PATH_TO_LABELS,NUM_CLASSES)
+model = Object_detect(MODEL_NAME, PATH_TO_LABELS, NUM_CLASSES)
 model.Laod_model_parameter()
-ret = model.find_detection(args.input_path,args.output_path)
-if ret==1:
-    print("\n","File Error.....")
+ret = model.find_detection(args.input_path, args.output_path)
+if ret == 1:
+    print("\n", "File Error.....")

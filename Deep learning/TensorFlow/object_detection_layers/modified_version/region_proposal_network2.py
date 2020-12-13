@@ -1,7 +1,6 @@
 # region_proposal_network.py
 import tensorflow as tf
-import numpy as np
-import anchor_target_layer 
+
 
 # class RegionProposalNetwork(object):
 #     """
@@ -95,67 +94,68 @@ import anchor_target_layer
 #     return rpn_cls_loss(rpn_cls_score, rpn_labels)
 
 def rpn_cls_loss(rpn_cls_score, rpn_labels):
-
-    shape                     = tf.shape(rpn_cls_score)
+    shape = tf.shape(rpn_cls_score)
 
     # Stack all classification scores into 2D matrix
-    rpn_cls_score             = tf.transpose(rpn_cls_score,[0,3,1,2])
-    rpn_cls_score             = tf.reshape(rpn_cls_score,[shape[0],2,shape[3]//2*shape[1],shape[2]])
-    rpn_cls_score             = tf.transpose(rpn_cls_score,[0,2,3,1])
-    rpn_cls_score             = tf.reshape(rpn_cls_score,[-1,2])
+    rpn_cls_score = tf.transpose(rpn_cls_score, [0, 3, 1, 2])
+    rpn_cls_score = tf.reshape(rpn_cls_score, [shape[0], 2, shape[3] // 2 * shape[1], shape[2]])
+    rpn_cls_score = tf.transpose(rpn_cls_score, [0, 2, 3, 1])
+    rpn_cls_score = tf.reshape(rpn_cls_score, [-1, 2])
 
     # Stack labels
-    rpn_labels                = tf.reshape(rpn_labels,[-1])
+    rpn_labels = tf.reshape(rpn_labels, [-1])
 
     # Ignore label=-1 (Neither object nor background: IoU between 0.3 and 0.7)
-    rpn_cls_score             = tf.reshape(tf.gather(rpn_cls_score,tf.where(tf.not_equal(rpn_labels,-1))),[-1,2])
-    rpn_labels                = tf.reshape(tf.gather(rpn_labels,tf.where(tf.not_equal(rpn_labels,-1))),[-1])
+    rpn_cls_score = tf.reshape(tf.gather(rpn_cls_score, tf.where(tf.not_equal(rpn_labels, -1))), [-1, 2])
+    rpn_labels = tf.reshape(tf.gather(rpn_labels, tf.where(tf.not_equal(rpn_labels, -1))), [-1])
     # Cross entropy error
-    rpn_cross_entropy         = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=rpn_cls_score, labels=rpn_labels))
+    rpn_cross_entropy = tf.reduce_mean(
+        tf.nn.sparse_softmax_cross_entropy_with_logits(logits=rpn_cls_score, labels=rpn_labels))
 
     return rpn_cross_entropy
 
 
 def rpn_bbox_loss(rpn_bbox_pred, rpn_bbox_targets, rpn_inside_weights, rpn_outside_weights):
+    rpn_bbox_targets = tf.transpose(rpn_bbox_targets, [0, 2, 3, 1])
+    rpn_inside_weights = tf.transpose(rpn_inside_weights, [0, 2, 3, 1])
+    rpn_outside_weights = tf.transpose(rpn_outside_weights, [0, 2, 3, 1])
 
-    rpn_bbox_targets          = tf.transpose( rpn_bbox_targets,   [ 0, 2, 3, 1])
-    rpn_inside_weights        = tf.transpose( rpn_inside_weights, [ 0, 2, 3, 1])
-    rpn_outside_weights       = tf.transpose( rpn_outside_weights,[ 0, 2, 3, 1])
-
-    sigma=3
-    diff_sL1=(modified_smooth_l1(sigma, rpn_bbox_pred, rpn_bbox_targets, rpn_inside_weights, rpn_outside_weights))
+    sigma = 3
+    diff_sL1 = (modified_smooth_l1(sigma, rpn_bbox_pred, rpn_bbox_targets, rpn_inside_weights, rpn_outside_weights))
 
     # diff                      = tf.multiply( rpn_inside_weights, rpn_bbox_pred - rpn_bbox_targets)
     # print(rpn_bbox_pred,'\n',rpn_bbox_targets)
     # print ("my diff value was",diff)
     # diff_sL1                  = smoothL1(diff,3.0)
     # # diff_sL1=1
-    rpn_bbox_reg              = 10*tf.reduce_sum(tf.multiply(rpn_outside_weights, diff_sL1))
+    rpn_bbox_reg = 10 * tf.reduce_sum(tf.multiply(rpn_outside_weights, diff_sL1))
     return rpn_bbox_reg
 
+
 def smoothL1(x, sigma):
-    conditional               = tf.less(tf.abs(x), 1/sigma**2)
-    close                     = 0.5* (sigma * 2 ) **2
-    far                       = tf.abs(x) - 0.5/sigma ** 2
+    conditional = tf.less(tf.abs(x), 1 / sigma ** 2)
+    close = 0.5 * (sigma * 2) ** 2
+    far = tf.abs(x) - 0.5 / sigma ** 2
 
     return tf.where(conditional, close, far)
 
+
 def modified_smooth_l1(sigma, bbox_pred, bbox_targets, bbox_inside_weights, bbox_outside_weights):
-        """
-            ResultLoss = outside_weights * SmoothL1(inside_weights * (bbox_pred - bbox_targets))
-            SmoothL1(x) = 0.5 * (sigma * x)^2,    if |x| < 1 / sigma^2
-                          |x| - 0.5 / sigma^2,    otherwise
-        """
-        sigma2 = sigma * sigma
+    """
+        ResultLoss = outside_weights * SmoothL1(inside_weights * (bbox_pred - bbox_targets))
+        SmoothL1(x) = 0.5 * (sigma * x)^2,    if |x| < 1 / sigma^2
+                      |x| - 0.5 / sigma^2,    otherwise
+    """
+    sigma2 = sigma * sigma
 
-        inside_mul = tf.multiply(bbox_inside_weights, tf.subtract(bbox_pred, bbox_targets))
+    inside_mul = tf.multiply(bbox_inside_weights, tf.subtract(bbox_pred, bbox_targets))
 
-        smooth_l1_sign = tf.cast(tf.less(tf.abs(inside_mul), 1.0 / sigma2), tf.float32)
-        smooth_l1_option1 = tf.multiply(tf.multiply(inside_mul, inside_mul), 0.5 * sigma2)
-        smooth_l1_option2 = tf.subtract(tf.abs(inside_mul), 0.5 / sigma2)
-        smooth_l1_result = tf.add(tf.multiply(smooth_l1_option1, smooth_l1_sign),
-                                  tf.multiply(smooth_l1_option2, tf.abs(tf.subtract(smooth_l1_sign, 1.0))))
+    smooth_l1_sign = tf.cast(tf.less(tf.abs(inside_mul), 1.0 / sigma2), tf.float32)
+    smooth_l1_option1 = tf.multiply(tf.multiply(inside_mul, inside_mul), 0.5 * sigma2)
+    smooth_l1_option2 = tf.subtract(tf.abs(inside_mul), 0.5 / sigma2)
+    smooth_l1_result = tf.add(tf.multiply(smooth_l1_option1, smooth_l1_sign),
+                              tf.multiply(smooth_l1_option2, tf.abs(tf.subtract(smooth_l1_sign, 1.0))))
 
-        outside_mul = tf.multiply(bbox_outside_weights, smooth_l1_result)
+    outside_mul = tf.multiply(bbox_outside_weights, smooth_l1_result)
 
-        return outside_mul
+    return outside_mul

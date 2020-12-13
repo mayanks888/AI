@@ -1,6 +1,5 @@
-
-import torch
 import numpy as np
+import torch
 from torch.autograd import Variable
 from torch.utils.data import Dataset, DataLoader
 

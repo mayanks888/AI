@@ -1,17 +1,17 @@
+import matplotlib.pyplot as plt
+import numpy as np
 import torch
 from torch import nn
-import numpy as np
-import matplotlib.pyplot as plt
 
 # torch.manual_seed(1)    # reproducible
 
 # Hyper Parameters
-TIME_STEP = 10      # rnn time step
-INPUT_SIZE = 1      # rnn input size
-LR = 0.02           # learning rate
+TIME_STEP = 10  # rnn time step
+INPUT_SIZE = 1  # rnn input size
+LR = 0.02  # learning rate
 
 # show data
-steps = np.linspace(0, np.pi*2, 100, dtype=np.float32)
+steps = np.linspace(0, np.pi * 2, 100, dtype=np.float32)
 x_np = np.sin(steps)
 y_np = np.cos(steps)
 plt.plot(steps, y_np, 'r-', label='target (cos)')
@@ -26,9 +26,9 @@ class RNN(nn.Module):
 
         self.rnn = nn.RNN(
             input_size=INPUT_SIZE,
-            hidden_size=32,     # rnn hidden unit
-            num_layers=1,       # number of rnn layer
-            batch_first=True,   # input & output will has batch size as 1s dimension. e.g. (batch, time_step, input_size)
+            hidden_size=32,  # rnn hidden unit
+            num_layers=1,  # number of rnn layer
+            batch_first=True,  # input & output will has batch size as 1s dimension. e.g. (batch, time_step, input_size)
         )
         self.out = nn.Linear(32, 1)
 
@@ -38,8 +38,8 @@ class RNN(nn.Module):
         # r_out (batch, time_step, hidden_size)
         r_out, h_state = self.rnn(x, h_state)
 
-        outs = []    # save all predictions
-        for time_step in range(r_out.size(1)):    # calculate output for each time step
+        outs = []  # save all predictions
+        for time_step in range(r_out.size(1)):  # calculate output for each time step
             outs.append(self.out(r_out[:, time_step, :]))
         return torch.stack(outs, dim=1), h_state
 
@@ -48,28 +48,29 @@ class RNN(nn.Module):
         # outs = self.out(r_out)
         # return outs, h_state
 
+
 rnn = RNN()
 print(rnn)
 
-optimizer = torch.optim.Adam(rnn.parameters(), lr=LR)   # optimize all  parameters
+optimizer = torch.optim.Adam(rnn.parameters(), lr=LR)  # optimize all  parameters
 loss_func = nn.MSELoss()
 
-h_state = None      # for initial hidden state
+h_state = None  # for initial hidden state
 
 plt.figure(1, figsize=(12, 5))
-plt.ion()           # continuously plot
+plt.ion()  # continuously plot
 
 for step in range(100):
-    start, end = step * np.pi, (step+1)*np.pi   # time range
+    start, end = step * np.pi, (step + 1) * np.pi  # time range
     # use sin predicts cos
     steps = np.linspace(start, end, TIME_STEP, dtype=np.float32)
-    x_np = np.sin(steps)    # float32 for converting torch FloatTensor
+    x_np = np.sin(steps)  # float32 for converting torch FloatTensor
     y_np = np.cos(steps)
 
-    x = torch.from_numpy(x_np[np.newaxis, :, np.newaxis])    # shape (batch, time_step, input_size)
+    x = torch.from_numpy(x_np[np.newaxis, :, np.newaxis])  # shape (batch, time_step, input_size)
     y = torch.from_numpy(y_np[np.newaxis, :, np.newaxis])
 
-    prediction, h_state = rnn(x, h_state)   # rnn output
+    prediction, h_state = rnn(x, h_state)  # rnn output
     # !! next step is important !!
     h_state = h_state.data
     loss = loss_func(prediction, y)
@@ -80,7 +81,8 @@ for step in range(100):
     # plotting
     plt.plot(steps, y_np.flatten(), 'r-')
     plt.plot(steps, prediction.data.numpy().flatten(), 'b-')
-    plt.draw(); plt.pause(0.05)
+    plt.draw();
+    plt.pause(0.05)
 
 plt.ioff()
 plt.show()

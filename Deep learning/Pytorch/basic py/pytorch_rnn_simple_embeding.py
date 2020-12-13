@@ -5,12 +5,11 @@ from torch.autograd import Variable
 
 torch.manual_seed(777)  # reproducibility
 
-
 idx2char = ['h', 'i', 'e', 'l', 'o']
 
 # Teach hihell -> ihello
-x_data = [[0, 1, 0, 2, 3, 3]]   # hihell
-y_data = [1, 0, 2, 3, 3, 4]    # ihello
+x_data = [[0, 1, 0, 2, 3, 3]]  # hihell
+y_data = [1, 0, 2, 3, 3, 4]  # ihello
 
 # As we have one batch of samples, we will change them to variables only once
 inputs = Variable(torch.LongTensor(x_data))
@@ -20,7 +19,7 @@ num_classes = 5
 input_size = 5
 embedding_size = 10  # embedding size
 hidden_size = 5  # output from the LSTM. 5 to directly predict one-hot
-batch_size = 1   # one sentence
+batch_size = 1  # one sentence
 sequence_length = 6  # |ihello| == 6
 num_layers = 1  # one-layer rnn
 
@@ -70,5 +69,3 @@ for epoch in range(100):
     result_str = [idx2char[c] for c in idx.squeeze()]
     print("epoch: %d, loss: %1.3f" % (epoch + 1, loss.data[0]))
     print("Predicted string: ", ''.join(result_str))
-
-

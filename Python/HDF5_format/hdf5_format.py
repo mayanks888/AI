@@ -1,5 +1,6 @@
 import h5py
 import numpy as np
+
 ###########################################################
 # h5py.File.attrs
 # h5py.File.get
@@ -30,7 +31,7 @@ import numpy as np
 # h5py.File.visit
 # h5py.File.visititems
 temperature = np.random.random(1024)
-print (temperature)
+print(temperature)
 # this is for creating hdf5 file or reading it if already created
 f = h5py.File("new2.hdf5")
 f["temp"] = temperature
@@ -42,7 +43,7 @@ print(f)
 data = f["temp"]
 # for key, value in data.attrs.iteritems():
 #     print ("%s: %s" % (key, value))
-a=1
+a = 1
 print(data[2:4])
 print(data.att)
 
@@ -51,7 +52,7 @@ print(data.att)
 ####################################################################3
 # Type 2
 
-dat=np.arange(10,dtype="int32")
+dat = np.arange(10, dtype="int32")
 print(dat)
 print(dat.dtype)
 print(h5py.File.attrs)

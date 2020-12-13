@@ -1,5 +1,6 @@
-import tensorflow as tf
 import numpy as np
+import tensorflow as tf
+
 
 def find_my_iou(data_ground, data_predicted):
     xminofmax = tf.maximum((data_ground[:, 0]), (data_predicted[:, 0]))
@@ -29,14 +30,14 @@ def find_my_iou(data_ground, data_predicted):
     mean_iou = tf.reduce_mean(iou)
     return mean_iou
 
-  
+    # data_ground = tf.placeholder(shape=(None,4),dtype=tf.float32)
+    # data_predicted = tf.placeholder(shape=(None,4),dtype=tf.float32)
 
-    #data_ground = tf.placeholder(shape=(None,4),dtype=tf.float32)
-    #data_predicted = tf.placeholder(shape=(None,4),dtype=tf.float32)
+
 if __name__ == '__main__':
-    data_ground = tf.placeholder(shape=None,dtype=tf.float32)
-    data_predicted = tf.placeholder(shape=None,dtype=tf.float32)
-    meanIOU=find_my_iou(data_ground,data_predicted)
+    data_ground = tf.placeholder(shape=None, dtype=tf.float32)
+    data_predicted = tf.placeholder(shape=None, dtype=tf.float32)
+    meanIOU = find_my_iou(data_ground, data_predicted)
 
     data_g = np.array([[64, 57, 190, 119],
                        [77, 23, 160, 79],
@@ -44,9 +45,9 @@ if __name__ == '__main__':
 
     # data_g=data_g.transpose()
     data_p = data_g + .1
-    feed_dict1=({data_ground: data_g, data_predicted: data_p})
+    feed_dict1 = ({data_ground: data_g, data_predicted: data_p})
     sess = tf.Session()
-   # sess.run(cool,feed_dict=feed_dict1)
-    #sess = tf_debug.TensorBoardDebugWrapperSession(sess, "localhost:7000")
-    overlap= sess.run(meanIOU,feed_dict=feed_dict1)
+    # sess.run(cool,feed_dict=feed_dict1)
+    # sess = tf_debug.TensorBoardDebugWrapperSession(sess, "localhost:7000")
+    overlap = sess.run(meanIOU, feed_dict=feed_dict1)
     print(overlap)

@@ -7,13 +7,15 @@
 #
 # @author Mayank Sati/Ashis Samal
 ######################################################################################
-import cv2
 import os
 import shutil
 import time
 from datetime import datetime, timedelta
 
-def main(input_folder,output_folder,maxframes="None"):
+import cv2
+
+
+def main(input_folder, output_folder, maxframes="None"):
     """Function to extract frames from input video file and save them as separate frames_folder in an output directory.
 
         Args:
@@ -35,28 +37,27 @@ def main(input_folder,output_folder,maxframes="None"):
         # shutil.rmtree(output_folder)
         os.makedirs(output_folder)
 
-    for root,directory,filenames in os.walk(input_folder):
-        if (len(filenames)==0):
+    for root, directory, filenames in os.walk(input_folder):
+        if (len(filenames) == 0):
             print("Input folder is empty")
             continue
             # return 1
         for filename in filenames:
             try:
-                file_path=(os.path.join(root, filename))
-                Video_file_name=filename.split(".")[0]
-                Gen_frame_path=(os.path.join(output_folder, Video_file_name))
+                file_path = (os.path.join(root, filename))
+                Video_file_name = filename.split(".")[0]
+                Gen_frame_path = (os.path.join(output_folder, Video_file_name))
                 print()
-
 
                 time_start = time.time()
                 cap = cv2.VideoCapture()
                 cap.open(file_path)
                 if not cap.isOpened():
                     print("Failed to open input file : {fn}".format(fn=filename))
-                    raise IOError#("Failed to open input file : {fn}".format(fn=filename))
+                    raise IOError  # ("Failed to open input file : {fn}".format(fn=filename))
                     # raise Invalid ("Invalid File")
                     # continue
-                    #return 1
+                    # return 1
 
                 print("Creating frames : {fn}".format(fn=filename))
                 if os.path.exists(Gen_frame_path):
@@ -65,30 +66,29 @@ def main(input_folder,output_folder,maxframes="None"):
                 os.makedirs(Gen_frame_path)
 
                 frameCount = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-                print("TotalFrame : {tf} - Frame_width : {fw} - Frame Height : {fh} - Frame Rate(FPS) : {fp} ".format(tf=frameCount, fw=cap.get(cv2.CAP_PROP_FRAME_WIDTH),fh=cap.get(cv2.CAP_PROP_FRAME_HEIGHT), fp=cap.get(cv2.CAP_PROP_FPS)) )
+                print("TotalFrame : {tf} - Frame_width : {fw} - Frame Height : {fh} - Frame Rate(FPS) : {fp} ".format(
+                    tf=frameCount, fw=cap.get(cv2.CAP_PROP_FRAME_WIDTH), fh=cap.get(cv2.CAP_PROP_FRAME_HEIGHT),
+                    fp=cap.get(cv2.CAP_PROP_FPS)))
 
-
-                frameId=0
+                frameId = 0
                 skipDelta = 0
 
-                if not maxframes =="None":
+                if not maxframes == "None":
                     if frameCount > maxframes:
                         skipDelta = (frameCount / maxframes)
                         # print ("Video has {fc}, but Maxframes is set to {mf}".format(fc=frameCount, mf=maxframes))
                         print("Maxframes is set to : {mf}".format(mf=maxframes))
-                        print( "Skip frames delta is : {d}".format(d=int(skipDelta)))
+                        print("Skip frames delta is : {d}".format(d=int(skipDelta)))
                     else:
                         print('Max frame {mf} cannot exceed total frame'.format(mf=maxframes))
-
 
                 while frameId < frameCount:
 
                     ret, frame = cap.read()
-                        # print frameId, ret, frame.shape
+                    # print frameId, ret, frame.shape
                     if not ret:
-                        print ("Failed to get the frame {f}".format(f=frameId))
+                        print("Failed to get the frame {f}".format(f=frameId))
                         continue
-
 
                     fname = "frame_" + str(frameId) + ".jpg"
 
@@ -108,8 +108,9 @@ def main(input_folder,output_folder,maxframes="None"):
                 d = datetime(1, 1, 1) + sec
                 # print("DAYS:HOURS:MIN:SEC")
                 # print("%d:%d:%d:%.2f" % (d.day - 1, d.hour, d.minute, d.second))
-                print("Time Consumed - hours:{th} - Minutes:{mn} - Second:{sc}".format(th=d.hour,mn=d.minute,sc=d.second))
-                print ("Output path :", Gen_frame_path)
+                print("Time Consumed - hours:{th} - Minutes:{mn} - Second:{sc}".format(th=d.hour, mn=d.minute,
+                                                                                       sc=d.second))
+                print("Output path :", Gen_frame_path)
 
 
             # except ValueError:
@@ -117,24 +118,21 @@ def main(input_folder,output_folder,maxframes="None"):
             except IOError:
                 print("Existing...")
             except:
-                 print('ERROR...Filename: {fn} cannot be converted into frames'.format(fn=filename))
-        #     except IOError:
-        #          print('Filename{fn} cannot be converted into frames, check file'.format(fn=filename))
+                print('ERROR...Filename: {fn} cannot be converted into frames'.format(fn=filename))
+            #     except IOError:
+            #          print('Filename{fn} cannot be converted into frames, check file'.format(fn=filename))
             else:
                 print("Frame generated successfully")
 
 
-
 if __name__ == "__main__":
 
-
-    Input_folder =  "/home/mayank-s/PycharmProjects/Datasets/Video_to_frame/input"
+    Input_folder = "/home/mayank-s/PycharmProjects/Datasets/Video_to_frame/input"
     output_folder = '/home/mayank-s/PycharmProjects/Datasets/Video_to_frame/output'
 
-    print("Start Video to Frames Converter...","\n")
+    print("Start Video to Frames Converter...", "\n")
 
-
-    ret = main(Input_folder, output_folder,5)
-    if ret==1:
+    ret = main(Input_folder, output_folder, 5)
+    if ret == 1:
         print("Error in convering a file.....")
 # exit(ret)

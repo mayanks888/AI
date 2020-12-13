@@ -1,17 +1,21 @@
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
-from tensorflow.python import debug as tf_debug
-mnist = input_data.read_data_sets("MNIST_data/",one_hot=True)
+
+mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+
 
 # Function to help intialize random weights for fully connected or convolutional layers, we leave the shape attribute as a parameter for this.
 def init_weights(shape):
     init_random_dist = tf.truncated_normal(shape, stddev=0.1)
     return tf.Variable(init_random_dist)
 
+
 # Same as init_weights, but for the biases
 def init_bias(shape):
     init_bias_vals = tf.constant(0.1, shape=shape)
     return tf.Variable(init_bias_vals)
+
+
 # Create a 2D convolution using builtin conv2d from TF. From those docs:
 # 
 # Computes a 2-D convolution given 4-D `input` and `filter` tensors.
@@ -31,6 +35,8 @@ def init_bias(shape):
 #
 def conv2d(x, W):
     return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
+
+
 # Create a max pooling layer, again using built in TF functions:
 # 
 # Performs the max pooling on the input.
@@ -48,11 +54,13 @@ def max_pool_2by2(x):
     return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
                           strides=[1, 2, 2, 1], padding='SAME')
 
+
 # Using the conv2d function, we'll return an actual convolutional layer here that uses an ReLu activation.
 def convolutional_layer(input_x, shape):
     W = init_weights(shape)
     b = init_bias([shape[3]])
     return tf.nn.relu(conv2d(input_x, W) + b)
+
 
 # This is a normal fully connected layer
 def normal_full_layer(input_layer, size):
@@ -61,46 +69,45 @@ def normal_full_layer(input_layer, size):
     b = init_bias([size])
     return tf.matmul(input_layer, W) + b
 
+
 # ### Placeholders
-x = tf.placeholder(tf.float32,shape=[None,784])
-y_true = tf.placeholder(tf.float32,shape=[None,10])
+x = tf.placeholder(tf.float32, shape=[None, 784])
+y_true = tf.placeholder(tf.float32, shape=[None, 10])
 # ### Layers
-x_image = tf.reshape(x,[-1,28,28,1])
+x_image = tf.reshape(x, [-1, 28, 28, 1])
 
 # Using a 6by6 filter here, used 5by5 in video, you can play around with the filter size
 # You can change the 32 output, that essentially represents the amount of filters used
 # You need to pass in 32 to the next input though, the 1 comes from the original input of 
 # a single image.
-convo_1 = convolutional_layer(x_image,shape=[6,6,1,32])
+convo_1 = convolutional_layer(x_image, shape=[6, 6, 1, 32])
 convo_1_pooling = max_pool_2by2(convo_1)
 
 # Using a 6by6 filter here, used 5by5 in video, you can play around with the filter size
 # You can actually change the 64 output if you want, you can think of that as a representation
 # of the amount of 6by6 filters used.
-convo_2 = convolutional_layer(convo_1_pooling,shape=[6,6,32,64])
+convo_2 = convolutional_layer(convo_1_pooling, shape=[6, 6, 32, 64])
 convo_2_pooling = max_pool_2by2(convo_2)
 
 # Why 7 by 7 image? Because we did 2 pooling layers, so (28/2)/2 = 7
 # 64 then just comes from the output of the previous Convolution
-convo_2_flat = tf.reshape(convo_2_pooling,[-1,7*7*64])
-full_layer_one = tf.nn.relu(normal_full_layer(convo_2_flat,1024))
+convo_2_flat = tf.reshape(convo_2_pooling, [-1, 7 * 7 * 64])
+full_layer_one = tf.nn.relu(normal_full_layer(convo_2_flat, 1024))
 
 # NOTE THE PLACEHOLDER HERE!
 hold_prob = tf.placeholder(tf.float32)
-full_one_dropout = tf.nn.dropout(full_layer_one,keep_prob=hold_prob)
+full_one_dropout = tf.nn.dropout(full_layer_one, keep_prob=hold_prob)
 
-y_pred = normal_full_layer(full_one_dropout,10)
+y_pred = normal_full_layer(full_one_dropout, 10)
 # ### Loss Function
-cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_true,logits=y_pred))
+cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_true, logits=y_pred))
 # ### Optimizer
 optimizer = tf.train.AdamOptimizer(learning_rate=0.0001)
 train = optimizer.minimize(cross_entropy)
 
-
 init = tf.global_variables_initializer()
 
-
-#_________________________________________________
+# _________________________________________________
 #
 # my_prediction_train = tf.equal(tf.argmax(ol_output,1), tf.argmax(output_matrix,1))
 # accuray = tf.reduce_mean(tf.cast(my_prediction_train, tf.float32),name='accuracy')
@@ -119,25 +126,22 @@ init = tf.global_variables_initializer()
 steps = 1500
 
 with tf.Session() as sess:
-    
     sess.run(init)
     # sess = tf_debug.TensorBoardDebugWrapperSession(sess, "localhost:7000")
     for i in range(steps):
-        
-        batch_x , batch_y = mnist.train.next_batch(100)
-        
-        sess.run(train,feed_dict={x:batch_x,y_true:batch_y,hold_prob:0.5})
-        
+
+        batch_x, batch_y = mnist.train.next_batch(100)
+
+        sess.run(train, feed_dict={x: batch_x, y_true: batch_y, hold_prob: 0.5})
+
         # PRINT OUT A MESSAGE EVERY 100 STEPS
-        if i%10 == 0:
-            
+        if i % 10 == 0:
             print('Currently on step {}'.format(i))
             print('Accuracy is:')
             # Test the Train Model
-            matches = tf.equal(tf.argmax(y_pred,1),tf.argmax(y_true,1))
+            matches = tf.equal(tf.argmax(y_pred, 1), tf.argmax(y_true, 1))
 
-            acc = tf.reduce_mean(tf.cast(matches,tf.float32))
+            acc = tf.reduce_mean(tf.cast(matches, tf.float32))
 
-            print(sess.run(acc,feed_dict={x:mnist.test.images,y_true:mnist.test.labels,hold_prob:1.0}))
+            print(sess.run(acc, feed_dict={x: mnist.test.images, y_true: mnist.test.labels, hold_prob: 1.0}))
             print('\n')
-

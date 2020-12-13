@@ -1,0 +1,104 @@
+tl_preprocessor:
+  ros__parameters:
+    camera_topic: /apollo/sensor/camera/traffic/image_short
+    short_camera_extrinsic_parameters:
+      rotation:
+        w: -0.49942
+        x: 0.51153
+        y: -0.49879
+        z: 0.49013
+      translation:
+        x: 1.08836157364389
+        y: 0.387336013947056
+        z: -0.557590725977097
+    long_camera_extrinsic_parameters:
+      rotation:
+        x: 0.005
+        y: 0.0
+        z: 0.0
+        w: 1.0
+      translation:
+        x: -0.065
+        y: 0.0
+        z: 0.0
+    camera_intrinsic_parameters:
+      frame_id: long_camera
+      height: 1544
+      width: 2064
+      K:
+        [
+          2454.034973131883,
+          0.0,
+          1059.143852431321,
+          0.0,
+          2448.759244587516,
+          717.5680541125668,
+          0.0,
+          0.0,
+          1.0,
+        ]
+    visualizer: true
+    tl_signal: 2
+    velodyne64_novatel_extrinsics:
+      child_frame_id: velodyne64
+      translation:
+        x: -0.003726
+        y: 0.71641
+        z: 1.59569
+      rotation:
+        x: 0.00977
+        y: -0.00704
+        z: 0.69892
+        w: 0.71472
+      header:
+        seq: 0
+        stamp:
+          secs: 1512689414
+          nsecs: 0
+      frame_id: novatel
+
+tl_rectifier:
+  ros__parameters:
+    cfg : /module/src/rectifier/rectifier/cfg/yolov3.cfg
+    names : data/coco.names
+    weights : /module/src/rectifier/rectifier/weights/yolov3.pt
+    source : data/samples
+    output : output
+    img-size : 416
+    conf-thres : 0.3
+    iou-thres : 0.6
+    fourcc :  mp4v
+    device : 0 # 0,1 or cpu
+
+#
+#parser.add_argument(
+#            '--cfg', type=str, default='/module/src/rectifier/rectifier/cfg/yolov3.cfg', help='*.cfg path')
+#        parser.add_argument('--names', type=str,
+#                            default='data/coco.names', help='*.names path')
+#        parser.add_argument('--weights', type=str,
+#                            default='/module/src/rectifier/rectifier/weights/yolov3.pt', help='weights path')
+#        parser.add_argument('--source', type=str,
+#                            default='data/samples', help='source')
+#        parser.add_argument('--output', type=str, default='output',
+#                            help='output folder')  # output folder
+#        parser.add_argument('--img-size', type=int, default=416,
+#                            help='inference size (pixels)')
+#        parser.add_argument('--conf-thres', type=float,
+#                            default=0.3, help='object confidence threshold')
+#        parser.add_argument('--iou-thres', type=float,
+#                            default=0.6, help='IOU threshold for NMS')
+#        parser.add_argument('--fourcc', type=str, default='mp4v',
+#                            help='output video codec (verify ffmpeg support)')
+#        parser.add_argument('--half', action='store_true',
+#                            help='half precision FP16 inference')
+#        parser.add_argument('--device', default='0',
+#                            help='device id (i.e. 0 or 0,1) or cpu')
+#        parser.add_argument('--view-img', action='store_true',
+#                            help='display results')
+#        parser.add_argument('--save-txt', action='store_true',
+#                            help='save results to *.txt')
+#        parser.add_argument('--classes', nargs='+',
+#                            type=int, help='filter by class')
+#        parser.add_argument('--agnostic-nms', action='store_true',
+#                            help='class-agnostic NMS')
+#        self.opt = parser.parse_args()

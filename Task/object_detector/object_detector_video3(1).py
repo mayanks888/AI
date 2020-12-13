@@ -8,7 +8,13 @@
 #
 # @author Mayank Sati/Ashis Samal
 #
-#library used:
+# library used:
+
+import argparse
+import os
+import sys
+import time
+from datetime import datetime, timedelta
 
 # 1.Protobuf 3.0.0
 # 2.Python - tk
@@ -21,15 +27,9 @@
 # 9.0pencv-python 3.4.1.15
 ######################################################################################
 import cv2
-import os
-import shutil
-import argparse
-import time
 import numpy as np
-import pandas as pd
-import sys
-from datetime import datetime, timedelta
 import tensorflow as tf
+
 # This is needed since the notebook is stored in the object_detection folder.
 sys.path.append("..")
 # Import utilites
@@ -39,10 +39,10 @@ from utils import visualization_utils as vis_util
 
 class Object_detect():
 
-    def __init__(self,MODEL_NAME,label_path,NUM_CLASSES):
-        self.MODEL_NAME=MODEL_NAME
-        self.label_path=label_path
-        self.NUM_CLASSES=NUM_CLASSES
+    def __init__(self, MODEL_NAME, label_path, NUM_CLASSES):
+        self.MODEL_NAME = MODEL_NAME
+        self.label_path = label_path
+        self.NUM_CLASSES = NUM_CLASSES
 
     def Laod_model_parameter(self):
         CWD_PATH = os.getcwd()
@@ -81,9 +81,7 @@ class Object_detect():
         # Number of objects detected
         self.num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
-
-
-    def find_detection(self,input_folder,output_folder,maxframes="None"):
+    def find_detection(self, input_folder, output_folder, maxframes="None"):
         """Function to detect images in input folder and save annotated image in an output directory.
 
             Args:
@@ -101,23 +99,23 @@ class Object_detect():
             print("Output folder not present. Creating New folder...")
             os.makedirs(output_folder)
 
-        for root,_, filenames in os.walk(input_folder):
+        for root, _, filenames in os.walk(input_folder):
             if (len(filenames) == 0):
                 print("Input folder is empty")
                 return 1
             time_start = time.time()
             for filename in filenames:
                 try:
-                    print('\n',"Running object detection for file : {fn}".format(fn=filename))
+                    print('\n', "Running object detection for file : {fn}".format(fn=filename))
 
                     file_path = (os.path.join(root, filename))
 
                     cap = cv2.VideoCapture()
                     cap.open(file_path)
                     frameCount = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-                    if frameCount<=1 or not cap.isOpened():
-                         print("Failed to open input file : {fn}".format(fn=filename))
-                         raise IOError 
+                    if frameCount <= 1 or not cap.isOpened():
+                        print("Failed to open input file : {fn}".format(fn=filename))
+                        raise IOError
                     else:
                         frame_width = int(cap.get(3))
                         frame_height = int(cap.get(4))
@@ -126,7 +124,8 @@ class Object_detect():
                                               (frame_width, frame_height))
                         print(
                             "TotalFrame : {tf} - Frame_width : {fw} - Frame Height : {fh} - Frame Rate(FPS) : {fp} ".format(
-                                tf=frameCount, fw=cap.get(cv2.CAP_PROP_FRAME_WIDTH), fh=cap.get(cv2.CAP_PROP_FRAME_HEIGHT),
+                                tf=frameCount, fw=cap.get(cv2.CAP_PROP_FRAME_WIDTH),
+                                fh=cap.get(cv2.CAP_PROP_FRAME_HEIGHT),
                                 fp=cap.get(cv2.CAP_PROP_FPS)))
 
                         frameId = 0
@@ -140,7 +139,7 @@ class Object_detect():
                                 print("Skip frames delta is : {d}".format(d=int(skipDelta)))
                             else:
                                 print('Max frame {mf} cannot exceed total frame'.format(mf=maxframes))
-                                
+
                         while frameId < frameCount:
                             ret, frame = cap.read()
                             if not ret:
@@ -150,8 +149,10 @@ class Object_detect():
                             frame_expanded = np.expand_dims(frame, axis=0)
 
                             # Perform the actual detection by running the model with the image as input
-                            (boxes, scores, classes, num) = self.sess.run([self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
-                            feed_dict = {self.image_tensor: frame_expanded})
+                            (boxes, scores, classes, num) = self.sess.run(
+                                [self.detection_boxes, self.detection_scores, self.detection_classes,
+                                 self.num_detections],
+                                feed_dict={self.image_tensor: frame_expanded})
                             # Draw the results of the detection (aka 'visulaize the results')
                             vis_util.visualize_boxes_and_labels_on_image_array(
                                 frame,
@@ -184,7 +185,7 @@ class Object_detect():
                 else:
                     1
             time_end = time.time()
-            print('\n',"Object  Detection on Video is successfull !", '\n')
+            print('\n', "Object  Detection on Video is successfull !", '\n')
             sec = timedelta(seconds=int(time_end - time_start))
             d = datetime(1, 1, 1) + sec
             print("Time Consumed - hours:{th} - Minutes:{mn} - Second:{sc}".format(th=d.hour, mn=d.minute,
@@ -197,9 +198,9 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Object detection')
     # parser.add_argument('--input_path', help="Input Folder", default='/home/sai-kantareddy/Downloads/Aptiv_object_detector/video_input')
     # parser.add_argument('--output_path', help="Output folder", default='/home/sai-kantareddy/Downloads/Aptiv_object_detector/Output')
-    parser.add_argument('--input_path', help="Input Folder",default='')
-    parser.add_argument('--output_path', help="Output folder",default='')
-    parser.add_argument('--max_frames',help="Max_frames",default='')
+    parser.add_argument('--input_path', help="Input Folder", default='')
+    parser.add_argument('--output_path', help="Output folder", default='')
+    parser.add_argument('--max_frames', help="Max_frames", default='')
     args = parser.parse_args()
     return args
 
@@ -210,18 +211,18 @@ MODEL_NAME = 'inference_graph'
 
 
 if MODEL_NAME is not 'inference_graph':
-    PATH_TO_LABELS='mscoco_label_map.pbtxt'
+    PATH_TO_LABELS = 'mscoco_label_map.pbtxt'
     NUM_CLASSES = 90
 else:
-    PATH_TO_LABELS="labelmap.pbtxt"
-    NUM_CLASSES=6
+    PATH_TO_LABELS = "labelmap.pbtxt"
+    NUM_CLASSES = 6
 
-args=parse_args()
-print('\n',"Starting  Objects Detection on Video file...","\n")
+args = parse_args()
+print('\n', "Starting  Objects Detection on Video file...", "\n")
 print('Reading files from path :', args.input_path)
-model = Object_detect(MODEL_NAME,PATH_TO_LABELS,NUM_CLASSES)
+model = Object_detect(MODEL_NAME, PATH_TO_LABELS, NUM_CLASSES)
 # if __name__ == "__main__":
 model.Laod_model_parameter()
-ret = model.find_detection(args.input_path,args.output_path,args.max_frames)
-#if ret==100:
+ret = model.find_detection(args.input_path, args.output_path, args.max_frames)
+# if ret==100:
 #    print("\n","File Error.....")

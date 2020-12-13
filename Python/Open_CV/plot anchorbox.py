@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-import pandas as pd
+# import pandas as pd
+
 '''one=np.ones([500,500,3],dtype='uint8')#create all 2 channel image of 1
 white_image=one*255#converting complete image into 255(white)
 
@@ -24,11 +25,9 @@ cv2.destroyAllWindows()'''
 #      -167  -343   184   360
 
 
-data=pd.read_csv('../../../Datasets/anchorbox.csv')
+data = pd.read_csv('../../../Datasets/anchorbox.csv')
 # data=pd.read_csv('/home/mayank-s/Desktop/pytorch_retinanet_my_creation/anchor_4.csv')
-features=data.iloc[:,:].values
-
-
+features = data.iloc[:, :].values
 
 # ___________________________________________
 
@@ -50,21 +49,21 @@ features=data.iloc[:,:].values
     |          |
     --------x2,y2'''
 # my_image=cv2.imread('american_bulldog_135.jpg',1)
-one=np.ones([608,1056,3],dtype='uint8')#create all 2 channel image of 1
-white_image=one*255#converting complete image into 255(white)
-#cv2.imshow('MyImage',my_image)
+one = np.ones([608, 1056, 3], dtype='uint8')  # create all 2 channel image of 1
+white_image = one * 255  # converting complete image into 255(white)
+# cv2.imshow('MyImage',my_image)
 print(white_image.shape)
-a=260
+a = 260
 for loop in range(len(features)):
-    xmin=int(features[loop,0])
-    ymin=int(features[loop,1])
-    xmax=int(features[loop,2])
-    ymax=int(features[loop,3])
-    top=(xmin+a,ymax+a)
-    bottom=(xmax+a,ymin+a)
-    cv2.rectangle(white_image, pt1=top,pt2=bottom,color= (0,255,0), thickness=2)
+    xmin = int(features[loop, 0])
+    ymin = int(features[loop, 1])
+    xmax = int(features[loop, 2])
+    ymax = int(features[loop, 3])
+    top = (xmin + a, ymax + a)
+    bottom = (xmax + a, ymin + a)
+    cv2.rectangle(white_image, pt1=top, pt2=bottom, color=(0, 255, 0), thickness=2)
 
-cv2.imshow('bounding_box image',white_image)
+cv2.imshow('bounding_box image', white_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 # _____________________________________________________________

@@ -1,5 +1,6 @@
 import h5py
 import numpy as np
+
 # # create hdf5 file
 # f=h5py.File("name.hdf5",'r')
 # print(f.filename)
@@ -48,16 +49,15 @@ grp2=hd.create_group("test")
 grp2.create_dataset('bbox', (5,2), dtype=np.int64,fillvalue=34)
 hd.close()'''
 
-
-#now reading groups in hdfc data file created above with groups
-hdf=h5py.File("data.hdf5",'r')
-gorup_read=hdf.items()
-print(list(gorup_read))#very imp to convert it into list other wise will not be able to read it
-get_Data=hdf.get('train')
+# now reading groups in hdfc data file created above with groups
+hdf = h5py.File("data.hdf5", 'r')
+gorup_read = hdf.items()
+print(list(gorup_read))  # very imp to convert it into list other wise will not be able to read it
+get_Data = hdf.get('train')
 print((get_Data))
-bbox_val=get_Data.items()
+bbox_val = get_Data.items()
 print(list(bbox_val))
 # data_return=np.array((bbox_val.get('bbox')))
 # print(data_return)
-data_return=get_Data.get('bbox')
+data_return = get_Data.get('bbox')
 print(np.array(data_return))

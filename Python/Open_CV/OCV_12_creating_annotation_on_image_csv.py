@@ -1,40 +1,57 @@
-import cv2
 import os
-import xml.etree.ElementTree as ET
-import  pandas as pd
-import numpy as np
+
+import cv2
+import pandas as pd
 
 # dataset = pd.read_csv("SortedXmlresult.csv")
 # /home/mayank-s/PycharmProjects/Datasets/Berkely DeepDrive/bdd100k/images/100k/train
 # /home/mayank-s/PycharmProjects/Datasets/Berkely DeepDrive/berkely_train.csv
-root="/home/mayank-s/PycharmProjects/Datasets/bike_datasets"
-csv_name="Bike.csv"
-csv_path=('/home/mayank-s/Desktop/berkely_modified.csv')
-root='/home/mayank-s/Desktop/Link to Datasets/Berkely_DeepDrive/bdd100k/images/100k/train'
+# csv_path="/home/mayanksati/PycharmProjects/Data_Science_new/lidar/point_csv/pointpil.csv"
+# csv_path="/home/mayanksati/PycharmProjects/Data_Science_new/Python/python_code/combined.csv"
+# root="/home/mayanksati/Documents/Rosbag_files/short_range_images/gwm_data_train.csv"
+# root="/home/mayanksati/Documents/datasets/BDD/ubuntu_aws_instance/Mayank_datastore/rosbag_images/2018-11-24-09-48-37/Baidu_TL_dataset1"
+root = ""
+# csv_path="/home/mayanksati/Documents/Rosbag_files/short_range_images/gwm_data_train.csv"
+csv_path = "/home/mayank_sati/pycharm_projects/Data_Science_new/Python/python_code/seol_myayank_train.csv"
+# csv_path=('/home/mayanksati/Documents/csv/traffic_light_square.csv')
+# csv_path=('/home/mayanksati/PycharmProjects/Data_Science_new/Deep learning/Load Datasets/traffic_light.csv')
+# root='/home/mayanksati/PycharmProjects/models/tensorflow/re3-tensorflow-master/demo/GWM_dataset'
 dataset = pd.read_csv(csv_path)
 print(dataset.head())
 # dataset=dataset.iloc[np.random.permutation(len(dataset))]
 x = dataset.iloc[:, 0].values
 y = dataset.iloc[:, 4:8].values
-val=0
-#for loop,xml_aray in zip(x, y):
+val = 0
+# for loop,xml_aray in zip(x, y):
+
+z = dataset.iloc[:, 3].values
 for loop in x:
-# [Xmin,ymin,xmax,ymax]
-    top = (y[val,0], y[val,3])
-    bottom = (y[val,2], y[val,1])
-    image_path=os.path.join(root,loop+".jpg")
-    image_scale=cv2.imread(image_path,1)
+    print(loop)
+    # [Xmin,ymin,xmax,ymax]
+    top = (y[val, 0], y[val, 3])
+    bottom = (y[val, 2], y[val, 1])
+    # image_path=os.path.join(root,loop+".jpg")
+    image_path = os.path.join(root, loop)
+    image_scale = cv2.imread(image_path, 1)
     # print(my_image[0,0])
     # image_scale=cv2.resize(m_image,dsize=(800,600), interpolation=cv2.INTER_NEAREST)
     # cv2.rectangle(image_scale, pt1=(125,84),pt2=(159,38),color= (0,255,0), thickness=2)
     cv2.rectangle(image_scale, pt1=top, pt2=bottom, color=(0, 255, 0), thickness=2)
-    cv2.circle(image_scale,center=(452,274),radius=10,color=(0,255,0))
-    cv2.imshow('streched_image',image_scale)
+    cv2.circle(image_scale, center=(452, 274), radius=10, color=(0, 255, 0))
+    cv2.putText(image_scale, z[val], (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), lineType=cv2.LINE_AA)
+    cv2.imshow('streched_image', image_scale)
     # output_folder_path="/home/mayank-s/PycharmProjects/Datasets/aptive/object_detect/output/output_merccedes.png"
     # filepath=output_folder_path+my_image+".png"
     # cv2.imwrite(filepath,my_image)
-    cv2.waitKey(500)
+    # font = cv2.FONT_HERSHEY_SIMPLEX
+    # cv2.putText(image_scale, z[val], (100, 200), font, 4, (0, 255, 0), 2, cv2.LINE_AA)
+    # if val>1:
+    print(1)
+    # cv2.waitKey(1000)
+    ch = cv2.waitKey(10)  # refresh after 1 milisecong
+    if ch & 0XFF == ord('q'):
+        cv2.destroyAllWindows()
     cv2.destroyAllWindows()
-    val+=1
-    print (val)
+    val += 1
+    print(val)
     # break

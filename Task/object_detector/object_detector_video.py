@@ -6,9 +6,15 @@
 #
 # run command: python3 object_detector.py --input_path "/home/mayank-s/PycharmProjects/Datasets/aptive/object_detect/input" --output_path "/home/mayank-s/PycharmProjects/Datasets/aptive/object_detect/output"
 #
-# @author Mayank Sati/Ashis Samal
+
 #
-#library used:
+# library used:
+
+import argparse
+import os
+import sys
+import time
+from datetime import datetime, timedelta
 
 # 1.Protobuf 3.0.0
 # 2.Python - tk
@@ -21,15 +27,9 @@
 # 9.0pencv-python 3.4.1.15
 ######################################################################################
 import cv2
-import os
-import shutil
-import argparse
-import time
 import numpy as np
-import pandas as pd
-import sys
-from datetime import datetime, timedelta
 import tensorflow as tf
+
 # This is needed since the notebook is stored in the object_detection folder.
 sys.path.append("..")
 # Import utilites
@@ -39,10 +39,10 @@ from utils import visualization_utils as vis_util
 
 class Object_detect():
 
-    def __init__(self,MODEL_NAME,label_path,NUM_CLASSES):
-        self.MODEL_NAME=MODEL_NAME
-        self.label_path=label_path
-        self.NUM_CLASSES=NUM_CLASSES
+    def __init__(self, MODEL_NAME, label_path, NUM_CLASSES):
+        self.MODEL_NAME = MODEL_NAME
+        self.label_path = label_path
+        self.NUM_CLASSES = NUM_CLASSES
 
         # self.input_folder = input_folder
         # self.output_folder = output_folder
@@ -85,9 +85,7 @@ class Object_detect():
         # Number of objects detected
         self.num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
-
-
-    def find_detection(self,input_folder,output_folder,maxframes="None"):
+    def find_detection(self, input_folder, output_folder, maxframes="None"):
         """Function to detect images in input folder and save annotated image in an output directory.
 
             Args:
@@ -105,14 +103,14 @@ class Object_detect():
             print("Output folder not present. Creating New folder...")
             os.makedirs(output_folder)
 
-        for root,_, filenames in os.walk(input_folder):
+        for root, _, filenames in os.walk(input_folder):
             if (len(filenames) == 0):
                 print("Input folder is empty")
                 return 1
             time_start = time.time()
             for filename in filenames:
                 try:
-                    print( '\n',"Creating object detection for file : {fn}".format(fn=filename))
+                    print('\n', "Creating object detection for file : {fn}".format(fn=filename))
 
                     file_path = (os.path.join(root, filename))
                     cap = cv2.VideoCapture()
@@ -162,8 +160,9 @@ class Object_detect():
                         frame_expanded = np.expand_dims(frame, axis=0)
 
                         # Perform the actual detection by running the model with the image as input
-                        (boxes, scores, classes, num) = self.sess.run([self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
-                        feed_dict = {self.image_tensor: frame_expanded})
+                        (boxes, scores, classes, num) = self.sess.run(
+                            [self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
+                            feed_dict={self.image_tensor: frame_expanded})
                         # print(num)
                         # print(boxes.size)
                         # Draw the results of the detection (aka 'visulaize the results')
@@ -199,10 +198,11 @@ class Object_detect():
                 except IOError:
                     print("Existing Object Detection...")
                 except:
-                    print('ERROR...object detection failed for Filename: {fn} , Check file type '.format(fn=filename),'\n')
+                    print('ERROR...object detection failed for Filename: {fn} , Check file type '.format(fn=filename),
+                          '\n')
                 else:
                     1
-                    #print("Object Detected  successfully !", '\n')
+                    # print("Object Detected  successfully !", '\n')
 
             time_end = time.time()
             print("object  Detection on Video is successfull !", '\n')
@@ -218,8 +218,10 @@ def parse_args():
     """Parse input arguments."""
 
     parser = argparse.ArgumentParser(description='Object detection')
-    parser.add_argument('--input_path', help="Input Folder", default='/home/mayank-s/PycharmProjects/Datasets/aptive/object_detect/video_input')
-    parser.add_argument('--output_path', help="Output folder", default='/home/mayank-s/PycharmProjects/Datasets/aptive/object_detect/output')
+    parser.add_argument('--input_path', help="Input Folder",
+                        default='/home/mayank-s/PycharmProjects/Datasets/aptive/object_detect/video_input')
+    parser.add_argument('--output_path', help="Output folder",
+                        default='/home/mayank-s/PycharmProjects/Datasets/aptive/object_detect/output')
     # parser.add_argument('--input_path', help="Input Folder")#default='')
     # parser.add_argument('--output_path', help="Output folder")#, default='')
     args = parser.parse_args()
@@ -232,18 +234,18 @@ MODEL_NAME = 'inference_graph'
 
 
 if MODEL_NAME is not 'inference_graph':
-    PATH_TO_LABELS='mscoco_label_map.pbtxt'
+    PATH_TO_LABELS = 'mscoco_label_map.pbtxt'
     NUM_CLASSES = 90
 else:
-    PATH_TO_LABELS="labelmap.pbtxt"
-    NUM_CLASSES=11
+    PATH_TO_LABELS = "labelmap.pbtxt"
+    NUM_CLASSES = 11
 
-args=parse_args()
-print('\n',"Starting  Objects Detection on Image...","\n")
+args = parse_args()
+print('\n', "Starting  Objects Detection on Image...", "\n")
 print('Reading files from path :', args.input_path)
-model = Object_detect(MODEL_NAME,PATH_TO_LABELS,NUM_CLASSES)
+model = Object_detect(MODEL_NAME, PATH_TO_LABELS, NUM_CLASSES)
 # if __name__ == "__main__":
 model.Laod_model_parameter()
-ret = model.find_detection(args.input_path,args.output_path)#,maxframes=5)
-if ret==1:
-    print("\n","File Error.....")
+ret = model.find_detection(args.input_path, args.output_path)  # ,maxframes=5)
+if ret == 1:
+    print("\n", "File Error.....")

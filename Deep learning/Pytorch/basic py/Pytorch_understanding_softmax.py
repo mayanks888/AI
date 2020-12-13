@@ -1,13 +1,9 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.autograd import Variable
-
-
 # Cross entropy example
 import numpy as np
+import torch
+import torch.nn as nn
+from torch.autograd import Variable
+
 # One hot
 # 0: 1 0 0
 # 1: 0 1 0
@@ -50,7 +46,6 @@ Y = Variable(torch.LongTensor([2, 0, 1]), requires_grad=False)
 Y_pred1 = Variable(torch.Tensor([[0.1, 0.2, 0.9],
                                  [1.1, 0.1, 0.2],
                                  [0.2, 2.1, 0.1]]))
-
 
 Y_pred2 = Variable(torch.Tensor([[0.8, 0.2, 0.3],
                                  [0.2, 0.3, 0.5],

@@ -4,8 +4,8 @@
 import cv2
 import gym
 import numpy as np
-from gym.spaces.box import Box
 from gym import wrappers
+from gym.spaces.box import Box
 
 
 # Taken from https://github.com/openai/universe-starter-agent
@@ -30,7 +30,7 @@ def _process_frame42(frame):
     frame = frame.mean(2)
     frame = frame.astype(np.float32)
     frame *= (1.0 / 255.0)
-    #frame = np.reshape(frame, [1, 42, 42])
+    # frame = np.reshape(frame, [1, 42, 42])
     return frame
 
 
@@ -41,7 +41,7 @@ class MyAtariRescale42x42(gym.ObservationWrapper):
         self.observation_space = Box(0.0, 1.0, [1, 42, 42])
 
     def _observation(self, observation):
-    	return _process_frame42(observation)
+        return _process_frame42(observation)
 
 
 class MyNormalizedEnv(gym.ObservationWrapper):
@@ -56,9 +56,9 @@ class MyNormalizedEnv(gym.ObservationWrapper):
     def _observation(self, observation):
         self.num_steps += 1
         self.state_mean = self.state_mean * self.alpha + \
-            observation.mean() * (1 - self.alpha)
+                          observation.mean() * (1 - self.alpha)
         self.state_std = self.state_std * self.alpha + \
-            observation.std() * (1 - self.alpha)
+                         observation.std() * (1 - self.alpha)
 
         unbiased_mean = self.state_mean / (1 - pow(self.alpha, self.num_steps))
         unbiased_std = self.state_std / (1 - pow(self.alpha, self.num_steps))

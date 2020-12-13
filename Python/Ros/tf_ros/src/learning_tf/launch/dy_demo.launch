@@ -1,0 +1,5 @@
+<launch>
+    ...
+    <node pkg="learning_tf" type="dynamic_tf_broadcaster.py"
+          name="broadcaster_dynamic" />
+  </launch>

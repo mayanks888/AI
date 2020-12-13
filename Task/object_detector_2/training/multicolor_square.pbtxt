@@ -1,0 +1,17 @@
+item {
+  id: 1
+  name: 'red_light'
+}
+
+item {
+  id: 2
+  name: 'green_light'
+}
+
+item {
+  id: 3
+  name: 'black_light'
+}
+
+
+

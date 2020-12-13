@@ -1,10 +1,9 @@
-
-import torch
-from torch.autograd import Variable
 import numpy as np
-import torch.functional as F
+import torch
 import torch.nn.functional as F
-#small corpus for my understanding
+from torch.autograd import Variable
+
+# small corpus for my understanding
 corpus = [
     'he is a king',
     'she is a queen',
@@ -12,12 +11,14 @@ corpus = [
     'she is a woman',
     'warsaw is poland capital',
     'berlin is germany capital',
-    'paris is france capital',   
+    'paris is france capital',
 ]
+
 
 def tokenize_corpus(corpus):
     tokens = [x.split() for x in corpus]
     return tokens
+
 
 tokenized_corpus = tokenize_corpus(corpus)
 
@@ -48,12 +49,14 @@ for sentence in tokenized_corpus:
             context_word_idx = indices[context_word_pos]
             idx_pairs.append((indices[center_word_pos], context_word_idx))
 
-idx_pairs = np.array(idx_pairs) # it will be useful to have this as numpy array
+idx_pairs = np.array(idx_pairs)  # it will be useful to have this as numpy array
+
 
 def get_input_layer(word_idx):
     x = torch.zeros(vocabulary_size).float()
     x[word_idx] = 1.0
     return x
+
 
 embedding_dims = 5
 W1 = Variable(torch.randn(embedding_dims, vocabulary_size).float(), requires_grad=True)
@@ -75,10 +78,10 @@ for epo in range(num_epochs):
 
         z1 = torch.matmul(W1, x)
         z2 = torch.matmul(W2, z1)
-    
+
         log_softmax = F.log_softmax(z2, dim=0)
 
-        loss = F.nll_loss(log_softmax.view(1,-1), y_true)
+        loss = F.nll_loss(log_softmax.view(1, -1), y_true)
         loss_val += loss.data[0]
         loss.backward()
         W1.data -= learning_rate * W1.grad.data
@@ -86,6 +89,5 @@ for epo in range(num_epochs):
 
         W1.grad.data.zero_()
         W2.grad.data.zero_()
-    if epo % 10 == 0:    
-        print('Loss at epo {epo}: {lp}'.format(epo=epo,lp=(loss_val/len(idx_pairs))))
-
+    if epo % 10 == 0:
+        print('Loss at epo {epo}: {lp}'.format(epo=epo, lp=(loss_val / len(idx_pairs))))

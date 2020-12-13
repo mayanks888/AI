@@ -1,13 +1,10 @@
-import tensorflow as tf
-import os
-import sys
-import random
-
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
 plt.style.use('seaborn-white')
 import seaborn as sns
+
 sns.set_style("white")
 #
 # %matplotlib inline
@@ -15,24 +12,19 @@ sns.set_style("white")
 # import cv2
 from sklearn.model_selection import train_test_split
 
-from tqdm import tqdm_notebook, tnrange
-from itertools import chain
-from skimage.io import imread, imshow, concatenate_images
+from tqdm import tqdm_notebook
 from skimage.transform import resize
-from skimage.morphology import label
 
 from keras.models import Model, load_model
-from keras.layers import Input,Dropout,BatchNormalization,Activation,Add
-from keras.layers.core import Lambda
+from keras.layers import Input, Dropout, BatchNormalization, Activation, Add
 from keras.layers.convolutional import Conv2D, Conv2DTranspose
 from keras.layers.pooling import MaxPooling2D
 from keras.layers.merge import concatenate
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
-from keras import backend as K
 
 import tensorflow as tf
 
-from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img#,save_img
+from keras.preprocessing.image import load_img  # ,save_img
 
 # Set some parameters
 im_width = 101
@@ -66,7 +58,6 @@ def downsample(img):  # not used
     # return img[:img_size_ori, :img_size_ori]
 
 
-
 # Loading of training/testing ids and depths
 
 train_df = pd.read_csv("/home/mayank-s/PycharmProjects/Datasets/tgs/train.csv", index_col="id", usecols=[0])
@@ -76,12 +67,14 @@ test_df = depths_df[~depths_df.index.isin(train_df.index)]
 
 print(len(train_df))
 
-
-
-train_df["images"] = [np.array(load_img("/home/mayank-s/PycharmProjects/Datasets/tgs/train/images/{}.png".format(idx), grayscale=True)) / 255 for idx in
+train_df["images"] = [np.array(
+    load_img("/home/mayank-s/PycharmProjects/Datasets/tgs/train/images/{}.png".format(idx), grayscale=True)) / 255 for
+                      idx in
                       tqdm_notebook(train_df.index)]
 
-train_df["masks"] = [np.array(load_img("/home/mayank-s/PycharmProjects/Datasets/tgs/train/masks/{}.png".format(idx), grayscale=True)) / 255 for idx in
+train_df["masks"] = [np.array(
+    load_img("/home/mayank-s/PycharmProjects/Datasets/tgs/train/masks/{}.png".format(idx), grayscale=True)) / 255 for
+                     idx in
                      tqdm_notebook(train_df.index)]
 
 train_df["coverage"] = train_df.masks.map(np.sum) / pow(img_size_ori, 2)
@@ -102,15 +95,13 @@ plt.suptitle("Salt coverage")
 axs[0].set_xlabel("Coverage")
 axs[1].set_xlabel("Coverage class")'''
 
-
-#Plotting the depth distributions¶
+# Plotting the depth distributions¶
 
 sns.distplot(train_df.z, label="Train")
 sns.distplot(test_df.z, label="Test")
 plt.legend()
 plt.title("Depth distribution")
 plt.show()
-
 
 # Create train/validation split stratified by salt coverage
 
@@ -120,20 +111,22 @@ ids_train, ids_valid, x_train, x_valid, y_train, y_valid, cov_train, cov_test, d
     np.array(train_df.masks.map(upsample).tolist()).reshape(-1, img_size_target, img_size_target, 1),
     train_df.coverage.values,
     train_df.z.values,
-    test_size=0.2, stratify=train_df.coverage_class, random_state= 1234)
+    test_size=0.2, stratify=train_df.coverage_class, random_state=1234)
 
-def convolution_block(x, filters, size, strides=(1,1), padding='same', activation=True):
+
+def convolution_block(x, filters, size, strides=(1, 1), padding='same', activation=True):
     x = Conv2D(filters, size, strides=strides, padding=padding)(x)
     x = BatchNormalization()(x)
     if activation == True:
         x = Activation('relu')(x)
     return x
 
+
 def residual_block(blockInput, num_filters=16):
     x = Activation('relu')(blockInput)
     x = BatchNormalization()(x)
-    x = convolution_block(x, num_filters, (3,3) )
-    x = convolution_block(x, num_filters, (3,3), activation=False)
+    x = convolution_block(x, num_filters, (3, 3))
+    x = convolution_block(x, num_filters, (3, 3), activation=False)
     x = Add()([x, blockInput])
     return x
 
@@ -266,6 +259,8 @@ def iou_metric(y_true_in, y_pred_in, print_table=False):
     iou = intersection / union
 
     # Precision helper function
+
+
 def precision_at(threshold, iou):
     matches = iou > threshold
     true_positives = np.sum(matches, axis=1) == 1  # Correct objects
@@ -308,7 +303,8 @@ def my_iou_metric(label, pred):
     metric_value = tf.py_func(iou_metric_batch, [label, pred], tf.float64)
     return metric_value
 
-#Data augmentation
+
+# Data augmentation
 x_train2 = np.append(x_train, [np.fliplr(x) for x in x_train], axis=0)
 y_train2 = np.append(y_train, [np.fliplr(x) for x in y_train], axis=0)
 print(x_train2.shape)
@@ -317,7 +313,7 @@ print(y_valid.shape)
 # model
 input_layer = Input((img_size_target, img_size_target, 1))
 # input_layer2 = Input((img_size_target, img_size_target, 1))
-output_layer = build_model(input_layer, 16,0.5)
+output_layer = build_model(input_layer, 16, 0.5)
 
 # del model
 model = Model(input_layer, output_layer)
@@ -325,11 +321,12 @@ model.compile(loss="binary_crossentropy", optimizer="adam", metrics=[my_iou_metr
 
 model.summary()
 
-early_stopping = EarlyStopping(monitor='val_my_iou_metric', mode = 'max',patience=20, verbose=1)
-model_checkpoint = ModelCheckpoint("./unet_best1.model",monitor='val_my_iou_metric',
-                                   mode = 'max', save_best_only=True, verbose=1)
-reduce_lr = ReduceLROnPlateau(monitor='val_my_iou_metric', mode = 'max',factor=0.2, patience=5, min_lr=0.00001, verbose=1)
-#reduce_lr = ReduceLROnPlateau(factor=0.2, patience=5, min_lr=0.00001, verbose=1)
+early_stopping = EarlyStopping(monitor='val_my_iou_metric', mode='max', patience=20, verbose=1)
+model_checkpoint = ModelCheckpoint("./unet_best1.model", monitor='val_my_iou_metric',
+                                   mode='max', save_best_only=True, verbose=1)
+reduce_lr = ReduceLROnPlateau(monitor='val_my_iou_metric', mode='max', factor=0.2, patience=5, min_lr=0.00001,
+                              verbose=1)
+# reduce_lr = ReduceLROnPlateau(factor=0.2, patience=5, min_lr=0.00001, verbose=1)
 
 epochs = 200
 batch_size = 32
@@ -341,38 +338,41 @@ history = model.fit(x_train2, y_train2,
                     callbacks=[early_stopping, model_checkpoint, reduce_lr],
                     verbose=2)
 import matplotlib.pyplot as plt
+
 # summarize history for loss
 plt.plot(history.history['my_iou_metric'][1:])
 plt.plot(history.history['val_my_iou_metric'][1:])
 plt.title('model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
-plt.legend(['train','Validation'], loc='upper left')
+plt.legend(['train', 'Validation'], loc='upper left')
 plt.show()
 
-fig, (ax_loss, ax_acc) = plt.subplots(1, 2, figsize=(15,5))
+fig, (ax_loss, ax_acc) = plt.subplots(1, 2, figsize=(15, 5))
 ax_loss.plot(history.epoch, history.history["loss"], label="Train loss")
 ax_loss.plot(history.epoch, history.history["val_loss"], label="Validation loss")
 
-model = load_model("./unet_best1.model",custom_objects={'my_iou_metric': my_iou_metric})
+model = load_model("./unet_best1.model", custom_objects={'my_iou_metric': my_iou_metric})
 
 
-def predict_result(model,x_test,img_size_target): # predict both orginal and reflect x
-    x_test_reflect =  np.array([np.fliplr(x) for x in x_test])
+def predict_result(model, x_test, img_size_target):  # predict both orginal and reflect x
+    x_test_reflect = np.array([np.fliplr(x) for x in x_test])
     preds_test1 = model.predict(x_test).reshape(-1, img_size_target, img_size_target)
     preds_test2_refect = model.predict(x_test_reflect).reshape(-1, img_size_target, img_size_target)
-    preds_test2 = np.array([ np.fliplr(x) for x in preds_test2_refect] )
-    preds_avg = (preds_test1 +preds_test2)/2
+    preds_test2 = np.array([np.fliplr(x) for x in preds_test2_refect])
+    preds_avg = (preds_test1 + preds_test2) / 2
     return preds_avg
 
-preds_valid = predict_result(model,x_valid,img_size_target)
+
+preds_valid = predict_result(model, x_valid, img_size_target)
 preds_valid2 = np.array([downsample(x) for x in preds_valid])
 
 y_valid2 = np.array([downsample(x) for x in y_valid])
 
 ## Scoring for last model
 thresholds = np.linspace(0.3, 0.7, 31)
-ious = np.array([iou_metric_batch(y_valid2, np.int32(preds_valid2 > threshold)) for threshold in tqdm_notebook(thresholds)])
+ious = np.array(
+    [iou_metric_batch(y_valid2, np.int32(preds_valid2 > threshold)) for threshold in tqdm_notebook(thresholds)])
 
 threshold_best_index = np.argmax(ious)
 iou_best = ious[threshold_best_index]
@@ -385,33 +385,38 @@ plt.ylabel("IoU")
 plt.title("Threshold vs IoU ({}, {})".format(threshold_best, iou_best))
 plt.legend()
 
-
 """
 used for converting the decoded image to rle mask
 Fast compared to previous one
 """
+
+
 def rle_encode(im):
     '''
     im: numpy array, 1 - mask, 0 - background
     Returns run length as string formated
     '''
-    pixels = im.flatten(order = 'F')
+    pixels = im.flatten(order='F')
     pixels = np.concatenate([[0], pixels, [0]])
     runs = np.where(pixels[1:] != pixels[:-1])[0] + 1
     runs[1::2] -= runs[::2]
     return ' '.join(str(x) for x in runs)
 
-x_test = np.array([(np.array(load_img("../input/test/images/{}.png".format(idx), grayscale = True))) / 255 for idx in tqdm_notebook(test_df.index)]).reshape(-1, img_size_target, img_size_target, 1)
 
-preds_test = predict_result(model,x_test,img_size_target)
+x_test = np.array([(np.array(load_img("../input/test/images/{}.png".format(idx), grayscale=True))) / 255 for idx in
+                   tqdm_notebook(test_df.index)]).reshape(-1, img_size_target, img_size_target, 1)
+
+preds_test = predict_result(model, x_test, img_size_target)
 
 import time
+
 t1 = time.time()
-pred_dict = {idx: rle_encode(np.round(downsample(preds_test[i]) > threshold_best)) for i, idx in enumerate(tqdm_notebook(test_df.index.values))}
+pred_dict = {idx: rle_encode(np.round(downsample(preds_test[i]) > threshold_best)) for i, idx in
+             enumerate(tqdm_notebook(test_df.index.values))}
 t2 = time.time()
 
 print("Usedtime = {t2-t1} s")
-sub = pd.DataFrame.from_dict(pred_dict,orient='index')
+sub = pd.DataFrame.from_dict(pred_dict, orient='index')
 sub.index.names = ['id']
 sub.columns = ['rle_mask']
 sub.to_csv('submission13.csv')

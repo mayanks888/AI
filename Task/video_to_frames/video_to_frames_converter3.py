@@ -13,15 +13,17 @@
 #
 # @author Mayank Sati/Ashis Samal
 #
-#library used:
-#1. 0pencv-python 3.4.1.15
+# library used:
+# 1. 0pencv-python 3.4.1.15
 ######################################################################################
-import cv2
+import argparse
 import os
 import shutil
-import argparse
 import time
 from datetime import datetime, timedelta
+
+import cv2
+
 
 class Video2file():
 
@@ -31,7 +33,7 @@ class Video2file():
     #     self.output_folder = output_folder
     #     self.maxframes = maxframes
 
-    def Create_frames(self,input_folder,output_folder, maxframes="None"):
+    def Create_frames(self, input_folder, output_folder, maxframes="None"):
         """Function to extract frames from input video file and save them as separate frames_folder in an output directory.
 
             Args:
@@ -52,7 +54,7 @@ class Video2file():
             print('Output folder not present. Creating New folder...')
             os.makedirs(output_folder)
 
-        for root,_, filenames in os.walk(input_folder):
+        for root, _, filenames in os.walk(input_folder):
             if (len(filenames) == 0):
                 print("Input folder is empty")
                 return 1
@@ -72,18 +74,17 @@ class Video2file():
                     # elif cap.get(cv2.CAP_PROP_FRAME_COUNT)>1:
                     #     print('this is a image ,please give video')
 
-
                     print("Creating frames : {fn}".format(fn=filename))
                     if os.path.exists(Gen_frame_path):
                         print("Remove existing {pt} output folder".format(pt=filename))
                         shutil.rmtree(Gen_frame_path)
                     os.makedirs(Gen_frame_path)
 
-
                     frameCount = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-                    print("TotalFrame : {tf} - Frame_width : {fw} - Frame Height : {fh} - Frame Rate(FPS) : {fp} ".format(
-                        tf=frameCount, fw=cap.get(cv2.CAP_PROP_FRAME_WIDTH), fh=cap.get(cv2.CAP_PROP_FRAME_HEIGHT),
-                        fp=cap.get(cv2.CAP_PROP_FPS)))
+                    print(
+                        "TotalFrame : {tf} - Frame_width : {fw} - Frame Height : {fh} - Frame Rate(FPS) : {fp} ".format(
+                            tf=frameCount, fw=cap.get(cv2.CAP_PROP_FRAME_WIDTH), fh=cap.get(cv2.CAP_PROP_FRAME_HEIGHT),
+                            fp=cap.get(cv2.CAP_PROP_FPS)))
 
                     frameId = 0
                     skipDelta = 0
@@ -127,14 +128,13 @@ class Video2file():
                 except:
                     print('ERROR...Filename: {fn} cannot be converted into frames'.format(fn=filename))
                 else:
-                    print("Frames generated successfully",'\n')
+                    print("Frames generated successfully", '\n')
 
 
-
-model=Video2file()
+model = Video2file()
 # if __name__ == "__main__":
 
-print("Start Video to Frames Converter...","\n")
+print("Start Video to Frames Converter...", "\n")
 
 parser = argparse.ArgumentParser(description="Video to Frames converter")
 parser.add_argument('-input', help="Input Video Folder")
@@ -143,10 +143,9 @@ parser.add_argument('-maxframes', type=int, help="Output max number of frames")
 args = parser.parse_args()
 
 if args.maxframes:
-    ret = model.Create_frames(args.input, args.output,args.maxframes)
+    ret = model.Create_frames(args.input, args.output, args.maxframes)
 else:
     ret = model.Create_frames(args.input, args.output)
-    
 
-if ret==1:
-    print("\n","Error in convering a file.....")
+if ret == 1:
+    print("\n", "Error in convering a file.....")

@@ -1,10 +1,9 @@
-import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-x=np.linspace(0,5,10)
-y=x**2
-y1=x**3
+x = np.linspace(0, 5, 10)
+y = x ** 2
+y1 = x ** 3
 '''print (x)
 plt.plot(x,y)
 plt.xlabel("x")
@@ -39,9 +38,12 @@ plt.tight_layout()#set a plot properly into page
 plt.show()
 plt.savefig('myfigure.png')#saving a plot'''
 
-fig=plt.figure()
-ax=fig.add_axes([.1,.1,1,1])
-ax.plot(x,y,color='purple',linewidth=3)
-ax.set_xlim([0,5])#define the axis value as your convinient
-ax.set_ylim([0,10])
+fig = plt.figure()
+ax = fig.add_axes([.1, .1, 1, 1])
+ax.plot(x, y, color='purple', linewidth=3)
+ax.set_xlim([0, 5])  # define the axis value as your convinient
+ax.set_ylim([0, 10])
 plt.show()
+
+# tensor([0.0485, 0.4602, 0.7500, 0.0000, 0.0000, 0.0000, 0.0000])
+# tensor([0.5779, 0.1977, 0.0342, 0.0000, 0.0000, 0.0000, 0.0000])

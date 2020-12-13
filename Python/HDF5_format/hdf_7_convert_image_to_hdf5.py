@@ -1,23 +1,21 @@
-import argparse
 import os
-from PIL import Image
-import io
+from collections import namedtuple
+
 import h5py
 import numpy as np
-from collections import namedtuple, OrderedDict
-import pandas as pd
-import cv2
 
-classes=['person','motor','bus','car','bike','traffic light','traffic sign','truck', 'train']
+classes = ['person', 'motor', 'bus', 'car', 'bike', 'traffic light', 'traffic sign', 'truck', 'train']
+
 
 def class_text_to_int(row_label):
     if row_label in classes:
-        val=classes.index(row_label)
-        return val+1
+        val = classes.index(row_label)
+        return val + 1
     else:
         print(row_label)
         print('classes does not exist in defined classes')
         raise IOError
+
 
 def add_image_to_datasets(voc_path, group_val, images, start=0):
     # image_name = group_val.filename + ".jpg"
@@ -27,12 +25,11 @@ def add_image_to_datasets(voc_path, group_val, images, start=0):
 
 
 def add_to_dataset(voc_path, group_val, images, boxes, start=0):
-
     image_name = group_val.filename + ".jpg"
     image_data = get_image_for_id(voc_path, image_name)
     images[start] = image_data
     image_boxes = get_boxes_for_id(group_val)
-    boxes[start]=image_boxes
+    boxes[start] = image_boxes
 
 
 def get_boxes_for_id(group):
@@ -50,9 +47,7 @@ def get_boxes_for_id(group):
     # train_boxes[loop] = final_bbox
 
 
-
 def get_image_for_id(path, image_id):
-
     """Get image data as uint8 array for given image.
     Parameters
     ----------
@@ -68,18 +63,16 @@ def get_image_for_id(path, image_id):
     return np.fromstring(data, dtype='uint8')
 
 
-
 def split(df, group):
     data = namedtuple('data', ['filename', 'object'])
     gb = df.groupby(group)
     return [data(filename, gb.get_group(x)) for filename, x in zip(gb.groups.keys(), gb.groups)]
 
 
-
 if __name__ == '__main__':
     voc_path = '/home/mayank-s/Desktop/Link to Datasets/aptive/object_detect'
     train_csv_name = "berkely_train_for_hdf5.csv"
-    image_path='/home/mayank-s/Desktop/Link to Datasets/aptive/object_detect/input'
+    image_path = '/home/mayank-s/Desktop/Link to Datasets/aptive/object_detect/input'
 
     print('Creating HDF5 dataset structure.')
     fname = os.path.join(voc_path, 'Image_to_hdf51.hdf5')
@@ -98,7 +91,6 @@ if __name__ == '__main__':
     # train_group = voc_h5file.create_group('train')
     # val_group = voc_h5file.create_group('val')
     test_group = voc_h5file.create_group('test')
-
 
     # store class list for reference class ids as csv fixed-length numpy string
     # voc_h5file.attrs['classes'] = np.string_(str.join(',', classes))
@@ -123,7 +115,7 @@ if __name__ == '__main__':
     # test_boxes = test_group.create_dataset(
     #     'boxes', shape=((test_ids),), dtype=vlen_int_dt)
 
-    loop=0
+    loop = 0
 
     if not os.path.exists(image_path):
         print("Input folder not found")
@@ -132,7 +124,7 @@ if __name__ == '__main__':
     # if not os.path.exists(image_path):
     #     print('Output folder not present. Creating New folder...')
     #     os.makedirs(output_folder)
-    start=0
+    start = 0
     for root, _, filenames in os.walk(image_path):
         if (len(filenames) == 0):
             print("Input folder is empty")
@@ -142,19 +134,18 @@ if __name__ == '__main__':
         # test_images = test_group.create_dataset(name='images', shape=(3, 2), dtype=uint8_dt)
         for filename in filenames:
             # try:
-                image_data = get_image_for_id(image_path, filename)
-                test_images[start] = image_data
-                # filename = filename.encode()
-                # dt = np.dtype([(filename, np.unicode, 8)])
-                # # np.fromstring(filename, dtype=np.uint8)
-                # # test_images[start, 1] = filename
-                # # test_images[start] = filename
+            image_data = get_image_for_id(image_path, filename)
+            test_images[start] = image_data
+            # filename = filename.encode()
+            # dt = np.dtype([(filename, np.unicode, 8)])
+            # # np.fromstring(filename, dtype=np.uint8)
+            # # test_images[start, 1] = filename
+            # # test_images[start] = filename
 
-                start+=1
-                print(start)
+            start += 1
+            print(start)
 
-   # test_group.H5IMlink_palette
-
+    # test_group.H5IMlink_palette
 
     print('Closing HDF5 file.')
     voc_h5file.close()

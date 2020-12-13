@@ -1,20 +1,13 @@
 import pandas as pd
-import numpy as np
-from sklearn.covariance import EllipticEnvelope
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as plt
-from sklearn.metrics import r2_score
-from sklearn.metrics import mean_squared_error
 # import statsmodels.formula.api as smapi
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+
 # base_path="Users\mayank\Documents\mytensorflow\Datasets\"
 
-file_name="C:/Users/mayank/Documents/Datasets/MY_refine_engine_data.xlsx"
-data=pd.read_excel(file_name)
+file_name = "C:/Users/mayank/Documents/Datasets/MY_refine_engine_data.xlsx"
+data = pd.read_excel(file_name)
 '''
 #ploting wheel rpm and gear
 plt.scatter(data['WhlRPM_FL[rpm]']/10,data['Gr[]'],color='b')
@@ -42,26 +35,27 @@ plt.xlabel("Engine Torque")
 plt.ylabel("Gear")
 plt.show()'''
 
-features=data.iloc[:,:-1].values
-labels=data.iloc[:,-1].values
-print (features)
+features = data.iloc[:, :-1].values
+labels = data.iloc[:, -1].values
+print(features)
 # print labels
 
-x_train,xtest,y_train,ytest=train_test_split(features,labels,test_size=.25,random_state=2355)
-print (x_train.shape)
+x_train, xtest, y_train, ytest = train_test_split(features, labels, test_size=.25, random_state=2355)
+print(x_train.shape)
 # mydtree=DecisionTreeClassifier(random_state=2355)
 # mydtree.fit(x_train,y_train)
-myclass=RandomForestClassifier(n_estimators=100, oob_score=True,random_state=2355)
-myclass.fit(x_train,y_train)
+myclass = RandomForestClassifier(n_estimators=100, oob_score=True, random_state=2355)
+myclass.fit(x_train, y_train)
 
 from sklearn.metrics import accuracy_score
+
 predicted = myclass.predict(xtest)
-print ("predicted Gear :", predicted)
+print("predicted Gear :", predicted)
 print
 print("Real Gear are", ytest)
 accuracy = accuracy_score(ytest, predicted)
 print
-print ("the Accuracy of Model is : ",accuracy)
+print("the Accuracy of Model is : ", accuracy)
 
 # #ploting wheel engine torque and gear
 # plt.scatter(ytest,predicted,color='g')
@@ -72,20 +66,19 @@ print ("the Accuracy of Model is : ",accuracy)
 
 
 # print (myclass.max_leaf_nodes)
-df=pd.DataFrame()
-df['Real_gear']= ytest
-df['predicted gear']= predicted
-
+df = pd.DataFrame()
+df['Real_gear'] = ytest
+df['predicted gear'] = predicted
 
 # from sklearn.preprocessing import LabelEncoder
 # le = LabelEncoder()
 # y = le.fit_transform(ytest)
 # z = le.fit_transform(predicted)
-dat123=['0','1','2','3','4','5','6','7','8','13']
-dat12=[0,1,2,3,4,5,6,7,8,13]
-labedled = [dat12,dat12]
-cm=( confusion_matrix(ytest, predicted, labels=dat12))
-print ("Confuction Matrix:\n",cm)
+dat123 = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '13']
+dat12 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 13]
+labedled = [dat12, dat12]
+cm = (confusion_matrix(ytest, predicted, labels=dat12))
+print("Confuction Matrix:\n", cm)
 # print (confusion_matrix(y, z, labels=labedled))
 # "________________________________________________"
 

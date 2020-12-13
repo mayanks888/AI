@@ -1,10 +1,3 @@
-from sklearn.datasets import make_blobs
-import matplotlib.pyplot as plt
-import numpy as np
-import math
-import numpy as np
-import tensorflow as tf
-
 '''
 # this was used to create your own datasets (its a features in sklearn)
 new_data=np.arange(0,10,2)
@@ -22,7 +15,7 @@ wih=np.random.rand(3,3)-.5
 wih = np.random.normal(0, pow(1, -0.5), (2,3))'''
 
 # print (tf.__version__)#check tensor flow version
-#this is normal tensorflow practise
+# this is normal tensorflow practise
 
 '''con_data=tf.constant(.1,shape=(3,3),dtype=tf.float32)
 
@@ -31,21 +24,16 @@ sess= tf.Session()
 new_data=sess.run(con_data)
 print(new_data)'''
 
-import cv2
 import numpy as np
-import tensorflow as tf
-import sklearn.preprocessing
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder,OneHotEncoder
-from sklearn.model_selection import train_test_split
-from keras.utils import to_categorical
 from keras.utils import np_utils
+
 # linux
 # data=pd.read_csv('../../../../Datasets/MNIST_data/train_image.csv')
 # label=pd.read_csv('../../../../Datasets/MNIST_data/train_label.csv')
 
-data=pd.read_csv('../../../../Datasets/MNIST_data/test_image.csv')
-label=pd.read_csv('../../../../Datasets/MNIST_data/test_label.csv')
+data = pd.read_csv('../../../../Datasets/MNIST_data/test_image.csv')
+label = pd.read_csv('../../../../Datasets/MNIST_data/test_label.csv')
 # winodws
 
 # data=pd.read_csv(r"C:\Users\mayank\Documents\Datasets\MNIST_data\test_image.csv")
@@ -63,20 +51,20 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()'''
 # '____________________________________________________________'
 
-#dataset = pd.read_csv("SortedXmlresult_linux.csv")
-feature_input = data.iloc[:,:].values
-y = label.iloc[:,:].values
-#to check for any null value in datasets
+# dataset = pd.read_csv("SortedXmlresult_linux.csv")
+feature_input = data.iloc[:, :].values
+y = label.iloc[:, :].values
+# to check for any null value in datasets
 # print(data.isnull().sum())
 # print(label.isnull().sum())
 
 # ________________________________________________________________
 # scaling features area image argumentation later we will add more image argumantation function
-scaled_input = np.asfarray(feature_input/255.0)# * 0.99) +0.01
+scaled_input = np.asfarray(feature_input / 255.0)  # * 0.99) +0.01
 
 # this was used to categorise label if they are more than tow
 # '_---______________________________________________' \
-#one hot encode label data
+# one hot encode label data
 y_train = np_utils.to_categorical(y, 10)
 
 # sess.run(init)
@@ -103,14 +91,13 @@ batch_y=sess.run(batch_y1)
 print(batch_y)
 # sess.run(train, feed_dict={x: batch_x, y_true: batch_y, hold_prob: 0.5})'''
 
-
 from batchup import data_source
 
 # Construct an array data source
 ds = data_source.ArrayDataSource([scaled_input, y_train])
-loop=0
+loop = 0
 # Iterate over samples, drawing batches of 64 elements in random order
 for (batch_X, batch_y) in ds.batch_iterator(batch_size=100, shuffle=np.random.RandomState(12345)):
-    loop+=1
-    print(batch_X,'\n',batch_y)
-    print (loop)
+    loop += 1
+    print(batch_X, '\n', batch_y)
+    print(loop)

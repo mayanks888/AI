@@ -31,26 +31,21 @@ torch.save(model, filepath)
 model = torch.load(filepath)
 
 This way is still not bullet proof and since pytorch is still undergoing a lot of changes, I wouldn't recommend it.'''
-import cv2
 import numpy as np
 import pandas as pd
-from keras.utils import np_utils
-from batchup import data_source
-
-import argparse
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.autograd import Variable
+from batchup import data_source
+from keras.utils import np_utils
 
 # ___________________
-data=pd.read_csv('../../../Datasets/MNIST_data/train_image.csv')
-label=pd.read_csv('../../../Datasets/MNIST_data/train_label.csv')
+data = pd.read_csv('../../../Datasets/MNIST_data/train_image.csv')
+label = pd.read_csv('../../../Datasets/MNIST_data/train_label.csv')
 
-test_feature=pd.read_csv('../../../Datasets/MNIST_data/test_image.csv')
-test_label=pd.read_csv('../../../Datasets/MNIST_data/test_label.csv')
+test_feature = pd.read_csv('../../../Datasets/MNIST_data/test_image.csv')
+test_label = pd.read_csv('../../../Datasets/MNIST_data/test_label.csv')
 
 PATH = '/home/mayank-s/PycharmProjects/Datasets/pytorch_model_save/mytraining.pt'
 
@@ -63,17 +58,17 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()'''
 # '____________________________________________________________'
 
-#dataset = pd.read_csv("SortedXmlresult_linux.csv")
-feature_input = data.iloc[:,:].values
-y = label.iloc[:,:].values
+# dataset = pd.read_csv("SortedXmlresult_linux.csv")
+feature_input = data.iloc[:, :].values
+y = label.iloc[:, :].values
 
 # ________________________________________________________________
 # scaling features area image argumentation later we will add more image argumantation function
-scaled_input = np.asfarray(feature_input/255.0)# * 0.99) +0.01
+scaled_input = np.asfarray(feature_input / 255.0)  # * 0.99) +0.01
 
 # this was used to categorise label if they are more than tow
 # '_---______________________________________________' \
-#one hot encode label data
+# one hot encode label data
 y_train = np_utils.to_categorical(y, 10)
 # print(y_test)
 # '_---______________________________________________'
@@ -82,24 +77,27 @@ y_train = np_utils.to_categorical(y, 10)
 # X_train, X_test, y_train, y_test = train_test_split(new_image_input, y, test_size = .10, random_state = 4)#splitting data (no need if test data is present
 # '_---______________________________________________'
 # scaling and one hot encode applied on a test datasets
-feature_test = test_feature.iloc[:,:].values
-label_test = test_label.iloc[:,:].values
-scaled_test = np.asfarray(feature_test/255.0)
+feature_test = test_feature.iloc[:, :].values
+label_test = test_label.iloc[:, :].values
+scaled_test = np.asfarray(feature_test / 255.0)
 y_test = np_utils.to_categorical(label_test, 10)
+
+
 # '_---______________________________________________'
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, kernel_size=5,padding=2)#this is nothing with(1=channel,layer=32,padding=1 =same size of input)
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=5,padding=2)
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=5,
+                               padding=2)  # this is nothing with(1=channel,layer=32,padding=1 =same size of input)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=5, padding=2)
         self.mp = nn.MaxPool2d(2)
         self.fc = nn.Linear(3136, 10)
 
     def forward(self, x):
         in_size = x.size(0)
         # x = x.float()
-        first_layer=self.conv1(x)
+        first_layer = self.conv1(x)
         x = F.relu(self.mp(first_layer))
         x = F.relu(self.mp(self.conv2(x)))
 
@@ -107,7 +105,7 @@ class Net(nn.Module):
         x = self.fc(x)
         # prob=nn.Softmax(x)
         # print(prob.data[0])
-        prob=F.log_softmax(x)
+        prob = F.log_softmax(x)
         # prob=prob.long()
         return prob
 
@@ -116,7 +114,7 @@ model = Net()
 ##############################################
 # #this is for loading model saved parameter you dont need it while training or  you can resume you training with this
 # #model = torch.load(PATH + str(7))
-#2nd method
+# 2nd method
 # state = torch.load(PATH + str(2))
 # model.load_state_dict(state['state_dict'])
 #
@@ -125,17 +123,18 @@ model = Net()
 # ##############################################
 # model.cuda()
 model = model.double()
-criterea = torch.nn.CrossEntropyLoss()#this include softmax and cross entropy
+criterea = torch.nn.CrossEntropyLoss()  # this include softmax and cross entropy
 # criterea=torch.nn.MSELoss(size_average=False)#cross entropy loss
 optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.5)
 
 # optimizer.load_state_dict(state['optimizer'])
 
-run=0
-epochs=10
+run = 0
+epochs = 10
+
 
 def train(loop):
-    run=0
+    run = 0
     ds = data_source.ArrayDataSource([scaled_input, y])
     # Iterate over samples, drawing batches of 64 elements in random order
     for (data, target) in ds.batch_iterator(batch_size=1000, shuffle=True):  # shuffle true will randomise every batch
@@ -167,13 +166,16 @@ def train(loop):
         loss.backward()
         optimizer.step()
         run += 1
-        print("Epochs : {ep} - Run Cycle : {rc} - Training Loss : {tl} - Training accuracy: {ta} ".format(ep=loop, rc=run,
-                                                                                                        tl=loss.item(), ta=acc))
+        print(
+            "Epochs : {ep} - Run Cycle : {rc} - Training Loss : {tl} - Training accuracy: {ta} ".format(ep=loop, rc=run,
+                                                                                                        tl=loss.item(),
+                                                                                                        ta=acc))
     # 1st method to save your complete model
     # PATH = '/home/mayank-s/PycharmProjects/Datasets/pytorch_model_save/mytraining.pt'+str(loop)
     # torch.save(model, PATH)
     # state = {'epoch': loop,'state_dict': model.state_dict(),'optimizer': optimizer.state_dict(),'best_accuracy': acc}
     # torch.save(state, PATH+str(loop))
+
 
 def test():
     ds = data_source.ArrayDataSource([scaled_test, label_test])

@@ -1,7 +1,8 @@
 import numpy as np
 import tensorflow as tf
 # import tensorflow.python.debug as tf_debug
-# from tensorflow.python import debug as tf_debug
+from tensorflow.python import debug as tf_debug
+
 xs = np.linspace(-0.5, 0.49, 100)
 x = tf.placeholder(tf.float32, shape=[None], name="x")
 y = tf.placeholder(tf.float32, shape=[None], name="y")
@@ -14,14 +15,6 @@ sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 
 # sess = tf_debug.LocalCLIDebugWrapperSession(sess)
-# sess = tf_debug.TensorBoardDebugWrapperSession(sess, "MAYANK_PC:7000")
+sess = tf_debug.TensorBoardDebugWrapperSession(sess, "MAYANK_PC:7000")
 for _ in range(10):
-  sess.run(train_op, feed_dict={x: xs, y: 42 * xs})
-
-
-
-
-
-
-
-
+    sess.run(train_op, feed_dict={x: xs, y: 42 * xs})

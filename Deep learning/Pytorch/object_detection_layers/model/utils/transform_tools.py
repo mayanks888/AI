@@ -1,7 +1,9 @@
-from torchvision import transforms
+import random
+
 import torch
 from skimage import transform as sktransform
-import random
+from torchvision import transforms
+
 
 def image_normalize(img):
     """
@@ -45,29 +47,26 @@ def resize_bbox(bbox, image_size_in, image_size_out):
 
 def random_flip(image, bbox, vertical_random=False, horizontal_random=False):
     vertical_flip, horizontal_flip = False, False
-    H,W = image.shape[1], image.shape[2]
+    H, W = image.shape[1], image.shape[2]
     bbox = bbox.copy()
 
     if vertical_random:
-        vertical_flip =  random.choice([True, False])
+        vertical_flip = random.choice([True, False])
     if horizontal_random:
         horizontal_flip = random.choice([True, False])
 
     if vertical_flip:
-        image = image[:,::-1,:]
+        image = image[:, ::-1, :]
         y_max = H - bbox[:, 0]
         y_min = H - bbox[:, 2]
         bbox[:, 0] = y_min
         bbox[:, 2] = y_max
 
     if horizontal_flip:
-        image = image[:,:,::-1]
+        image = image[:, :, ::-1]
         x_max = W - bbox[:, 1]
         x_min = W - bbox[:, 3]
         bbox[:, 1] = x_min
         bbox[:, 3] = x_max
-    
+
     return image, bbox
-
-
-        

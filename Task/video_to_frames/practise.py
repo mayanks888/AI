@@ -16,7 +16,6 @@ parser.add_argument("square", help="display a square of a given number",
 args = parser.parse_args()
 print (args.square**2)'''
 
-
 '''import argparse
 parser = argparse.ArgumentParser(description="Video2Frames converter")
 parser.add_argument('input', metavar='<input_video_file>', help="Input video file")
@@ -41,12 +40,13 @@ for root, directories, filenames in os.walk(input_video_file):
 
 from datetime import datetime, timedelta
 
+
 def GetTime():
     sec = timedelta(seconds=int(input('Enter the number of seconds: ')))
-    d = datetime(1,1,1) + sec
+    d = datetime(1, 1, 1) + sec
 
     print("DAYS:HOURS:MIN:SEC")
-    print("%d:%d:%d:%d" % (d.day-1, d.hour, d.minute, d.second))
+    print("%d:%d:%d:%d" % (d.day - 1, d.hour, d.minute, d.second))
 
 
 GetTime()

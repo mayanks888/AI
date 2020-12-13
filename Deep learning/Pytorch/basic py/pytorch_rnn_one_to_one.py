@@ -1,23 +1,21 @@
-
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
 
 torch.manual_seed(777)  # reproducibility
 
-
 idx2char = ['h', 'i', 'e', 'l', 'o']
 
 #  hihell -> ihello
-x_data = [[0, 1, 0, 2, 3, 3]]   # hihell
-x_one_hot = [[[1, 0, 0, 0, 0],   # h 0
-              [0, 1, 0, 0, 0],   # i 1
-              [1, 0, 0, 0, 0],   # h 0
-              [0, 0, 1, 0, 0],   # e 2
-              [0, 0, 0, 1, 0],   # l 3
+x_data = [[0, 1, 0, 2, 3, 3]]  # hihell
+x_one_hot = [[[1, 0, 0, 0, 0],  # h 0
+              [0, 1, 0, 0, 0],  # i 1
+              [1, 0, 0, 0, 0],  # h 0
+              [0, 0, 1, 0, 0],  # e 2
+              [0, 0, 0, 1, 0],  # l 3
               [0, 0, 0, 1, 0]]]  # l 3
 
-y_data = [1, 0, 2, 3, 3, 4]    # ihello
+y_data = [1, 0, 2, 3, 3, 4]  # ihello
 
 # As we have one batch of samples, we will change them to variables only once
 inputs = Variable(torch.Tensor(x_one_hot))
@@ -25,8 +23,8 @@ labels = Variable(torch.LongTensor(y_data))
 
 num_classes = 5
 input_size = 5  # one-hot size(no of inputs in one time period batch)
-hidden_size =5 # output from the LSTM. 5 to directly predict one-hot(no of hidden neuron in one layer)
-batch_size = 1   # one sentence
+hidden_size = 5  # output from the LSTM. 5 to directly predict one-hot(no of hidden neuron in one layer)
+batch_size = 1  # one sentence
 sequence_length = 6  # |ihello| == 6(no of time period in one batch
 num_layers = 1  # one-layer rnn
 
@@ -84,7 +82,11 @@ for epoch in range(100):
     _, idx = outputs.max(1)
     idx = idx.data.numpy()
     result_str = [idx2char[c] for c in idx.squeeze()]
-    print("epoch: %d, loss: %1.3f" % (epoch + 1, loss.data[0]))
+    print("epoch: %d, loss: %1.3f" % (epoch + 1, loss.data))
     print("Predicted string: ", ''.join(result_str))
 
 print("Learning finished!")
+
+dummy_input = torch.randn(1, 6, 5)
+
+torch.onnx.export(rnn, dummy_input, "pytorch_rnn.onnx")

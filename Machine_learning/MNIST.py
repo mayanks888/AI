@@ -1,4 +1,3 @@
-
 # coding: utf-8
 
 # # Classification Based Machine Learning Algorithm
@@ -25,25 +24,22 @@
 
 import numpy as np
 
-
 # In[2]:
 
 
 from sklearn.datasets import fetch_mldata
-mnist = fetch_mldata('MNIST original')
 
+mnist = fetch_mldata('MNIST original')
 
 # In[3]:
 
 
 mnist
 
-
 # In[4]:
 
 
 len(mnist['data'])
-
 
 # # Visualisation
 
@@ -52,51 +48,41 @@ len(mnist['data'])
 
 X, y = mnist['data'], mnist['target']
 
-
 # In[6]:
 
 
 X
-
 
 # In[7]:
 
 
 y
 
-
 # In[8]:
 
 
 X[69999]
-
 
 # In[9]:
 
 
 y[69999]
 
-
 # In[10]:
 
 
 X.shape
-
 
 # In[11]:
 
 
 y.shape
 
-
 # In[12]:
 
 
 get_ipython().run_line_magic('matplotlib', 'inline')
-import matplotlib
 import matplotlib.pyplot as plt
-import seaborn as sns
-
 
 # In[13]:
 
@@ -105,12 +91,10 @@ _ = X[1000]
 _image = _.reshape(28, 28)
 plt.imshow(_image);
 
-
 # In[14]:
 
 
 y[1000]
-
 
 # ### Exercise: Locating the number 4 and plot the image
 
@@ -119,24 +103,20 @@ y[1000]
 
 type(y)
 
-
 # In[16]:
 
 
 y == 4
 
-
 # In[17]:
 
 
-np.where(y==4)
-
+np.where(y == 4)
 
 # In[18]:
 
 
 y[24754]
-
 
 # In[19]:
 
@@ -144,7 +124,6 @@ y[24754]
 _ = X[24754]
 _image = _.reshape(28, 28)
 plt.imshow(_image);
-
 
 # ***
 
@@ -157,7 +136,6 @@ num_split = 60000
 
 X_train, X_test, y_train, y_test = X[:num_split], X[num_split:], y[:num_split], y[num_split:]
 
-
 # **Tips**: Typically we shuffle the training set. This ensures the training set is randomised and your data distribution is consistent. However, shuffling is a bad idea for time series data.
 
 # # Shuffling the dataset
@@ -169,13 +147,11 @@ X_train, X_test, y_train, y_test = X[:num_split], X[num_split:], y[:num_split], 
 
 import numpy as np
 
-
 # In[22]:
 
 
 shuffle_index = np.random.permutation(num_split)
 X_train, y_train = X_train[shuffle_index], y_train[shuffle_index]
-
 
 # ## Training a Binary Classifier
 
@@ -188,24 +164,20 @@ X_train, y_train = X_train[shuffle_index], y_train[shuffle_index]
 
 y_train_0 = (y_train == 0)
 
-
 # In[24]:
 
 
 y_train_0
-
 
 # In[25]:
 
 
 y_test_0 = (y_test == 0)
 
-
 # In[26]:
 
 
 y_test_0
-
 
 # At this point we can pick any classifier and train it. This is the iterative part of choosing and testing all the classifiers and tuning the hyper parameters
 
@@ -220,9 +192,8 @@ y_test_0
 
 from sklearn.linear_model import SGDClassifier
 
-clf = SGDClassifier(random_state = 0)
+clf = SGDClassifier(random_state=0)
 clf.fit(X_train, y_train_0)
-
 
 # # Prediction
 
@@ -230,7 +201,6 @@ clf.fit(X_train, y_train_0)
 
 
 clf.predict(X[1000].reshape(1, -1))
-
 
 # ***
 
@@ -253,14 +223,13 @@ clf.predict(X[1000].reshape(1, -1))
 
 from sklearn.model_selection import StratifiedKFold
 from sklearn.base import clone
-clf = SGDClassifier(random_state=0)
 
+clf = SGDClassifier(random_state=0)
 
 # In[30]:
 
 
 skfolds = StratifiedKFold(n_splits=3, random_state=100)
-
 
 # In[31]:
 
@@ -271,12 +240,11 @@ for train_index, test_index in skfolds.split(X_train, y_train_0):
     y_train_folds = (y_train_0[train_index])
     X_test_fold = X_train[test_index]
     y_test_fold = (y_train_0[test_index])
-    
+
     clone_clf.fit(X_train_fold, y_train_folds)
     y_pred = clone_clf.predict(X_test_fold)
     n_correct = sum(y_pred == y_test_fold)
     print("{0:.4f}".format(n_correct / len(y_pred)))
-
 
 # #### `cross_val_score` using K-fold Cross-Validation
 
@@ -287,12 +255,10 @@ for train_index, test_index in skfolds.split(X_train, y_train_0):
 
 from sklearn.model_selection import cross_val_score
 
-
 # In[33]:
 
 
 cross_val_score(clf, X_train, y_train_0, cv=3, scoring='accuracy')
-
 
 # #### Exercise:
 # 
@@ -302,7 +268,6 @@ cross_val_score(clf, X_train, y_train_0, cv=3, scoring='accuracy')
 
 
 cross_val_score(clf, X_train, y_train_0, cv=10, scoring='accuracy')
-
 
 # ***
 
@@ -315,8 +280,7 @@ cross_val_score(clf, X_train, y_train_0, cv=10, scoring='accuracy')
 
 1 - sum(y_train_0) / len(y_train_0)
 
-
-# A simple check shows that 90.1% of the images are not zero. Any time you guess the image is not zero, you will be right 90.13% of the time. 
+# A simple check shows that 90.1% of the images are not zero. Any time you guess the image is not zero, you will be right 90.13% of the time.
 # 
 # Bare this in mind when you are dealing with **skewed datasets**. Because of this, accuracy is generally not the preferred performance measure for classifiers.
 
@@ -327,24 +291,20 @@ cross_val_score(clf, X_train, y_train_0, cv=10, scoring='accuracy')
 
 from sklearn.model_selection import cross_val_predict
 
-
 # In[37]:
 
 
 y_train_pred = cross_val_predict(clf, X_train, y_train_0, cv=3)
-
 
 # In[38]:
 
 
 from sklearn.metrics import confusion_matrix
 
-
 # In[39]:
 
 
 confusion_matrix(y_train_0, y_train_pred)
-
 
 # Each row: actual class
 # 
@@ -375,20 +335,17 @@ confusion_matrix(y_train_0, y_train_pred)
 
 from sklearn.metrics import precision_score, recall_score
 
-
 # Note the result here may vary from the video as the results from the confusion matrix are different each time you run it.
 
 # In[41]:
 
 
-precision_score(y_train_0, y_train_pred) # 5618 / (574 + 5618)
-
+precision_score(y_train_0, y_train_pred)  # 5618 / (574 + 5618)
 
 # In[45]:
 
 
 5618 / (574 + 5618)
-
 
 # ## Recall
 # 
@@ -403,14 +360,12 @@ precision_score(y_train_0, y_train_pred) # 5618 / (574 + 5618)
 # In[46]:
 
 
-recall_score(y_train_0, y_train_pred) # 5618 / (305 + 5618)
-
+recall_score(y_train_0, y_train_pred)  # 5618 / (305 + 5618)
 
 # In[47]:
 
 
 5618 / (305 + 5618)
-
 
 # ## F1 Score
 # 
@@ -427,14 +382,12 @@ recall_score(y_train_0, y_train_pred) # 5618 / (305 + 5618)
 
 from sklearn.metrics import f1_score
 
-
 # Note the result here may vary from the video as the results from the confusion matrix are different each time you run it.
 
 # In[49]:
 
 
 f1_score(y_train_0, y_train_pred)
-
 
 # ***
 
@@ -491,12 +444,10 @@ f1_score(y_train_0, y_train_pred)
 clf = SGDClassifier(random_state=0)
 clf.fit(X_train, y_train_0)
 
-
 # In[51]:
 
 
 y[1000]
-
 
 # In[52]:
 
@@ -504,24 +455,20 @@ y[1000]
 y_scores = clf.decision_function(X[1000].reshape(1, -1))
 y_scores
 
-
 # In[53]:
 
 
 threshold = 0
-
 
 # In[54]:
 
 
 y_some_digits_pred = (y_scores > threshold)
 
-
 # In[55]:
 
 
 y_some_digits_pred
-
 
 # In[56]:
 
@@ -530,18 +477,16 @@ threshold = 40000
 y_some_digits_pred = (y_scores > threshold)
 y_some_digits_pred
 
-
 # In[57]:
 
 
 y_scores = cross_val_predict(clf, X_train, y_train_0, cv=3, method='decision_function')
 
-
 # In[58]:
 
 
-plt.figure(figsize=(12,8)); plt.hist(y_scores, bins=100);
-
+plt.figure(figsize=(12, 8));
+plt.hist(y_scores, bins=100);
 
 # With the decision scores, we can compute precision and recall for all possible thresholds using the `precision_recall_curve()` function:
 
@@ -549,7 +494,6 @@ plt.figure(figsize=(12,8)); plt.hist(y_scores, bins=100);
 
 
 from sklearn.metrics import precision_recall_curve
-
 
 # In[60]:
 
@@ -565,16 +509,15 @@ def plot_precision_recall_vs_threshold(precisions, recalls, thresholds):
     plt.plot(thresholds, recalls[:-1], "g--", label="Recall")
     plt.xlabel("Threshold")
     plt.legend(loc="upper left")
-    plt.ylim([-0.5,1.5])    
+    plt.ylim([-0.5, 1.5])
 
 
 # In[62]:
 
 
-plt.figure(figsize=(12,8)); 
+plt.figure(figsize=(12, 8));
 plot_precision_recall_vs_threshold(precisions, recalls, thresholds)
 plt.show()
-
 
 # With this chart, you can select the threshold value that gives you the best precision/recall tradeoff for your task.
 # 
@@ -589,12 +532,11 @@ plt.show()
 # In[63]:
 
 
-plt.figure(figsize=(12,8)); 
+plt.figure(figsize=(12, 8));
 plt.plot(precisions, recalls);
 plt.xlabel('recalls');
 plt.ylabel('precisions');
 plt.title('PR Curve: precisions/recalls tradeoff');
-
 
 # # Setting High Precisions
 # 
@@ -605,49 +547,41 @@ plt.title('PR Curve: precisions/recalls tradeoff');
 
 len(precisions)
 
-
 # In[65]:
 
 
 len(thresholds)
 
-
 # In[66]:
 
 
-plt.figure(figsize=(12,8)); 
+plt.figure(figsize=(12, 8));
 plt.plot(thresholds, precisions[1:]);
-
 
 # In[134]:
 
 
 idx = len(precisions[precisions < 0.9])
 
-
 # In[135]:
 
 
 thresholds[idx]
-
 
 # In[136]:
 
 
 y_train_pred_90 = (y_scores > 21454)
 
-
 # In[137]:
 
 
 precision_score(y_train_0, y_train_pred_90)
 
-
 # In[138]:
 
 
 recall_score(y_train_0, y_train_pred_90)
-
 
 # # Setting High Precisions
 # 
@@ -658,7 +592,6 @@ recall_score(y_train_0, y_train_pred_90)
 
 idx = len(precisions[precisions < 0.99])
 
-
 # This is the same as the line above
 idx = len(precisions) - len(precisions[precisions > 0.99])
 # In[145]:
@@ -666,24 +599,20 @@ idx = len(precisions) - len(precisions[precisions > 0.99])
 
 thresholds[idx]
 
-
 # In[146]:
 
 
 y_train_pred_90 = (y_scores > thresholds[idx])
-
 
 # In[147]:
 
 
 precision_score(y_train_0, y_train_pred_90)
 
-
 # In[148]:
 
 
 recall_score(y_train_0, y_train_pred_90)
-
 
 # #### Exercise
 # 
@@ -694,30 +623,25 @@ recall_score(y_train_0, y_train_pred_90)
 
 idx = len(recalls[recalls > 0.9])
 
-
 # In[150]:
 
 
 thresholds[idx]
-
 
 # In[151]:
 
 
 y_train_pred_90 = (y_scores > thresholds[idx])
 
-
 # In[152]:
 
 
 precision_score(y_train_0, y_train_pred_90)
 
-
 # In[153]:
 
 
 recall_score(y_train_0, y_train_pred_90)
-
 
 # ***
 
@@ -734,7 +658,6 @@ recall_score(y_train_0, y_train_pred_90)
 
 from sklearn.metrics import roc_curve
 
-
 # In[155]:
 
 
@@ -746,7 +669,7 @@ fpr, tpr, thresholds = roc_curve(y_train_0, y_scores)
 
 def plot_roc_curve(fpr, tpr, label=None):
     plt.plot(fpr, tpr, linewidth=2, label=label)
-    plt.plot([0,1], [0,1], 'k--')
+    plt.plot([0, 1], [0, 1], 'k--')
     plt.axis([0, 1, 0, 1])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
@@ -756,22 +679,19 @@ def plot_roc_curve(fpr, tpr, label=None):
 # In[157]:
 
 
-plt.figure(figsize=(12,8)); 
+plt.figure(figsize=(12, 8));
 plot_roc_curve(fpr, tpr)
 plt.show();
-
 
 # In[158]:
 
 
 from sklearn.metrics import roc_auc_score
 
-
 # In[159]:
 
 
 roc_auc_score(y_train_0, y_scores)
-
 
 # Use PR curve whenever the **positive class is rare** or when you care more about the false positives than the false negatives
 # 
@@ -789,19 +709,16 @@ roc_auc_score(y_train_0, y_scores)
 
 from sklearn.ensemble import RandomForestClassifier
 
-
 # In[161]:
 
 
 f_clf = RandomForestClassifier(random_state=0)
 
-
 # In[162]:
 
 
 y_probas_forest = cross_val_predict(f_clf, X_train, y_train_0,
-                                   cv=3, method='predict_proba')
-
+                                    cv=3, method='predict_proba')
 
 # In[163]:
 
@@ -809,51 +726,43 @@ y_probas_forest = cross_val_predict(f_clf, X_train, y_train_0,
 y_scores_forest = y_probas_forest[:, 1]
 fpr_forest, tpr_forest, threshold_forest = roc_curve(y_train_0, y_scores_forest)
 
-
 # In[164]:
 
 
-plt.figure(figsize=(12,8)); 
+plt.figure(figsize=(12, 8));
 plt.plot(fpr, tpr, "b:", label="SGD")
 plot_roc_curve(fpr_forest, tpr_forest, "Random Forest")
 plt.legend(loc="lower right")
 plt.show();
-
 
 # In[165]:
 
 
 roc_auc_score(y_train_0, y_scores_forest)
 
-
 # In[166]:
 
 
 f_clf.fit(X_train, y_train_0)
-
 
 # In[167]:
 
 
 y_train_rf = cross_val_predict(f_clf, X_train, y_train_0, cv=3)
 
-
 # In[168]:
 
 
-precision_score(y_train_0, y_train_rf) 
-
+precision_score(y_train_0, y_train_rf)
 
 # In[169]:
 
 
-recall_score(y_train_0, y_train_rf) 
-
+recall_score(y_train_0, y_train_rf)
 
 # In[170]:
 
 
 confusion_matrix(y_train_0, y_train_rf)
-
 
 # ***

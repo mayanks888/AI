@@ -1,12 +1,12 @@
-import pandas as pd
 import os
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import skimage
 from bs4 import BeautifulSoup
 from more_itertools import unique_everseen
-import numpy as np
-import matplotlib.pyplot as plt
-import  skimage
 from skimage import io
-
 
 root_dir = '/Users/mprat/personal/VOCdevkit/VOCdevkit/VOC2012/'
 img_dir = os.path.join(root_dir, 'JPEGImages/')
@@ -146,8 +146,8 @@ def _load_data(category, data_type=None):
         raise ValueError('Must provide data_type = train or val')
     to_find = category
     filename = os.path.join(root_dir, 'csvs/') + \
-        data_type + '_' + \
-        category + '.csv'
+               data_type + '_' + \
+               category + '.csv'
     if os.path.isfile(filename):
         return pd.read_csv(filename)
     else:

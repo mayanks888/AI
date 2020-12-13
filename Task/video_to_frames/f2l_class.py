@@ -3,18 +3,20 @@
 # unique names in their respective folder.
 #
 
-#python f2l_class.py /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/input  /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/output  --maxframes=5
+import argparse
+import os
+import shutil
+import time
+from datetime import datetime, timedelta
+
+# python f2l_class.py /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/input  /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/output  --maxframes=5
 # Can also optionally pass maxframes  as 3rd parameter. For example:
 # Usage Example 1: Created total of 10 frames from the input video
 #
 # @author Mayank Sati/Ashis Samal
 ######################################################################################
 import cv2
-import os
-import shutil
-import argparse
-import time
-from datetime import datetime, timedelta
+
 
 class Video2file():
 
@@ -24,8 +26,7 @@ class Video2file():
     #     self.output_folder = output_folder
     #     self.maxframes = maxframes
 
-
-    def Create_frames(self,input_folder,output_folder, maxframes="None"):
+    def Create_frames(self, input_folder, output_folder, maxframes="None"):
         """Function to extract frames from input video file and save them as separate frames_folder in an output directory.
 
             Args:
@@ -47,7 +48,7 @@ class Video2file():
             # shutil.rmtree(output_folder)
             os.makedirs(output_folder)
 
-        for root,_, filenames in os.walk(input_folder):
+        for root, _, filenames in os.walk(input_folder):
             for filename in filenames:
                 file_path = (os.path.join(root, filename))
                 Video_file_name = filename.split(".")[0]
@@ -109,19 +110,17 @@ class Video2file():
                 d = datetime(1, 1, 1) + sec
                 print("Time Consumed - hours:{th} - Minutes:{mn} - Second:{sc}".format(th=d.hour, mn=d.minute,
                                                                                        sc=d.second))
-                print("Output path :", Gen_frame_path,'\n')
+                print("Output path :", Gen_frame_path, '\n')
                 print
 
 
-
-model=Video2file()
+model = Video2file()
 # if __name__ == "__main__":
 
 # Input_folder =  "/home/mayank-s/PycharmProjects/Datasets/Video_to_frame/input"
 # output_folder = '/home/mayank-s/PycharmProjects/Datasets/Video_to_frame/output'
 
-print("Start Video to Frames Converter...","\n")
-
+print("Start Video to Frames Converter...", "\n")
 
 parser = argparse.ArgumentParser(description="Video to Frames converter")
 parser.add_argument('input', metavar='<input_video_folder>', help="Input video folder")
@@ -130,12 +129,11 @@ parser.add_argument('--maxframes', type=int, help="Output max number of frames")
 args = parser.parse_args()
 
 if args.maxframes:
-    ret = model.Create_frames(args.input, args.output,args.maxframes)
+    ret = model.Create_frames(args.input, args.output, args.maxframes)
 else:
     ret = model.Create_frames(args.input, args.output)
 
+if ret == 1:
+    print("\n", "Error in convering a file.....")
 
-if ret==1:
-    print("\n","Error in convering a file.....")
-
-#python f2l_class.py /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/input  /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/output  --maxframes=5
+# python f2l_class.py /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/input  /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/output  --maxframes=5

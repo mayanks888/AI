@@ -4,16 +4,17 @@
 # The main difference is that it does not take rendered screen as input but it simply uses observation values from the \
 # environment.
 
-import gym
-from gym import wrappers
-import random
 import math
+import random
+
+import gym
+import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
-import torch.optim as optim
-from torch.autograd import Variable
 import torch.nn.functional as F
-import matplotlib.pyplot as plt
+import torch.optim as optim
+from gym import wrappers
+from torch.autograd import Variable
 
 # hyper parameters
 EPISODES = 200  # number of episodes
@@ -65,7 +66,7 @@ class Network(nn.Module):
 
 
 env = gym.make('MountainCar-v0')
-env = wrappers.Monitor(env, './tmp/MountainCar-v0',force=True)
+env = wrappers.Monitor(env, './tmp/MountainCar-v0', force=True)
 
 model = Network()
 if use_cuda:
@@ -101,14 +102,16 @@ def run_episode(e, environment):
         if done:
             reward = -1
 
-        memory.push((FloatTensor([state]), action, FloatTensor([next_state]), FloatTensor([reward])))#action taken by render
+        memory.push(
+            (FloatTensor([state]), action, FloatTensor([next_state]), FloatTensor([reward])))  # action taken by render
         learn()
 
         state = next_state
         steps += 1
 
         if done:
-            print("{2} Episode {0} finished after {1} steps".format(e, steps, '\033[92m' if steps >= 195 else '\033[99m'))
+            print(
+                "{2} Episode {0} finished after {1} steps".format(e, steps, '\033[92m' if steps >= 195 else '\033[99m'))
             episode_durations.append(steps)
             plot_durations()
             break

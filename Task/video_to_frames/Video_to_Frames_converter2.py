@@ -13,23 +13,24 @@
 #
 # @author Mayank Sati/Ashis Samal
 #
-#library used:
-#1. 0pencv-python 3.4.1.15
+# library used:
+# 1. 0pencv-python 3.4.1.15
 ######################################################################################
-import cv2
+import argparse
 import os
 import shutil
-import argparse
 import time
 from datetime import datetime, timedelta
 
+import cv2
+
+
 class Video2file():
 
-    def __init__(self,input_folder,output_folder,maxframes='None'):
+    def __init__(self, input_folder, output_folder, maxframes='None'):
         self.input_folder = input_folder
         self.output_folder = output_folder
         self.maxframes = maxframes
-
 
     def Create_frames(self):
         """Function to extract frames from input video file and save them as separate frames_folder in an output directory.
@@ -53,7 +54,7 @@ class Video2file():
             # shutil.rmtree(self.output_folder)
             os.makedirs(self.output_folder)
 
-        for root,_, filenames in os.walk(self.input_folder):
+        for root, _, filenames in os.walk(self.input_folder):
             for filename in filenames:
                 file_path = (os.path.join(root, filename))
                 Video_file_name = filename.split(".")[0]
@@ -82,13 +83,13 @@ class Video2file():
                 skipDelta = 0
 
                 if not self.maxframes == "None":
-                    if frameCount >  self.maxframes:
-                        skipDelta = (frameCount /  self.maxframes)
+                    if frameCount > self.maxframes:
+                        skipDelta = (frameCount / self.maxframes)
                         # print ("Video has {fc}, but Maxframes is set to {mf}".format(fc=frameCount, mf=maxframes))
-                        print("Maxframes is set to : {mf}".format(mf= self.maxframes))
+                        print("Maxframes is set to : {mf}".format(mf=self.maxframes))
                         print("Skip frames delta is : {d}".format(d=int(skipDelta)))
                     else:
-                        print('Max frame {mf} cannot exceed total frame'.format(mf= self.maxframes))
+                        print('Max frame {mf} cannot exceed total frame'.format(mf=self.maxframes))
 
                 while frameId < frameCount:
                     ret, frame = cap.read()
@@ -115,22 +116,19 @@ class Video2file():
                 d = datetime(1, 1, 1) + sec
                 print("Time Consumed - hours:{th} - Minutes:{mn} - Second:{sc}".format(th=d.hour, mn=d.minute,
                                                                                        sc=d.second))
-                print("Output path :", Gen_frame_path,'\n')
-
-
+                print("Output path :", Gen_frame_path, '\n')
 
 
 # model=Video2file()
 # if __name__ == "__main__":
 
-print("Start Video to Frames Converter...","\n")
+print("Start Video to Frames Converter...", "\n")
 
 parser = argparse.ArgumentParser(description="Video to Frames converter")
 parser.add_argument('input', metavar='<input_video_file>', help="Input video file")
 parser.add_argument('output', metavar='<output_folder>', help="Output folder. If exists it will be removed")
 parser.add_argument('--maxframes', type=int, help="Output max number of frames")
 args = parser.parse_args()
-
 
 # model=Video2file(args.input, args.output,args.maxframes)
 if args.maxframes:
@@ -140,8 +138,8 @@ else:
     model = Video2file(args.input, args.output)
     # ret = model.Create_frames()args.input, args.output,"None")
 
-ret=model.Create_frames()
-if ret==1:
-    print("\n","Error in convering a file.....")
+ret = model.Create_frames()
+if ret == 1:
+    print("\n", "Error in convering a file.....")
 
-#python Video_to_Frames_converter.py /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/input  /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/output  --maxframes=5
+# python Video_to_Frames_converter.py /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/input  /home/mayank-s/PycharmProjects/Datasets/Video_to_frame/output  --maxframes=5

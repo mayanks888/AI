@@ -1,20 +1,20 @@
-
-from PIL import Image
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image
+
 im = Image.open('3_3_pic.png')
 # pixels = list(im.getdata())
 pixels = list(im.getdata(0))
-print (pixels)
-print (len(pixels))
+print(pixels)
+print(len(pixels))
 # width, height = im.size
 # pixels = [pixels[i * width:(i + 1) * width] for i in range(height)]
 # print (pixels)
-mydata=[]
+mydata = []
 for data in pixels:
-    print (data)
+    print(data)
     # data=str(data)
-    mydata.append(255-data)
+    mydata.append(255 - data)
     # mydata(data).replace(' ', '')
 print(mydata)
 mydata = np.array(mydata, ndmin=2).T

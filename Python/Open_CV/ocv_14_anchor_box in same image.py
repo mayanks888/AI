@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import pandas as pd
+
 '''one=np.ones([500,500,3],dtype='uint8')#create all 2 channel image of 1
 white_image=one*255#converting complete image into 255(white)
 
@@ -25,11 +26,9 @@ cv2.destroyAllWindows()'''
 
 
 # data=pd.read_csv('../../../Datasets/anchorbox.csv')
-data=pd.read_csv('/home/mayank-s/Desktop/pytorch_retinanet_my_creation/anchor_34.csv')
-features=data.iloc[:,:].values
+data = pd.read_csv('/home/mayank-s/Desktop/pytorch_retinanet_my_creation/anchor_34.csv')
+features = data.iloc[:, :].values
 print(features.shape[0])
-
-
 
 # ___________________________________________
 
@@ -51,35 +50,35 @@ print(features.shape[0])
     |          |
     --------x2,y2'''
 # my_image=cv2.imread('american_bulldog_135.jpg',1)
-one=np.ones([608,1056,3],dtype='uint8')#create all 2 channel image of 1
-white_image=one*255#converting complete image into 255(white)
-#cv2.imshow('MyImage',my_image)
+one = np.ones([608, 1056, 3], dtype='uint8')  # create all 2 channel image of 1
+white_image = one * 255  # converting complete image into 255(white)
+# cv2.imshow('MyImage',my_image)
 print(white_image.shape)
-a=0
-img1=white_image.copy()
-counter=0
-width_max=1
-height_max=1
+a = 0
+img1 = white_image.copy()
+counter = 0
+width_max = 1
+height_max = 1
 for loop in range(len(features)):
     img = img1.copy()
-    xmin=int(features[loop,0])
-    ymin=int(features[loop,1])
-    xmax=int(features[loop,2])
-    ymax=int(features[loop,3])
-    width= abs(xmax-xmin)
-    height= abs(ymax-ymin)
-    top=(xmin+a,ymax+a)
-    bottom=(xmax+a,ymin+a)
+    xmin = int(features[loop, 0])
+    ymin = int(features[loop, 1])
+    xmax = int(features[loop, 2])
+    ymax = int(features[loop, 3])
+    width = abs(xmax - xmin)
+    height = abs(ymax - ymin)
+    top = (xmin + a, ymax + a)
+    bottom = (xmax + a, ymin + a)
 
     # if (xmin > 0 and  ymin > 0 and xmax > 0 and ymax > 0 and height > 400 and ymax<=608 and xmax<=1056):
-    if (xmin > 0 and  ymin > 0 and xmax > 0 and ymax > 0 and height > 400 and ymax<=608 and xmax<=1056):
-        cv2.rectangle(img, pt1=top,pt2=bottom,color= (0,255,0), thickness=2)
-        print('heigth is {ht} and width is {wt}'.format(ht=height,wt=width))
-        counter+=1
+    if (xmin > 0 and ymin > 0 and xmax > 0 and ymax > 0 and height > 400 and ymax <= 608 and xmax <= 1056):
+        cv2.rectangle(img, pt1=top, pt2=bottom, color=(0, 255, 0), thickness=2)
+        print('heigth is {ht} and width is {wt}'.format(ht=height, wt=width))
+        counter += 1
         print(counter)
-        max=1
-        if width_max<=width:
-            width_max=width
+        max = 1
+        if width_max <= width:
+            width_max = width
         if height_max <= height:
             height_max = height
         # cv2.imshow('bounding_box image',white_image)
@@ -90,7 +89,9 @@ for loop in range(len(features)):
         img = None
     # cv2.destroyAllWindows()
 
-print('counter : {ct} :max heigth is {ht} :   max width is {wt}'.format(ct=counter,ht=height_max,wt=width_max))
+print('counter : {ct} :max heigth is {ht} :   max width is {wt}'.format(ct=counter, ht=height_max, wt=width_max))
+
+
 # _____________________________________________________________
 
 def keep_inside(self, all_anchors, im_info):

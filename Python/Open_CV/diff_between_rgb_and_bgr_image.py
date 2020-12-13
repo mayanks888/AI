@@ -1,7 +1,6 @@
 import cv2
 # import
 import matplotlib.pyplot as plt
-import os
 
 '''img=cv2.imread('2008_000008.jpg')
 print(1)
@@ -35,41 +34,39 @@ cv2.destroyAllWindows()'''
 # 2nd method
 # from second method we understood that open cs extract info in B G R format and also show in same format(BGR)
 # image_path='/home/mayank-s/Desktop/aptive_video_Diles/video_to_images_all/frame_71.jpg'#rgb
-image_path='/home/mayank-s/Desktop/aptive_video_Diles/video_to_images_all/frame_71.jpg'#bgr
+image_path = '/home/mayank_sati/Documents/datsets/Traffic_light/bosch/dataset_train_rgb.zip.001_FILES/rgb/train/2015-05-29-15-29-39_arastradero_traffic_light_loop_bag/13608.png'  # bgr
 # image_path='2008_000008.jpg'#normal
-img_or=cv2.imread(image_path)
-
+img_or = cv2.imread(image_path)
 
 print(1)
 # img_or = cv2.cvtColor(img_or, cv2.COLOR_RGB2BGR)
 
 
 # b,r,g = cv2.split(img) :Confusion in this format
-b,g,r = cv2.split(img_or)
+b, g, r = cv2.split(img_or)
 
 # img = cv2.merge((b,g,r))
 # img = cv2.merge((r,g,b))
-img = cv2.merge((g,b,r))
+img = cv2.merge((g, b, r))
 
-img1=img.copy()
-img2=img.copy()
-img3=img.copy()
+img1 = img.copy()
+img2 = img.copy()
+img3 = img.copy()
 
+img1[:, :, [1, 2]] = 0
 
-img1[:, :,[1,2]] = 0
+img2[:, :, [0, 2]] = 0
 
-img2[:, :,[0, 2]] = 0
-
-img3[:, :, [0,1]] = 0
+img3[:, :, [0, 1]] = 0
 
 cv2.imshow('blue', img1)
 cv2.imshow('green', img2)
 cv2.imshow('red', img3)
 cv2.imshow('original_image', img_or)
-cv2.imshow('merge_image',img)
+cv2.imshow('merge_image', img)
 
 # cv2.waitKey(5000)
-if cv2.waitKey(0) & 0xFF ==ord('q'):
+if cv2.waitKey(0) & 0xFF == ord('q'):
     cv2.destroyAllWindows()
     exit
 cv2.destroyAllWindows()
@@ -80,7 +77,7 @@ cv2.destroyAllWindows()
 # Show RGB channel separately in color
 
 fig, axes = plt.subplots(1, 3)
-image=cv2.imread('2008_000008.jpg')
+image = cv2.imread('2008_000008.jpg')
 # image[:, :, 0] is R channel, replace the rest by 0.
 imageR = image.copy()
 imageR[:, :, 1:3] = 0
@@ -99,9 +96,7 @@ imageB[:, :, 0:2] = 0
 axes[2].set_title('B channel')
 axes[2].imshow(imageB)
 # plt.savefig(os.path.join(basedir, 'RGB_color.jpg'))
-plt.savefig( 'RGB_color.jpg')
-
-
+plt.savefig('RGB_color.jpg')
 
 # *********************************************************
 
@@ -109,15 +104,15 @@ plt.savefig( 'RGB_color.jpg')
 # *********************************************************
 # modified version
 
- # Show RGB channel separately in color
+# Show RGB channel separately in color
 
 fig, axes = plt.subplots(1, 3)
 # image=cv2.imread('2008_000008.jpg')
-image=img3
+image = img3
 # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 # image[:, :, 0] is R channel, replace the rest by 0.
 imageR = image.copy()
-imageR[:, :, [1,2]] = 0
+imageR[:, :, [1, 2]] = 0
 axes[0].set_title('R channel')
 axes[0].imshow(imageR)
 
@@ -129,8 +124,8 @@ axes[1].imshow(imageG)
 
 # image[:, :, 2] is B channel, replace the rest by 0.
 imageB = image.copy()
-imageB[:, :, [0,1]] = 0
+imageB[:, :, [0, 1]] = 0
 axes[2].set_title('B channel')
 axes[2].imshow(imageB)
 # plt.savefig(os.path.join(basedir, 'RGB_color.jpg'))
-plt.savefig( 'RGB_color_2.jpg')
+plt.savefig('RGB_color_2.jpg')

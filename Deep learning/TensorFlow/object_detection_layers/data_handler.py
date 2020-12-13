@@ -1,7 +1,6 @@
-import tensorflow as tf
-import numpy as np
-import os, sys
 import random
+
+import numpy as np
 import scipy as scp
 import scipy.misc
 
@@ -63,7 +62,7 @@ class DataHandler(object):
 
         batch_size = end - start
         data = np.zeros((batch_size, HEIGHT, WIDTH, CHANNEL), dtype=np.float32)
-        #labels               = np.zeros( (0, label_dimension       ), dtype = np.float32 )
+        # labels               = np.zeros( (0, label_dimension       ), dtype = np.float32 )
         # label = []
         labels = []
         im_dims = np.zeros((batch_size, 2), dtype=np.int64)
@@ -122,6 +121,8 @@ class DataHandler(object):
             return data, im_dims
         else:
             return data, labels, im_dims
+
+
 # /home/mayank-s/PycharmProjects/Data_Science/frcnn/data_handler.py
 
 if __name__ == '__main__':
@@ -132,7 +133,6 @@ if __name__ == '__main__':
     data = "../../Datasets/kitti/train1.txt"
     label_file = "../../Datasets/kitti/label1.txt"
     data_handler.get_file_list(data, label_file)
-    data1, labels1,ims = data_handler.load_data(0, 1)
-    print(data1.shape, labels1.shape,ims.shape)
-    print(labels1,ims)
-
+    data1, labels1, ims = data_handler.load_data(0, 1)
+    print(data1.shape, labels1.shape, ims.shape)
+    print(labels1, ims)

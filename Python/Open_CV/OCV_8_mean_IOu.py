@@ -1,10 +1,9 @@
 # import the necessary packages
 from collections import namedtuple
-import numpy as np
-import cv2
-import  tensorflow as tf
+
 # define the `Detection` object
 Detection = namedtuple("Detection", ["image_path", "gt", "pred"])
+
 
 def bb_intersection_over_union(boxA, boxB):
     # determine the (x, y)-coordinates of the intersection rectangle
@@ -30,17 +29,15 @@ def bb_intersection_over_union(boxA, boxB):
     return iou
 
 
-
-
-
-# ground=[106,118,942,570]
-# # ground=[316,59,578,226]
+ground = [106, 118, 942, 570]
+predicted = [100, 118, 942, 570]
+# ground=[316,59,578,226]
 # predicted=[784,504,931,599]
-#
-#
-# # predicted=[80,60,200,158]
+
+
+# predicted=[80,60,200,158]
 # ground=np.array(ground)
 # predicted=np.array(predicted)
-# print(bb_intersection_over_union(predicted,ground))
+print(bb_intersection_over_union(predicted, ground))
 
 # print(tf.metrics.mean_iou(labels=ground,predictions=predicted,num_classes=1))

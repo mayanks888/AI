@@ -1,17 +1,13 @@
-import cv2
 # from __future__ import print_function
-import argparse
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torchvision import datasets, transforms
 from torch.autograd import Variable
-import matplotlib.pyplot as plt
-from PIL import Image
+from torchvision import datasets, transforms
+
 # Training settings
-batch_size = 64
-import numpy as np
+batch_size = 1000
 # MNIST Dataset
 # train_dataset = datasets.MNIST(root='./data/', train=True, download=True)
 train_dataset = datasets.MNIST(root='./data/', train=True, transform=transforms.ToTensor(), download=True)
@@ -46,18 +42,23 @@ class Net(nn.Module):
 
     def __init__(self):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(1, 10, kernel_size=5,padding=1)
-        self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
+        self.conv1 = nn.Conv2d(1, 10, kernel_size=5, padding=1)
+        self.conv2 = nn.Conv2d(10, 10, kernel_size=5)
         self.mp = nn.MaxPool2d(2)
         self.fc = nn.Linear(320, 10)
 
     def forward(self, x):
         in_size = x.size(0)
-        first_conv=self.conv1(x)
+        first_conv = self.conv1(x)
         x = F.relu(self.mp(first_conv))
-        #x = F.relu(self.mp(self.conv1(x)))
+        # x = F.relu(self.mp(self.conv1(x)))
         # print (x.data)
         x = F.relu(self.mp(self.conv2(x)))
+        # x = F.relu(self.mp(self.conv2(x)))
+        # x = F.relu(self.mp(self.conv2(x)))
+        # x = F.relu(self.mp(self.conv2(x)))
+        # x = F.relu(self.mp(self.conv2(x)))
+        # x = F.relu(self.mp(self.conv2(x)))
         x = x.view(in_size, -1)  # flatten the tensor
         x = self.fc(x)
         return F.log_softmax(x)
@@ -80,7 +81,7 @@ def train(epoch):
         if batch_idx % 10 == 0:
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
-                100. * batch_idx / len(train_loader), loss.data[0]))
+                       100. * batch_idx / len(train_loader), loss.data))
 
 
 def test():
@@ -104,4 +105,9 @@ def test():
 
 for epoch in range(1, 10):
     train(epoch)
+    break
     # test()
+
+dummy_input = torch.randn(64, 1, 28, 28)
+
+# torch.onnx.export(model, dummy_input, "onnx_model_name.onnx")

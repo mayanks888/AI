@@ -1,6 +1,7 @@
-import tensorflow as tf
 import numpy as np
-from tensorflow.python import debug as tf_debug
+import tensorflow as tf
+
+
 def bbox_iou_corner_xy(bboxes1, bboxes2):
     """
     Args:
@@ -38,7 +39,7 @@ def bbox_iou_corner_xy(bboxes1, bboxes2):
     # some invalid boxes should have iou of 0 instead of NaN
     # If inter_area is 0, then this result will be 0; if inter_area is
     # not 0, then union is not too, therefore adding a epsilon is OK.
-    return inter_area / (union+0.0001)
+    return inter_area / (union + 0.0001)
 
 
 def bbox_overlap_iou(bboxes1, bboxes2):
@@ -75,6 +76,7 @@ def bbox_overlap_iou(bboxes1, bboxes2):
 
     return inter_area / ((bboxes1_area + tf.transpose(bboxes2_area)) - inter_area)
 
+
 if __name__ == '__main__':
     bboxes1 = tf.placeholder(tf.float32)
     bboxes2 = tf.placeholder(tf.float32)
@@ -84,8 +86,8 @@ if __name__ == '__main__':
     # bboxes1_vals = [[39, 63, 203, 112], [0, 0, 10, 10],[5,6,77,8]]
     # bboxes2_vals = [[3, 4, 24, 32], [54, 66, 198, 114], [6, 7, 60, 44]]
 
-    bboxes1_vals = [[39, 63, 203, 112],[39, 63, 203, 112]]
-    bboxes2_vals = [[35, 60, 200, 110],[35, 60, 200, 110]]
+    bboxes1_vals = [[39, 63, 203, 112], [39, 63, 203, 112]]
+    bboxes2_vals = [[35, 60, 200, 110], [35, 60, 200, 110]]
 
     with tf.Session() as sess:
         overlap = sess.run(overlap_op, feed_dict={
@@ -101,9 +103,7 @@ if __name__ == '__main__':
         })
         print(overlap)
 
-
-
-#And here is a implementation for the YOLO style format
+# And here is a implementation for the YOLO style format
 
 '''def bbox_iou_center_xy(bboxes1, bboxes2):
     """ same as `bbox_iou_corner_xy', except that we have

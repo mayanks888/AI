@@ -2,7 +2,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torchvision.models as models
-import torch.nn.functional as F
 
 from utils_.utils import to_var
 
@@ -32,14 +31,13 @@ class CNN(nn.Module):
         return features
 
 
-
 class RPN(nn.Module):
 
     def __init__(self):
         super(RPN, self).__init__()
 
         self.conv = nn.Sequential(nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=(1, 1)),
-                                            nn.ReLU())
+                                  nn.ReLU())
 
         # 9 anchor * 2 classfier (object or non-object) each grid
         self.conv1 = nn.Conv2d(512, 2 * 9, kernel_size=1, stride=1)
@@ -49,7 +47,6 @@ class RPN(nn.Module):
         self.softmax = nn.Softmax()
 
     def forward(self, features):
-
         features = self.conv(features)
 
         logits, rpn_bbox_pred = self.conv1(features), self.conv2(features)
@@ -60,7 +57,8 @@ class RPN(nn.Module):
 
         rpn_cls_prob = self.softmax(logits)
         rpn_cls_prob = rpn_cls_prob.view(height, width, 18)  # (H/16 * W/16 * 9, 2)  => (H/16 ,W/16, 18)
-        rpn_cls_prob = rpn_cls_prob.permute(2, 0, 1).contiguous().unsqueeze(0) # (H/16 ,W/16, 18) => (1, 18, H/16, W/16)
+        rpn_cls_prob = rpn_cls_prob.permute(2, 0, 1).contiguous().unsqueeze(
+            0)  # (H/16 ,W/16, 18) => (1, 18, H/16, W/16)
 
         return rpn_bbox_pred, rpn_cls_prob, logits
 
@@ -93,7 +91,6 @@ class ROIpooling(nn.Module):
                 roi_feature = features[:, :, roi[1]:(roi[3] + 1), roi[0]:(roi[2] + 1)]
             except Exception as e:
                 print(e, roi)
-
 
             pool_feature = self.adapmax2d(roi_feature)
             output.append(pool_feature)
@@ -135,5 +132,3 @@ class FasterRcnn(nn.Module):
             print(e, logits)
 
         return bbox_delta, scores, logits
-
-

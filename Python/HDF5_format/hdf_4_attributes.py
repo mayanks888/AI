@@ -1,6 +1,6 @@
 import h5py as hp
-import numpy as np
-#now we will create group into hdf5 file
+
+# now we will create group into hdf5 file
 
 '''hd=hp.File("data1.hdf5",'w')
 arr = np.ones((5,2))
@@ -15,12 +15,11 @@ grp1.attrs['class']='dataMatrix'
 grp1.attrs['version']='1.1'
 hd.close()'''
 
-
 # Now to access attribuutes
 
-data=hp.File('data1.hdf5','r')
-new_val=data.get("train")
-at_val=new_val.attrs.keys()
-at_item=new_val.attrs.values()
+data = hp.File('data1.hdf5', 'r')
+new_val = data.get("train")
+at_val = new_val.attrs.keys()
+at_item = new_val.attrs.values()
 
-print(list(at_item),list(at_val))#dont forget to convert into list first
+print(list(at_item), list(at_val))  # dont forget to convert into list first

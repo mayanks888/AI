@@ -1,12 +1,9 @@
-import pandas as pd
 import numpy as np
-from scipy import stats
 from sklearn import preprocessing
-import statsmodels as st
 
 # '______________________________________________________________' \
-data=[1,2,3,4,5,6,7,8,9]
-data_ary=np.array(data)
+data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+data_ary = np.array(data)
 # print np.mean(data)
 # print np.median(data)
 # print stats.mode(data)
@@ -17,29 +14,30 @@ data_ary=np.array(data)
 # '______________________________________________________________' \
 # linear algebra
 
-matrix=np.array([[1,2,1],[4,0,6],[7,8,9],[88,96,97]])
+matrix = np.array([[1, 2, 1], [4, 0, 6], [7, 8, 9], [88, 96, 97]])
 
 # print matrix
 # print np.mean(matrix)
 # print np.var(matrix)
 # print stats.mode(matrix,axis=1)
 # # '______________________________________________________________' \
-                            #scaling of datas
+# scaling of datas
 
-                            #min max scaling
+# min max scaling
 # minmaxscale=preprocessing.MinMaxScaler(feature_range=(0,1))
 # scale_data=minmaxscale.fit_transform(matrix)
 # print scale_data
 
-                            #standard scaling
+# standard scaling
 # this is a standard scaler=[(Xi-Xmean)/standard deviation]
 
-standardscaler=preprocessing.StandardScaler()
-x_scale=standardscaler.fit_transform(matrix)
-print x_scale
+standardscaler = preprocessing.StandardScaler()
+x_scale = standardscaler.fit_transform(matrix)
+print
+x_scale
 
 # # '______________________________________________________________' \
-        # Here I did scaling to age and salary of datasets
+# Here I did scaling to age and salary of datasets
 # mydatasets= pd.read_csv("dataprepossor.csv")
 # # datasets['Sex']=datasets['Sex'].replace('male','men').head()
 # mydatasets[['Salary','Age']]=mydatasets[['Salary','Age']].replace(np.nan,0)
@@ -63,16 +61,17 @@ print x_scale
 
 
 # # '______________________________________________________________' \
-            #normaliser xi/sqrt(sum of all square of rows
+# normaliser xi/sqrt(sum of all square of rows
 
-normaliser1=preprocessing.Normalizer()
-normaldata=normaliser1.fit_transform(matrix)
-print normaldata
-
+normaliser1 = preprocessing.Normalizer()
+normaldata = normaliser1.fit_transform(matrix)
+print
+normaldata
 
 # # '______________________________________________________________' \
-                                # Binarizer
+# Binarizer
 
-binarizer=preprocessing.Binarizer(4)#here 4 means that all value below 4 will be 0 and above will  be 1
-binardata=binarizer.fit_transform(matrix)
-print binardata
+binarizer = preprocessing.Binarizer(4)  # here 4 means that all value below 4 will be 0 and above will  be 1
+binardata = binarizer.fit_transform(matrix)
+print
+binardata

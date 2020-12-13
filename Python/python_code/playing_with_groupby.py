@@ -1,29 +1,26 @@
 import pandas as pd
-import numpy as np
+
 # data=pd.read_csv("/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/berkerly_new_useful/Berkerly_no_filter_include_all_classes.csv")
 # data=pd.read_csv("/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/berkerly_new_useful/berkely_ready_to_train_for_retinanet_with_weather_pytorch.csv")
-data=pd.read_csv("/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/berkerly_new_useful/berkely_ready_to_train_for_retinanet_with_weather_pytorch.csv")
-data=pd.read_csv("berkely_weather.csv")
+data = pd.read_csv(
+    "/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/berkerly_new_useful/berkely_ready_to_train_for_retinanet_with_weather_pytorch.csv")
+data = pd.read_csv("berkely_weather.csv")
 
-df=data[(data['xmin']!=data['xmax']) & (data['ymin']!=data['ymax'])]
+df = data[(data['xmin'] != data['xmax']) & (data['ymin'] != data['ymax'])]
 
-
-
-
-cool=(df.groupby('weather').count())
+cool = (df.groupby('weather').count())
 print(df.groupby('weather').count())
 
 # classes=['person', 'traffic light', 'bus', 'car', 'motor','bike',  'traffic sign']
 # classes=['weather','clear','foggy' ,'overcast', 'partly cloudy','rainy','snowy', 'undefined']
-classes=['weather','clear' ,'overcast','partly cloudy','rainy','snowy']
+classes = ['weather', 'clear', 'overcast', 'partly cloudy', 'rainy', 'snowy']
 
 # df=data.loc[data['class'].isin(["traffic sign","traffic light"])]
-df=df.loc[data['weather'].isin(classes)]
+df = df.loc[data['weather'].isin(classes)]
 
 print(df.groupby('weather').count())
 
-
-df=df.replace("partly cloudy", "partly_cloudy")
+df = df.replace("partly cloudy", "partly_cloudy")
 
 # df=df.replace("bike", "cool")
 # df=df.replace("cool", "motorbike")
@@ -32,10 +29,6 @@ df=df.replace("partly cloudy", "partly_cloudy")
 print(df.groupby('weather').count())
 # df.to_csv("berkely_weather.csv")
 print(1)
-
-
-
-
 
 # data=pd.read_csv('/home/mayank-s/Desktop/Link to Datasets/aptiveBB/reddy.csv')
 '''print(data.head())
@@ -61,8 +54,6 @@ for num,dat in enumerate(grouped.size()):
 df=pd.DataFrame(filename,car)#, columns=['filename','car'])
 # df=df[filename,car]
 # df.to_csv("Carcount.csv")'''
-
-
 
 '''#now next job is to remove the selected index from this datasets based on car count on carcaount datasets
 cardatsets=pd.read_csv('/home/mayank-s/PycharmProjects/Data_Science_New/Python/python_code/maxcarcaount_3.csv')

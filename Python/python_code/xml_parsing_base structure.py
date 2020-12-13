@@ -1,7 +1,9 @@
 import xml.etree.cElementTree as ET
-import numpy as np
-xml_source='C:/Users/mayank/Documents/Datasets/VOCtrainval_11-May-2012/VOCdevkit/VOC2012/Annotations/2007_000027.xml'
-xml_source="C:/Users/mayank/Documents/Datasets/VOCtrainval_11-May-2012/VOCdevkit/VOC2012/Annotations/2007_001027.xml"
+
+xml_source = 'C:/Users/mayank/Documents/Datasets/VOCtrainval_11-May-2012/VOCdevkit/VOC2012/Annotations/2007_000027.xml'
+xml_source = "C:/Users/mayank/Documents/Datasets/VOCtrainval_11-May-2012/VOCdevkit/VOC2012/Annotations/2007_001027.xml"
+
+
 def parseXML(xmlPath, labels, side):
     """
     Args:
@@ -16,7 +18,8 @@ def parseXML(xmlPath, labels, side):
     height = int(root.find('size').find('height').text)
 
     for obj in root.iter('object'):
-        class_num = labels.index(obj.find('name').text)#finding the index of label mention so as to store data into correct label
+        class_num = labels.index(
+            obj.find('name').text)  # finding the index of label mention so as to store data into correct label
         bndbox = obj.find('bndbox')
         xmin = int(bndbox.find('xmin').text)
         ymin = int(bndbox.find('ymin').text)
@@ -29,7 +32,7 @@ def parseXML(xmlPath, labels, side):
         # which cell this obj falls into
         centerx = (xmax + xmin) / 2.0
         centery = (ymax + ymin) / 2.0
-        #448 is size of the input image
+        # 448 is size of the input image
         newx = (448.0 / width) * centerx
         newy = (448.0 / height) * centery
 
@@ -46,11 +49,13 @@ def parseXML(xmlPath, labels, side):
         cord_x = (newx - cell_left) / cell_size
         cord_y = (newy - cell_top) / cell_size
 
-        #objif = objInfo(cord_x, cord_y, np.sqrt(h_new / 448.0), np.sqrt(w_new / 448.0), class_num)
-        #self.boxes[row][col].has_obj = True
-        #self.boxes[row][col].objs.append(objif)
+        # objif = objInfo(cord_x, cord_y, np.sqrt(h_new / 448.0), np.sqrt(w_new / 448.0), class_num)
+        # self.boxes[row][col].has_obj = True
+        # self.boxes[row][col].objs.append(objif)
+
 
 # mylabel='head'
-side=7
-mylabel = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train","tvmonitor"]
-parseXML(xml_source,mylabel,side)
+side = 7
+mylabel = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog",
+           "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
+parseXML(xml_source, mylabel, side)

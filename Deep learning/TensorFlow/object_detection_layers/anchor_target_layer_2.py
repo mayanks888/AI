@@ -1,9 +1,7 @@
-
+import numpy as np
 from lib.bbox import bbox_overlaps
 from lib.faster_rcnn.bbox_transform import bbox_transform
 from lib.faster_rcnn.generate_anchors import generate_anchors
-
-import numpy as np
 
 
 class AnchorTargetLayer(object):
@@ -60,7 +58,7 @@ class AnchorTargetLayer(object):
             (all_anchors[:, 0] >= -self.allowed_border) &
             (all_anchors[:, 1] >= -self.allowed_border) &
             (all_anchors[:, 2] < im_info[1] + self.allowed_border) &  # width
-            (all_anchors[:, 3] < im_info[0] + self.allowed_border)    # height
+            (all_anchors[:, 3] < im_info[0] + self.allowed_border)  # height
         )[0]
 
         # keep only inside anchors
@@ -82,11 +80,11 @@ class AnchorTargetLayer(object):
         gt_argmax_overlaps = np.where(overlaps == gt_max_overlaps)[0]
 
         return argmax_overlaps, max_overlaps, gt_max_overlaps, \
-            gt_argmax_overlaps
+               gt_argmax_overlaps
 
     def create_labels(self, inds_inside, anchors, gt_boxes):
         # label: 1 is positive, 0 is negative, -1 is dont care
-        labels = np.empty((len(inds_inside), ), dtype=np.float32)
+        labels = np.empty((len(inds_inside),), dtype=np.float32)
         labels.fill(-1)
 
         argmax_overlaps, max_overlaps, gt_max_overlaps, gt_argmax_overlaps = \
@@ -232,11 +230,11 @@ class AnchorTargetLayer(object):
         """
 
         if len(data.shape) == 1:
-            ret = np.empty((count, ), dtype=np.float32)
+            ret = np.empty((count,), dtype=np.float32)
             ret.fill(fill)
             ret[inds] = data
         else:
-            ret = np.empty((count, ) + data.shape[1:], dtype=np.float32)
+            ret = np.empty((count,) + data.shape[1:], dtype=np.float32)
             ret.fill(fill)
             ret[inds, :] = data
         return ret

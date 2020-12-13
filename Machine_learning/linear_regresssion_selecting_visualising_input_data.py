@@ -1,10 +1,10 @@
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 from sklearn.model_selection import train_test_split
-data = pd.read_csv('/home/mayank-s/PycharmProjects/Datasets/housing_data.csv')#,header=None)#, sep='\s+')
-data.columns = ['CRIM', 'ZN', 'INDUS', 'CHAS','NOX', 'RM', 'AGE', 'DIS', 'RAD','TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
-print(data.head())
 
+data = pd.read_csv('/home/mayank-s/PycharmProjects/Datasets/housing_data.csv')  # ,header=None)#, sep='\s+')
+data.columns = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
+print(data.head())
 
 # after load we have to do exploratory data analysis
 # Using this scatterplot matrix, we can now quickly eyeball how the data is distributed and whether it contains outliers.
@@ -30,9 +30,10 @@ hm = sns.heatmap(cm, cbar=True, annot=True, square=True, fmt='.2f', annot_kws={'
 # ************************************************************************
 X = data[['RM']].values
 y = data['MEDV'].values
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = .20, random_state = 0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.20, random_state=0)
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
+
 sc_x = StandardScaler()
 sc_y = StandardScaler()
 # sc = StandardScaler()
@@ -47,18 +48,21 @@ plt.ylabel('SSE')
 plt.xlabel('Epoch')
 plt.show()'''
 
-regression_data=LinearRegression()
-regression_data.fit(X_train,y_train)
-y_train_pred= regression_data.predict(X_train)
-y_test_pred= regression_data.predict(X_test)
-plt.scatter(X,y,color='blue')
-plt.plot(X_train,regression_data.predict(X_train),color='red')
-plt.scatter(X,y)
+regression_data = LinearRegression()
+regression_data.fit(X_train, y_train)
+y_train_pred = regression_data.predict(X_train)
+y_test_pred = regression_data.predict(X_test)
+plt.scatter(X, y, color='blue')
+plt.plot(X_train, regression_data.predict(X_train), color='red')
+plt.scatter(X, y)
 plt.show()
 
 from sklearn.metrics import mean_squared_error
-print('MSE train: %.3f, test: %.3f' % (mean_squared_error(y_train, y_train_pred), mean_squared_error(y_test, y_test_pred)))
+
+print('MSE train: %.3f, test: %.3f' % (
+    mean_squared_error(y_train, y_train_pred), mean_squared_error(y_test, y_test_pred)))
 
 from sklearn.metrics import r2_score
-rscore=r2_score(y_test,y_test_pred)
+
+rscore = r2_score(y_test, y_test_pred)
 print(rscore)

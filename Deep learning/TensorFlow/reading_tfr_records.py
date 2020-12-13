@@ -1,8 +1,7 @@
 import tensorflow as tf
-import numpy as np
-import matplotlib.pyplot as plt
 
-data_path = '/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/bb_train.record'  # address to save the hdf5 file
+# data_path = '/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/bb_train.record'  # address to save the hdf5 file
+data_path = '/home/mayanksati/Documents/datasets/BDD/bdd_traffic_val_tf.record'  # address to save the hdf5 file
 with tf.Session() as sess:
     feature = {'train/image': tf.FixedLenFeature([], tf.string),
                'train/label': tf.FixedLenFeature([], tf.int64)}

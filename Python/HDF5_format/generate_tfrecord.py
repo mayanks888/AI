@@ -7,24 +7,28 @@ Usage:
   # Create test data:
   python generate_tfrecord.py --csv_input=images/test_labels.csv  --image_dir=images/test --output_path=test.record
 """
+from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-from __future__ import absolute_import
 
-import os
 import io
+import os
+from collections import namedtuple
+
 import pandas as pd
 import tensorflow as tf
-
 from PIL import Image
 from object_detection.utils import dataset_util
-from collections import namedtuple, OrderedDict
 
 flags = tf.app.flags
-flags.DEFINE_string('csv_input', '/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/berkely_train.csv', 'Path to the CSV input')
-flags.DEFINE_string('image_dir', '/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/bdd100k/images/100k/train', 'Path to the image directory')
-flags.DEFINE_string('output_path', '/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/bb_test.record', 'Path to output TFRecord')
+flags.DEFINE_string('csv_input', '/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/berkely_train.csv',
+                    'Path to the CSV input')
+flags.DEFINE_string('image_dir', '/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/bdd100k/images/100k/train',
+                    'Path to the image directory')
+flags.DEFINE_string('output_path', '/home/mayank-s/PycharmProjects/Datasets/Berkely_DeepDrive/bb_test.record',
+                    'Path to output TFRecord')
 FLAGS = flags.FLAGS
+
 
 # classes=['bus','light','traffic light','person','bike','truck','motor','car','train','Rider',"traffic sign"]
 
@@ -64,7 +68,7 @@ def split(df, group):
 
 
 def create_tf_example(group, path):
-    image_name=group.filename+".jpg"
+    image_name = group.filename + ".jpg"
     with tf.gfile.GFile(os.path.join(path, '{}'.format(image_name)), 'rb') as fid:
         encoded_jpg = fid.read()
     encoded_jpg_io = io.BytesIO(encoded_jpg)

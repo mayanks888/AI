@@ -152,23 +152,23 @@ def _main(args):
 
     # store images as variable length uint8 arrays
     train_images = train_group.create_dataset(
-        'images', shape=(total_train_ids, ), dtype=uint8_dt)
+        'images', shape=(total_train_ids,), dtype=uint8_dt)
     val_images = val_group.create_dataset(
-        'images', shape=(len(val_ids), ), dtype=uint8_dt)
+        'images', shape=(len(val_ids),), dtype=uint8_dt)
     test_images = test_group.create_dataset(
-        'images', shape=(len(test_ids), ), dtype=uint8_dt)
+        'images', shape=(len(test_ids),), dtype=uint8_dt)
 
     # store boxes as class_id, xmin, ymin, xmax, ymax
     train_boxes = train_group.create_dataset(
-        'boxes', shape=(total_train_ids, ), dtype=vlen_int_dt)
+        'boxes', shape=(total_train_ids,), dtype=vlen_int_dt)
     val_boxes = val_group.create_dataset(
-        'boxes', shape=(len(val_ids), ), dtype=vlen_int_dt)
+        'boxes', shape=(len(val_ids),), dtype=vlen_int_dt)
     test_boxes = test_group.create_dataset(
-        'boxes', shape=(len(test_ids), ), dtype=vlen_int_dt)
+        'boxes', shape=(len(test_ids),), dtype=vlen_int_dt)
 
     # process all ids and add to datasets
     print('Processing Pascal VOC 2007 datasets for training set.')
-    last_2007 = add_to_dataset(voc_path, '2007', train_ids_2007, train_images,train_boxes)
+    last_2007 = add_to_dataset(voc_path, '2007', train_ids_2007, train_images, train_boxes)
     print('Processing Pascal VOC 2012 training set.')
     add_to_dataset(
         voc_path,

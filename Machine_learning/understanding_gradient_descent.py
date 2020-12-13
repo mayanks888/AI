@@ -1,4 +1,6 @@
-import  numpy as np
+import numpy as np
+
+
 class AdalineGD(object):
     """ADAptive LInear NEuron classifier.
 

@@ -1,6 +1,6 @@
 import cv2
-import numpy as np
-file_path="/home/mayank-s/PycharmProjects/Datasets/aptive/object_detect/video_input/Cars13.mp4"
+
+file_path = "/home/mayank-s/PycharmProjects/Datasets/aptive/object_detect/video_input/Cars13.mp4"
 # Create a VideoCapture object
 cap = cv2.VideoCapture(0)
 cap.open(file_path)

@@ -1,5 +1,6 @@
 import torch
 from torchvision import datasets, transforms
+
 # train_dataset = datasets.MNIST(root='./data/', train=True, download=True)
 # train_dataset = datasets.MNIST(root='./data/', train=True, transform=transforms.ToTensor(), download=True)
 # #
@@ -21,9 +22,6 @@ IMG_SIZE = 15
 _mean = [0.485, 0.456, 0.406]
 _std = [0.229, 0.224, 0.225]
 
-
-
-
 trans = transforms.Compose([
     transforms.RandomCrop(IMG_SIZE),
     transforms.RandomHorizontalFlip(),
@@ -33,7 +31,7 @@ trans = transforms.Compose([
 ])
 
 train_dataset = datasets.MNIST(root='./data/', train=True, transform=trans, download=True)
-#now thing to understand is that transformaionof image will not happended now rather it will be for during downloader funtionis called
+# now thing to understand is that transformaionof image will not happended now rather it will be for during downloader funtionis called
 
 # cool=trans(train_dataset[13][0])#13 image and read it img values stored at 0
 print(1)
