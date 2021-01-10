@@ -45,6 +45,7 @@ for values in data:
     #             new_file_path=(root + '/' + str(file))
     #             break
     #####################################################
+
     base_ground_file_path = (os.path.join(base_image_path, filename))
     if os.path.exists(base_ground_file_path):
         data_label = [filename, width, height, obj_class, xmin, ymin, xmax, ymax]
