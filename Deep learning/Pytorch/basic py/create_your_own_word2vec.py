@@ -82,7 +82,7 @@ for epo in range(num_epochs):
         log_softmax = F.log_softmax(z2, dim=0)
 
         loss = F.nll_loss(log_softmax.view(1, -1), y_true)
-        loss_val += loss.data[0]
+        loss_val += loss.data
         loss.backward()
         W1.data -= learning_rate * W1.grad.data
         W2.data -= learning_rate * W2.grad.data

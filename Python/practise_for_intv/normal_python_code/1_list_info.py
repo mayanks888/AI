@@ -57,3 +57,35 @@ print("slicing", forthList[1:][:])
 
 print("count fothlist {}".format(forthList.count(2)))
 print(len(forthList))
+
+
+#creat list of 10 vales
+
+myforthlist=[9]*6
+print(myforthlist)
+
+#copy function
+myfifthList=["a","b","c"]
+new_fifthList=myfifthList
+new_fifthList.append("j")
+print(new_fifthList)
+print(myfifthList)
+# to create a
+new_fifthList=myfifthList.copy()
+# or
+new_fifthList=myfifthList[:]
+new_fifthList.append("j")
+
+print(new_fifthList)
+print(myfifthList)
+# to create a
+
+#######################33
+# get the index of any value in list
+
+print(myfifthList.index("b"))
+
+
+
+lst =list(range(1, 11))
+print (lst)

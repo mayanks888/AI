@@ -12,3 +12,25 @@ loop=0
 while(loop<10):
     print(loop)
     loop+=1
+
+
+cool=[val+2 for val in myList]
+print("coolVAl is",cool)
+
+def make_square(a):
+    return (a**2)
+
+final_val=list(map(make_square, myList))
+print("this is final list",final_val)
+
+newList=[]
+cool=[newList.append(make_square(val)) for val in myList]
+# or
+cool=[make_square(val) for val in myList]
+print(newList)
+
+#more advanced
+new=[val for val in myList if val%2==0]
+# myList.
+print("more advanced",new)
+

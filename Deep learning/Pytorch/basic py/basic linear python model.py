@@ -12,7 +12,7 @@ def forward(x, m):
 
 
 def loss(ypred, yreal):
-    return ((ypred - yreal) * (ypred - yreal))
+    return ((ypred - yreal) **2)
 
 
 ypred = forward(x, w)

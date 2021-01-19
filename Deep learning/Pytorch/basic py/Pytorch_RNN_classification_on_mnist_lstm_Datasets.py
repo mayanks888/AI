@@ -25,7 +25,7 @@ print(train_data.train_data.size())  # (60000, 28, 28)
 print(train_data.train_labels.size())  # (60000)
 plt.imshow(train_data.train_data[0].numpy(), cmap='gray')
 plt.title('%i' % train_data.train_labels[0])
-# plt.show()
+plt.show()
 
 # Data Loader for easy mini-batch return in training
 train_loader = torch.utils.data.DataLoader(dataset=train_data, batch_size=BATCH_SIZE, shuffle=True)
