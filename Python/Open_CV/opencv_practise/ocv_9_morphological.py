@@ -3,9 +3,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 img = cv2.imread('color_balls2.png', cv2.IMREAD_GRAYSCALE)
-# img = cv2.imread('color_balls2.png', 1)
+# img = cv2.imread('img_2.png', 1)
 # img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 _, mask = cv2.threshold(img, 220, 255, cv2.THRESH_BINARY_INV)
+# mask=cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
 
 kernal = np.ones((5,5), np.uint8)
 

@@ -14,6 +14,7 @@ b=-2
 print("check logical and comapratr ",a >0 and b <0)
 
 myString="Mayank"
+cool=myString.center()
 # myString=2
 # assert isinstance(myString, str)
 assert isinstance(myString, str), "%r is not a print value" % myString

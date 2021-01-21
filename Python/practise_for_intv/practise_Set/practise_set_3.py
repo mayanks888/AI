@@ -24,3 +24,6 @@ print(" ".join(str))
 # re.sub(' +', ' ', 'The     quick brown    fox')
 # 'The quick brown fox'
 # print(re.sub(' +', ' ',new_string))
+string_2="mayank"
+# cool=string_2.split()
+print(list(string_2))

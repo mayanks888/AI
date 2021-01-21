@@ -8,7 +8,6 @@ img=cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 # img=np.zeros([512,512])
 # img = np.random.randint(0,255, size=(512,512,3),dtype=np.uint8)
 img = np.random.randint(0,255, size=(512,512),dtype=np.uint8)
-
 cv2.rectangle(img,(20,40),(50,10),(255,5,0),thickness=-1)#(pt1=(xmin,ymax),pt2=(smin,ymax)
 
 cv2.circle(img,(80,80),radius=50,color=(255,255,0),thickness=2)

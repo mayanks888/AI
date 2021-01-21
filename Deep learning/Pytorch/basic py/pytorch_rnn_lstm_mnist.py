@@ -100,7 +100,7 @@ def train(epoch):
             acc = test()
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}\tacc: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
-                       100. * batch_idx / len(train_loader), loss.data[0], acc))
+                       100. * batch_idx / len(train_loader),float(loss), acc))
 
 
 def test():

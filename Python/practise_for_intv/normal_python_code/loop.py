@@ -34,3 +34,8 @@ new=[val for val in myList if val%2==0]
 # myList.
 print("more advanced",new)
 
+
+
+myString="Mayank"
+cool=myString.center(0)
+print(cool)

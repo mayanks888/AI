@@ -45,7 +45,7 @@ class Net(nn.Module):
         self.conv1 = nn.Conv2d(1, 10, kernel_size=5, padding=1)
         self.conv2 = nn.Conv2d(10, 10, kernel_size=5)
         self.mp = nn.MaxPool2d(2)
-        self.fc = nn.Linear(320, 10)
+        self.fc = nn.Linear(160, 10)
 
     def forward(self, x):
         in_size = x.size(0)

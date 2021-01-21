@@ -1,7 +1,7 @@
 import cv2
 import matplotlib.pyplot as plt
 
-img = cv2.imread("gradient.jpg", 1)
+# img = cv2.imread("gradient.jpg", 1)
 img = cv2.imread("img_2.png", 1)
 # a very simple concenpt if val of pixel is greater that threshold make is 255 or else make 0
 _, img2 = cv2.threshold(img, 25, 255, type=cv2.THRESH_BINARY)

@@ -8,3 +8,5 @@ print(dictVAl["name"])
 dictVAl["place"]="dehradun"
 print(dictVAl)
 print(dictVAl.items())
+dictVAl["cool"]="fool"
+print(dictVAl.items())
