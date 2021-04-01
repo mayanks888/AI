@@ -31,7 +31,11 @@ class MyModel(nn.Module):
 
 
 Model = MyModel()
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print('Using device:', device)
 optimizer = optim.SGD(Model.parameters(), lr=0.01, momentum=0.5)
+Model = Model.to(device)
+
 # optimizer = torch.optim.Adam(Model.parameters(), lr=0.1)
 criterea = torch.nn.CrossEntropyLoss()  # this include softmax and cross entropy
 
@@ -39,6 +43,8 @@ criterea = torch.nn.CrossEntropyLoss()  # this include softmax and cross entropy
 def train(epoch):
     Model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
+        data = data.to(device)
+        target = target.to(device)
         # data, target = Variable(data), Variable(target)
         data, target = torch.tensor(data), torch.tensor(target).long()
         optimizer.zero_grad()
