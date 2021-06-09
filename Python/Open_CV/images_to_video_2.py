@@ -41,6 +41,7 @@ def make_video(file_path, fps=20, size=None, is_color=True, format="XVID", outvi
 
 
 if __name__ == '__main__':
-    input_path='/home/mayank_s/Desktop/template/farm_2/farm_2_images2_scaled'
+    # input_path='/home/mayank_s/Desktop/template/farm_2/farm_2_images2_scaled'
+    input_path='/home/mayank_sati/Videos/fake'
     # ret = create_video_file(args.input_path, args.output_path)  # ,maxframes=5)
     make_video(input_path)

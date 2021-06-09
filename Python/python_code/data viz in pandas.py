@@ -1,5 +1,5 @@
 import  pandas as pd
-import seaborn as sns
+# import seaborn as sns
 import matplotlib.pyplot as plt
 data1=pd.read_csv('df1')
 print (data1.head())

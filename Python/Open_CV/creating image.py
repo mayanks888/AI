@@ -4,8 +4,9 @@ import numpy as np
 black = np.zeros([150, 200, 1], dtype='uint8')  # creating 3d array array of 150 widht ,200 hieght , and 1 channel
 print(black)
 print(black.shape)
-# cv2.imshow('Black',black)
-
+cv2.imshow('Black',black)
+cv2.waitKey(500)
+cv2.destroyAllWindows()
 one = np.ones([150, 200, 1], dtype='uint8')
 
 # creating image out of black array
@@ -21,5 +22,5 @@ print('shape of color image is', create_color.shape)
 print('pixel value', create_color[1, 2, 0])
 # cv2.imshow('color image',create_color)
 # cv2.imwrite('output1.jpg',create_color)
-cv2.waitKey(5000)
-cv2.destroyAllWindows()
+# cv2.waitKey(5000)
+# cv2.destroyAllWindows()

@@ -20,7 +20,7 @@ def FrameCapture(path):
         success, image = vidObj.read()
 
         # Saves the frames with frame-count
-        basepath='/home/mayank_s/Desktop/fake'
+        basepath='/home/mayank_sati/Videos/fake'
         final_path=basepath+"/"+"frame%d.jpg" % count
         cv2.imwrite(final_path, image)
 
@@ -31,4 +31,4 @@ def FrameCapture(path):
 # Driver Code
 if __name__ == '__main__':
     # Calling the function
-    FrameCapture("/home/mayank_s/codebase/others/centernet/mayank/CenterTrack/videos/nuscenes_mini.mp4")
+    FrameCapture("/home/mayank_sati/Videos/demo_pp (copy).mp4")

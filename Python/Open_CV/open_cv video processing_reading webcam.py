@@ -13,4 +13,4 @@ while (True):
 cap.release()
 cv2.destroyAllWindows()
 
-l].objs.append(objif)
+# l].objs.append(objif)

@@ -4,7 +4,7 @@ import numpy as np
 x = np.linspace(0, 5, 10)
 y = x ** 2
 y1 = x ** 3
-'''print (x)
+print (x)
 plt.plot(x,y)
 plt.xlabel("x")
 plt.ylabel('y')
