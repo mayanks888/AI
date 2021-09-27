@@ -18,7 +18,9 @@ domain_id
 *.pgm
 *.tar
 *.json
+*.trt
 *.cmake
+*.onnx
 Annotation tool V2.2/logs/
 Annotation_tool_V3/logs/
 Machine_learning/Python/Ros/catkin_workspace/

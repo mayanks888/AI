@@ -38,7 +38,7 @@ new_image_input, y = shuffle(image_list_array, y, random_state=4)  # shuffle dat
 X_train, X_test, y_train, y_test = train_test_split(new_image_input, y, test_size=.10,
                                                     random_state=4)  # splitting data (no need if test data is present
 
-# ____________________________________________________
+# ________________________________________________________________________
 # importing vgg base_model
 # imput_shape=new_image_input[0].shape#good thing to know the shape of input array
 input_shape = Input(shape=(224, 224, 3))

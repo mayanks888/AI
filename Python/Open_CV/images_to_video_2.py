@@ -5,7 +5,7 @@ import natsort
 from cv2 import VideoWriter, VideoWriter_fourcc, imread, resize
 # sys.path.append("..")
 
-def make_video(file_path, fps=20, size=None, is_color=True, format="XVID", outvid='image_video_2.avi'):
+def make_video(file_path, fps=25, size=None, is_color=True, format="XVID", outvid='image_video_2.avi'):
     # size=(540,960)
     # size=(1600,900)
 

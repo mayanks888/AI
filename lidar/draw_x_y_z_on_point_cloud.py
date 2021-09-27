@@ -94,8 +94,8 @@ def draw_gt_boxes3d(gt_boxes3d, fig, color=(1, 1, 1), line_width=1, draw_text=Tr
 # scan = np.fromfile('n008-2018-05-21-11-06-59-0400__LIDAR_TOP__1526915243047392.pcd.bin', dtype=np.float32)
 # scan = np.fromfile('./point_clouds/n008-2018-05-21-11-06-59-0400__LIDAR_TOP__1526915243047392.pcd.bin', dtype=np.float32)
 # scan = np.fromfile('/home/mayanksati/Documents/point_clouds/KITTI_DATASET_ROOT/testing/velodyne/000007.bin', dtype=np.float32)
-scan = np.fromfile('/home/mayanksati/Documents/point_clouds/KITTI_DATASET_ROOT/testing/velodyne_reduced/000003.bin',
-                   dtype=np.float32)
+# scan = np.fromfile('/home/mayanksati/Documents/point_clouds/KITTI_DATASET_ROOT/testing/velodyne_reduced/000003.bin', dtype=np.float32)
+scan = np.fromfile('/media/mayank_sati/New Volume/mayank_linux/roabag/livox/pcd/liv_435499521.pcd', dtype=np.float32)
 # scan = np.fromfile('/home/mayanksati/Documents/point_clouds/KITTI_DATASET_ROOT/pycharm_work/point_cloud/000001.bin', dtype=np.float32)
 
 

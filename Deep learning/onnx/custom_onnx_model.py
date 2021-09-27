@@ -59,11 +59,7 @@ class PFNLayer_mayank_seq_layer(nn.Module):
         return x_max
 
 
-if __name__ == '__main__':
-
-    model = PFNLayer_mayank_seq_layer(in_channels=9,out_channels=64)
-
-    # dummy_input = XXX # You need to provide the correct input here!
+if __name__ =antut = XXX # You need to provide the correct input here!
     # dummy_input = 608 # You need to provide the correct input here!
     # imgsz = 608
     dummy_input = torch.zeros((1, 9, 12000, 60))  # You need to provide the correct input here!
