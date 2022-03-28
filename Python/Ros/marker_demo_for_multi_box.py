@@ -78,7 +78,7 @@ def main():
 
         marker3 = Marker()
         marker3.id = 3
-        marker3.header.frame_id = 'world'
+        marker3.header.frame_id = 'base_link'
         marker3.type = Marker.LINE_STRIP
         marker3.ns = 'Testline'
         marker3.action = Marker.ADD
@@ -169,14 +169,14 @@ def main():
         print("working")
 
     #
-    marker_publisher = rospy.Publisher('_mayank_visualization_marker', MarkerArray, queue_size=5)
+    # marker_publisher = rospy.Publisher('_mayank_visualization_marker', MarkerArray, queue_size=5)
     marker_pub = rospy.Publisher('line_visualization_marker', Marker, queue_size=5)
     # marker_pub_array = rospy.Publisher('line_visualization_marker_array', Marker, queue_size=5)
 
     for val in range(1000):
         rospy.sleep(1)
-        show_text_in_rviz_mullti_cube(marker_publisher, 'Hello world!')
-        # show_text_in_rviz_mullti_line(marker_pub, 'Hello world!')
+        # show_text_in_rviz_mullti_cube(marker_publisher, 'Hello world!')
+        show_text_in_rviz_mullti_line(marker_pub, 'Hello world!')
         # show_text_in_rviz_mullti_line_array(marker_pub_array, 'Hello world!')
         print(val)
 

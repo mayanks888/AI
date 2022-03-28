@@ -37,7 +37,8 @@ import yaml
 # import sys
 # sys.path.append(r'/usr/local/lib/python2.7/dist-packages/gflags')
 # filepath='/home/mayanksati/PycharmProjects/models/AI-Hamid/bags_tracker/2018-11-24-09-25-36/2018-11-24-09-25-38_0_NO_TL.bag'
-filepath = '/home/mayanksati/PycharmProjects/models/AI-Hamid/bags_tracker/2018-11-24-09-25-36_copy/2018-11-24-09-25-38_0.orig.bag'
+# filepath = '/home/mayanksati/PycharmProjects/models/AI-Hamid/bags_tracker/2018-11-24-09-25-36_copy/2018-11-24-09-25-38_0.orig.bag'
+filepath = '/home/mayank_sati/Documents/datasets/roabag/livox/4.bag'
 # Requried flags.
 gflags.DEFINE_string('input_bag', filepath, 'Input bag path.')
 

@@ -3,7 +3,6 @@ import numpy as np
 import open3d as o3d
 
 if __name__ == "__main__":
-
     # generate some neat n times 3 matrix using a variant of sync function
     x = np.linspace(-3, 3, 401)
     mesh_x, mesh_y = np.meshgrid(x, x)

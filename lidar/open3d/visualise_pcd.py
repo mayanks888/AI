@@ -6,6 +6,7 @@ import open3d as o3d
 if __name__ == "__main__":
     v_path="/media/mayank_sati/New Volume/mayank_linux/roabag/livox/pcd/liv_435699658.pcd"
     v_path="/home/mayank_sati/Documents/442.499378300.pcd"
+    v_path="/home/mayank_sati/Documents/datasets/nuscenes/v1.0-mini/samples/LIDAR_TOP/n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151608548020.pcd.bin"
     #####################################################333
     # v_path = '/home/mayank_sati/Downloads/v1.0-mini/samples/LIDAR_TOP/n008-2018-08-27-11-48-51-0400__LIDAR_TOP__1535385098900804.pcd.bin'
     # v_path='/home/mayank_sati/Downloads/v1.0-mini/samples/LIDAR_TOP/n008-2018-08-27-11-48-51-0400__LIDAR_TOP__1535385095449675.pcd.bin'

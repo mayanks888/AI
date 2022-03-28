@@ -7,8 +7,8 @@ from torchvision import datasets, transforms
 train_datasets = datasets.MNIST(root="./data/", train=True, transform=transforms.ToTensor())
 test_datasets = datasets.MNIST(root="./data/", train=False, transform=transforms.ToTensor())
 
-train_loader = torch.utils.data.DataLoader(dataset=train_datasets, batch_size=16, shuffle=True)
-test_loader = torch.utils.data.DataLoader(dataset=test_datasets, batch_size=16, shuffle=True)
+train_loader = torch.utils.data.DataLoader(dataset=train_datasets, batch_size=64, shuffle=True)
+test_loader = torch.utils.data.DataLoader(dataset=test_datasets, batch_size=64, shuffle=True)
 
 
 class MyModel(nn.Module):

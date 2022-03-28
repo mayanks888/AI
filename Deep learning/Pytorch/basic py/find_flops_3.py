@@ -14,6 +14,7 @@ import time
 # model = torchvision.models.mnasnet1_3(pretrained=False)
 # model = torchvision.models.wide_resnet101_2(pretrained=False)
 model = torchvision.models.resnet50(pretrained=False)
+# print(model.summary)
 # model = torchvision.models.resnet18(pretrained=False)
 # model.eval()
 stat(model, (3, 224, 224))

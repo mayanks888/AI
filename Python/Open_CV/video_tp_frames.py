@@ -31,4 +31,4 @@ def FrameCapture(path):
 # Driver Code
 if __name__ == '__main__':
     # Calling the function
-    FrameCapture("/home/mayank_sati/Downloads/10.mp4")
+    FrameCapture("/home/mayank_sati/Videos/minkunet_livox_tracking.mp4")

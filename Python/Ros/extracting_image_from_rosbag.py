@@ -35,13 +35,15 @@ def image_callback(msg, prefix):
         file_prefix = prefix + '-'
     try:
         # Convert your ROS Image message to OpenCV2
-        cv2_img = bridge.imgmsg_to_cv2(msg, "bgr8")
-    except CvBridgeError, e:
-        print(e)
+        # cv2_img = bridge.imgmsg_to_cv2(msg, "bgr8")
+        cv2_img = bridge.imgmsg_to_cv2(msg, "rgb8")
+    except CvBridgeError:
+        print("hjgdj")
     else:
         # Save your OpenCV2 image as a jpeg
         time = msg.header.stamp
-        base_path = "/home/mayank_sati/Desktop/one_Shot_learning/farmington/traffic_shot"
+        # base_path = "/home/mayank_sati/Desktop/one_Shot_learning/farmington/traffic_shot"
+        base_path = "/home/mayank_sati/Documents/datasets/roabag/livox/images"
         cv2.imwrite(base_path + '/' + file_prefix + str(time) + '.jpeg', cv2_img)
         rospy.sleep(1)
 
@@ -61,7 +63,8 @@ def main():
         usage()
 
     # image_topic = "/camera/image_raw"
-    image_topic = "/apollo/sensor/camera/traffic/image_short"
+    # image_topic = "/apollo/sensor/camera/traffic/image_short"
+    image_topic = "/camera/color/image_raw"
     for opt, arg in opts:
         print('Check option: {} {}'.format(opt, arg))
         if opt in ('-t', '--topic'):

@@ -1,3 +1,6 @@
+# import sys
+# if sys.modules.get("gevent") is not None:
+#     evented = True
 from __future__ import print_function
 import argparse
 
@@ -79,23 +82,10 @@ def train(args, model, device, train_loader, optimizer, epoch):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
-        ###################################################33t
-        # # this is done to check onnx file
-        # imgsz = 224
-        # dummy_input = torch.zeros((16, 3, imgsz, imgsz), device="cuda")  # You need to provide the correct input here!
-        # dummy_input=data
-        # # Check it's valid by running the PyTorch model
-        # # dummy_output = model(dummy_input)
-        # print("Input is valid")
-        #
-        # # If the input is valid, then exporting should work
-        #
-        # # torch.onnx.export(model, dummy_input, "food_classifiy.onnx")
-        # torch.onnx.export(model, dummy_input,  "food_classifiy.onnx", verbose=True, input_names='input',
-        #                   output_names='output')
-        ########################################################
+
         optimizer.zero_grad()
         output = model(data)
+        # output = model(data)
         # loss = F.nll_loss(output, target)
         criterion = nn.CrossEntropyLoss()
         loss = criterion(output, target)
@@ -187,16 +177,22 @@ def main():
 
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 ########################################33
-
     res = 224
-
     train_folder_dataset = dset.ImageFolder(root=args.train_dir)
     train_dataset = Create_Image_Datasets(imageFolderDataset=train_folder_dataset, transform=transforms.Compose(
         [transforms.Resize((res, res)), transforms.ToTensor()]), should_invert=False)
     train_dataloader = DataLoader(train_dataset, shuffle=True, num_workers=4, batch_size=args.batch_size)
-
     # model = Net().to(device)
     model = Net_cifar().to(device)
+    ###################################################33t
+    example = torch.rand(1, 3, 224, 224).to(device)
+    # Use torch.jit.trace to generate a torch.jit.ScriptModule via tracing.
+    traced_script_module = torch.jit.trace(model, example)
+    # output = traced_script_module(torch.ones(1, 3, 224, 224))
+    traced_script_module.save("food_classification.pt")
+    loaded_model = torch.jit.load("food_classification.pt")
+    model = loaded_model.train(True)
+    ########################################################
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
     # optimizer = optim.Adam(model.parameters(), lr=0.1, betas=(0.9, 0.999), eps=1e-08,
     #                             weight_decay=0.0)
